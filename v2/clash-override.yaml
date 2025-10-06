@@ -941,6 +941,11 @@ rule-providers:
 
 # 路由规则
 rules:
+  # 拒绝规则 - 最高优先级
+  - DOMAIN-SUFFIX,account.listary.com,REJECT
+  - DOMAIN-SUFFIX,auth.listary.com,REJECT
+  - DOMAIN-SUFFIX,api.getfiddler.com,REJECT
+  
   # 自定义规则 - 优先级最高
   - DOMAIN-SUFFIX,grok.com,手动选择
   - DOMAIN-SUFFIX,windows.net,手动选择
