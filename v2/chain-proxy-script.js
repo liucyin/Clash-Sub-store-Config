@@ -134,7 +134,7 @@ function main(config, profileName) {
   }
   
   // 6. 修改应用分组，将 AI 服务默认指向链式代理
-  const aiGroups = ['Claude', 'OpenAI', 'Gemini', 'Google', 'TikTok'];
+  const aiGroups = ['Claude', 'OpenAI', 'Gemini', 'Google', 'Perplexity', 'TikTok'];
   aiGroups.forEach(groupName => {
     const group = proxyGroups.find(g => g.name === groupName);
     if (group && group.proxies) {
