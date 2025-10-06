@@ -391,6 +391,33 @@ proxy-groups:
       - DIRECT
       - REJECT
 
+  - name: Perplexity
+    <<: *Select
+    icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ChatGPT.png
+    include-all: true
+    proxies:
+      - 手动选择
+      - 自动选择
+      - 香港
+      - 澳门
+      - 台湾
+      - 日本
+      - 韩国
+      - 美国
+      - 英国
+      - 德国
+      - 法国
+      - 印度
+      - 新加坡
+      - 印尼
+      - 越南
+      - 泰国
+      - 澳洲
+      - 巴西
+      - 其他
+      - DIRECT
+      - REJECT
+
   - name: Github
     <<: *Select
     icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/GitHub.png
@@ -920,6 +947,11 @@ rules:
   - DOMAIN-SUFFIX,linux.do,直连
   - DOMAIN-SUFFIX,portal101.cn,直连
   - DOMAIN-SUFFIX,javasec.org,直连
+  
+  # Perplexity 域名规则
+  - DOMAIN-SUFFIX,perplexity.ai,Perplexity
+  - DOMAIN-SUFFIX,pplx.ai,Perplexity
+  - DOMAIN-KEYWORD,perplexity,Perplexity
   
   # 进程规则
   - PROCESS-NAME,prl_naptd,漏网之鱼
