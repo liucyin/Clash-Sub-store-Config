@@ -76,47 +76,62 @@ const baseConfig = {
   "keep-alive-idle": 15,
   "disable-keep-alive": true,
 
-  // DNS 配置
+  // DNS 配置（融合优化版）
   dns: {
     enable: true,
+    listen: "0.0.0.0:1053", // 如需局域网设备使用这个DNS，取消注释
     ipv6: true,
     "prefer-h3": false,
+    "respect-rules": true, // 尊重分流规则，DNS 查询也会遵循代理规则
     "use-hosts": false,
     "use-system-hosts": false,
+    "cache-algorithm": "arc", // 使用 ARC 缓存算法，性能更好
     "enhanced-mode": "fake-ip",
     "fake-ip-range": "198.18.0.1/16",
     "fake-ip-filter": [
+      // 本地主机/设备
       "+.lan",
       "+.local",
+      // Windows网络检测
       "+.msftconnecttest.com",
       "+.msftncsi.com",
+      // QQ/微信快速登录
       "localhost.ptlogin2.qq.com",
       "localhost.sec.qq.com",
-      "localhost.work.weixin.qq.com",
-      "market.xiaomi.com",
-      "*.xiaomi.com",
-      "*.mi.com",
-      "*.miui.com",
-      "*.xiaomi.net",
-      "*.mi.net",
-      "*.miui.net",
-      "*.pcbeta.com"
+      "localhost.work.weixin.qq.com"
     ],
     "default-nameserver": [
-      "tls://223.5.5.5",
-      "tls://119.29.29.29"
+      "223.5.5.5",
+      "1.2.4.8"
     ],
+    // 国外 DNS 服务器（代理流量使用）
     nameserver: [
-      "https://1.1.1.1/dns-query",
-      "https://dns.google.com/dns-query"
+      "https://1.1.1.1/dns-query", // Cloudflare
+      "https://cloudflare-dns.com/dns-query",
+      "https://dns.google.com/dns-query", // Google
+      "https://8.8.4.4/dns-query",
+      "https://208.67.222.222/dns-query", // OpenDNS
+      "https://9.9.9.9/dns-query" // Quad9
     ],
+    // 代理服务器节点解析使用国内 DNS（避免污染）
     "proxy-server-nameserver": [
+      "https://223.5.5.5/dns-query",
       "https://doh.pub/dns-query"
     ],
+    // 直连流量使用国内 DNS
     "direct-nameserver": [
       "https://doh.pub/dns-query",
+      "https://223.5.5.5/dns-query",
       "https://dns.alidns.com/dns-query"
-    ]
+    ],
+    "direct-nameserver-follow-policy": false,
+    // 国内域名使用国内 DNS
+    "nameserver-policy": {
+      "geosite:cn": [
+        "https://223.5.5.5/dns-query",
+        "https://doh.pub/dns-query"
+      ]
+    }
   },
 
   // GEO 配置
