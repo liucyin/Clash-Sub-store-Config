@@ -1515,13 +1515,13 @@ function main(config, profileName) {
   // 4. 创建代理组
   const proxyGroups = config['proxy-groups'] || [];
   
-  // 创建链式中转节点选择组（从机场节点中选择，排除所有家宽节点）
+  // 创建链式中转节点选择组（包含所有节点，包括家宽节点）
   const dialerGroup = {
     name: dialerProxyGroupName,
     type: 'select',
     icon: 'https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png',
     'include-all': true,
-    'exclude-filter': homeProxyFilter + '|🔗|DIRECT|REJECT'
+    'exclude-filter': '🔗|DIRECT|REJECT'
   };
   
   // 创建链式代理组（只包含克隆的链式家宽节点）
@@ -1537,7 +1537,7 @@ function main(config, profileName) {
   proxyGroups.unshift(dialerGroup);     // 🔗 链式中转 放在最前
   
   console.log("✅ 已创建链式代理组（已移至最前）:");
-  console.log(`   - ${dialerProxyGroupName} (中转节点选择，排除家宽)`);
+  console.log(`   - ${dialerProxyGroupName} (中转节点选择，包含所有节点)`);
   console.log(`   - ${chainProxyGroupName} (链式家宽落地选择)`);
   
   // 5. 将链式代理添加到手动选择组（可选）
