@@ -442,7 +442,7 @@ const baseConfig = {
       name: "Gemini",
       type: "select",
       "disable-udp": false,
-      icon: "https://testingcf.jsdelivr.net/gh/guaishouxiaoqi/icons@master/Color/Gemini.png",
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/perplexity.png",
       "include-all": true,
       proxies: [
         "手动选择",
