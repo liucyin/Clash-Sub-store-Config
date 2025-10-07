@@ -8,7 +8,7 @@
 
 // 家宽节点识别关键词（用于从订阅中筛选家宽节点）
 // 支持正则表达式，多个关键词用 | 分隔
-const homeProxyFilter = "家宽|Home|住宅|Residential|IPLC|Hd";
+const homeProxyFilter = "家宽|Home|住宅|Residential|IPLC|Hd|SC";
 
 // 链式代理组名称
 const chainProxyGroupName = "🏠 链式代理";
