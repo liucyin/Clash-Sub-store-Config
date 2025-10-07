@@ -377,6 +377,37 @@ const baseConfig = {
     },
 
     {
+      name: "Cursor",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/cursor.png",
+      "include-all": true,
+      proxies: [
+        "手动选择",
+        "自动选择",
+        "香港",
+        "澳门",
+        "台湾",
+        "日本",
+        "韩国",
+        "美国",
+        "英国",
+        "德国",
+        "法国",
+        "印度",
+        "新加坡",
+        "印尼",
+        "越南",
+        "泰国",
+        "澳洲",
+        "巴西",
+        "其他",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
       name: "Disney",
       type: "select",
       "disable-udp": false,
@@ -442,7 +473,7 @@ const baseConfig = {
       name: "Gemini",
       type: "select",
       "disable-udp": false,
-      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/perplexity.png",
+      icon: "https://testingcf.jsdelivr.net/gh/guaishouxiaoqi/icons@master/Color/Gemini.png",
       "include-all": true,
       proxies: [
         "手动选择",
@@ -473,7 +504,7 @@ const baseConfig = {
       name: "Perplexity",
       type: "select",
       "disable-udp": false,
-      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ChatGPT.png",
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/perplexity.png",
       "include-all": true,
       proxies: [
         "手动选择",
@@ -1387,6 +1418,13 @@ const baseConfig = {
     "DOMAIN-SUFFIX,pplx.ai,Perplexity",
     "DOMAIN-KEYWORD,perplexity,Perplexity",
     
+    // Cursor 域名规则
+    "DOMAIN-SUFFIX,cursor-cdn.com,Cursor",
+    "DOMAIN-SUFFIX,cursor.com,Cursor",
+    "DOMAIN-SUFFIX,cursor.sh,Cursor",
+    "DOMAIN-SUFFIX,cursorapi.com,Cursor",
+    "DOMAIN-KEYWORD,cursor,Cursor",
+    
     // 进程规则
     "PROCESS-NAME,prl_naptd,漏网之鱼",
     
@@ -1396,9 +1434,9 @@ const baseConfig = {
     "RULE-SET,China,直连,no-resolve",
     "RULE-SET,Telegram,Telegram",
     "RULE-SET,Gemini,Gemini",
+    "RULE-SET,YouTube,YouTube",
     "RULE-SET,Google,Google",
     "RULE-SET,Github,Github",
-    "RULE-SET,YouTube,YouTube",
     "RULE-SET,BiliBili,BiliBili",
     "RULE-SET,Microsoft,Microsoft",
     "RULE-SET,OneDrive,OneDrive",
@@ -1518,7 +1556,7 @@ function main(config, profileName) {
   }
   
   // 6. 修改应用分组，将 AI 服务默认指向链式代理
-  const aiGroups = ['Claude', 'OpenAI', 'Gemini', 'Google', 'Perplexity', 'TikTok'];
+  const aiGroups = ['Claude', 'OpenAI', 'Gemini', 'Google', 'Perplexity', 'TikTok', 'Cursor'];
   aiGroups.forEach(groupName => {
     const group = proxyGroups.find(g => g.name === groupName);
     if (group && group.proxies) {
