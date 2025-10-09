@@ -1431,6 +1431,7 @@ const baseConfig = {
     // 规则集匹配
     "RULE-SET,Lan,直连,no-resolve",
     "RULE-SET,DNSLeak,手动选择",
+    "RULE-SET,Microsoft,Microsoft",
     "RULE-SET,China,直连,no-resolve",
     "RULE-SET,Telegram,Telegram",
     "RULE-SET,Gemini,Gemini",
@@ -1438,7 +1439,6 @@ const baseConfig = {
     "RULE-SET,Google,Google",
     "RULE-SET,Github,Github",
     "RULE-SET,BiliBili,BiliBili",
-    "RULE-SET,Microsoft,Microsoft",
     "RULE-SET,OneDrive,OneDrive",
     "RULE-SET,TikTok,TikTok",
     "RULE-SET,Spotify,Spotify",
