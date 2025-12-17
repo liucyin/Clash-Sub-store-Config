@@ -1407,8 +1407,6 @@ const baseConfig = {
     "DOMAIN-SUFFIX,api.getfiddler.com,REJECT",
     
     // 自定义规则 - 优先级最高
-    "DOMAIN-SUFFIX,grok.com,手动选择",
-    "DOMAIN-SUFFIX,windows.net,手动选择",
     "DOMAIN-SUFFIX,portal101.cn,直连",
     "DOMAIN-SUFFIX,javasec.org,直连",
     
