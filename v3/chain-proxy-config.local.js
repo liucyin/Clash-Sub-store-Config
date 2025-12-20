@@ -25,7 +25,7 @@ const chainProxyRules = [
   "DOMAIN-SUFFIX,oaistatic.com," + chainProxyGroupName,
   "DOMAIN-SUFFIX,cdn.oaistatic.com," + chainProxyGroupName,
   "DOMAIN-SUFFIX,gstatic.com," + chainProxyGroupName,
-  
+
   // 通过规则集匹配
   "RULE-SET,ai," + chainProxyGroupName,
   "RULE-SET,AI," + chainProxyGroupName,
@@ -41,7 +41,7 @@ const aiRuleProviders = {
     "url": "https://fastly.jsdelivr.net/gh/MadisonWirtanen/WARP-Clash-with-ZJU-Rules@main/ai.yaml"
   },
   "AI": {
-    "type": "http", 
+    "type": "http",
     "behavior": "classical",
     "format": "text",
     "interval": 3600,
@@ -1428,26 +1428,26 @@ const baseConfig = {
     "DOMAIN-SUFFIX,account.listary.com,REJECT",
     "DOMAIN-SUFFIX,auth.listary.com,REJECT",
     "DOMAIN-SUFFIX,api.getfiddler.com,REJECT",
-    
+
     // 自定义规则 - 优先级最高
     "DOMAIN-SUFFIX,portal101.cn,直连",
     "DOMAIN-SUFFIX,javasec.org,直连",
-    
+
     // Perplexity 域名规则
     "DOMAIN-SUFFIX,perplexity.ai,Perplexity",
     "DOMAIN-SUFFIX,pplx.ai,Perplexity",
     "DOMAIN-KEYWORD,perplexity,Perplexity",
-    
+
     // Cursor 域名规则
     "DOMAIN-SUFFIX,cursor-cdn.com,Cursor",
     "DOMAIN-SUFFIX,cursor.com,Cursor",
     "DOMAIN-SUFFIX,cursor.sh,Cursor",
     "DOMAIN-SUFFIX,cursorapi.com,Cursor",
     "DOMAIN-KEYWORD,cursor,Cursor",
-    
+
     // 进程规则
     "PROCESS-NAME,prl_naptd,漏网之鱼",
-    
+
     // 规则集匹配
     "RULE-SET,Lan,直连,no-resolve",
     "RULE-SET,DNSLeak,手动选择",
@@ -1470,7 +1470,7 @@ const baseConfig = {
     "RULE-SET,Steam,Steam",
     "RULE-SET,Emby,Emby",
     "RULE-SET,Hijacking,DIRECT",
-    
+
     // 兜底规则
     "MATCH,漏网之鱼"
   ]
@@ -1482,7 +1482,7 @@ const baseConfig = {
 
 function main(config, profileName) {
   console.log("🚀 开始处理链式代理配置...");
-  
+
   // 如果传入了外部配置，使用外部配置；否则使用内置基础配置
   if (!config || !config.proxies || config.proxies.length === 0) {
     console.log("📋 使用内置基础配置");
@@ -1497,26 +1497,26 @@ function main(config, profileName) {
     mergedConfig.rules = config.rules || baseConfig.rules;
     config = mergedConfig;
   }
-  
+
   // 1. 获取所有节点
   const proxies = config.proxies || [];
   console.log(`📡 总节点数: ${proxies.length}`);
-  
+
   // 2. 识别家宽节点
   const homeProxies = proxies.filter(proxy => {
     const regex = new RegExp(homeProxyFilter, 'i');
     return regex.test(proxy.name);
   });
-  
+
   if (homeProxies.length === 0) {
     console.warn("⚠️  未找到家宽节点，请检查 homeProxyFilter 配置！");
     console.log(`当前过滤规则: ${homeProxyFilter}`);
     return config;
   }
-  
+
   console.log(`🏠 识别到 ${homeProxies.length} 个家宽节点:`);
   homeProxies.forEach(p => console.log(`   - ${p.name}`));
-  
+
   // 3. 为链式代理创建家宽节点的克隆（带 dialer-proxy）
   const chainHomeProxies = homeProxies.map(proxy => {
     const clonedProxy = JSON.parse(JSON.stringify(proxy)); // 深拷贝
@@ -1524,17 +1524,17 @@ function main(config, profileName) {
     clonedProxy['dialer-proxy'] = dialerProxyGroupName;
     return clonedProxy;
   });
-  
+
   // 将克隆的链式家宽节点添加到 proxies 列表
   proxies.push(...chainHomeProxies);
   console.log(`✅ 已创建 ${chainHomeProxies.length} 个链式家宽节点（带 dialer-proxy）`);
   chainHomeProxies.forEach(p => console.log(`   - ${p.name}`));
-  
+
   config.proxies = proxies;
-  
+
   // 4. 创建代理组
   const proxyGroups = config['proxy-groups'] || [];
-  
+
   // 创建链式中转节点选择组（包含所有节点，包括家宽节点）
   const dialerGroup = {
     name: dialerProxyGroupName,
@@ -1543,7 +1543,7 @@ function main(config, profileName) {
     'include-all': true,
     'exclude-filter': '🔗|DIRECT|REJECT'
   };
-  
+
   // 创建链式代理组（只包含克隆的链式家宽节点）
   const chainGroup = {
     name: chainProxyGroupName,
@@ -1551,32 +1551,32 @@ function main(config, profileName) {
     icon: 'https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Static.png',
     proxies: chainHomeProxies.map(p => p.name)
   };
-  
+
   // 添加到代理组列表最前面（使用 unshift）
   proxyGroups.unshift(chainGroup);      // 🏠 链式代理 放在最前
   proxyGroups.unshift(dialerGroup);     // 🔗 链式中转 放在最前
-  
+
   console.log("✅ 已创建链式代理组（已移至最前）:");
   console.log(`   - ${dialerProxyGroupName} (中转节点选择，包含所有节点)`);
   console.log(`   - ${chainProxyGroupName} (链式家宽落地选择)`);
-  
+
   // 5. 将链式代理添加到手动选择组（可选）
   if (addToManualSelect) {
-    const manualGroup = proxyGroups.find(g => 
-      g.name === '手动选择' || 
-      g.name === '🚀 节点选择' || 
+    const manualGroup = proxyGroups.find(g =>
+      g.name === '手动选择' ||
+      g.name === '🚀 节点选择' ||
       g.name === 'PROXY' ||
       g.type === 'select'
     );
-    
+
     if (manualGroup && manualGroup.proxies) {
       manualGroup.proxies.unshift(chainProxyGroupName);
       console.log(`✅ 已将链式代理添加到 ${manualGroup.name}`);
     }
   }
-  
+
   // 6. 修改应用分组，将 AI 服务默认指向链式代理
-  const aiGroups = ["手动选择","GLOBAL","Apple","BiliBili","Claude","Cursor","Disney","Emby","Gemini","Perplexity","Github","Google","Microsoft","Netflix","OpenAI","OneDrive","Steam","Spotify","TikTok","Telegram","Twitter","YouTube","漏网之鱼"]
+  const aiGroups = ["指纹浏览器-1-7911", "指纹浏览器-2-7912", "指纹浏览器-3-7913", "手动选择", "GLOBAL", "Apple", "BiliBili", "Claude", "Cursor", "Disney", "Emby", "Gemini", "Perplexity", "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam", "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"]
   aiGroups.forEach(groupName => {
     const group = proxyGroups.find(g => g.name === groupName);
     if (group && group.proxies) {
@@ -1585,7 +1585,7 @@ function main(config, profileName) {
       console.log(`✅ ${groupName} 默认使用链式代理`);
     }
   });
-  
+
   // 7. 不排除家宽节点，让所有组都能看到原始家宽节点
   // 但排除克隆的链式家宽节点（🔗 前缀），避免重复
   proxyGroups.forEach(group => {
@@ -1593,7 +1593,7 @@ function main(config, profileName) {
     if (group.name === chainProxyGroupName || group.name === dialerProxyGroupName) {
       return;
     }
-    
+
     // 为其他组添加排除规则，只排除克隆的链式节点
     if (group.filter || group['include-all']) {
       if (group['exclude-filter']) {
@@ -1603,26 +1603,26 @@ function main(config, profileName) {
       }
     }
   });
-  
+
   console.log("✅ 所有代理组现在都包含原始家宽节点（可直连）");
   console.log("✅ 只有 🏠 链式代理 组中的节点走链式代理");
-  
+
   config['proxy-groups'] = proxyGroups;
-  
+
   // 8. 添加 AI 规则集（可选，如果需要更全面的 AI 规则）
   // 注释掉以避免与策略组规则冲突，让用户可以在策略组中灵活切换
   // const ruleProviders = config['rule-providers'] || {};
   // Object.assign(ruleProviders, aiRuleProviders);
   // config['rule-providers'] = ruleProviders;
   // console.log("✅ 已添加 AI 规则集");
-  
+
   // 9. 不添加强制链式代理规则，让策略组规则生效
   // 用户可以在 OpenAI/Gemini/Claude 等策略组中选择是否使用链式代理
   // const rules = config.rules || [];
   // config.rules = [...chainProxyRules, ...rules];
   // console.log(`✅ 已添加 ${chainProxyRules.length} 条链式代理规则`);
   console.log("✅ 保留原有规则，AI 服务将走各自的策略组");
-  
+
   console.log("🎉 链式代理配置完成！");
   console.log("\n使用说明：");
   console.log(`1. 在 ${dialerProxyGroupName} 中选择机场中转节点`);
@@ -1630,7 +1630,7 @@ function main(config, profileName) {
   console.log("3. AI 服务走各自的策略组（OpenAI/Gemini/Claude等）");
   console.log(`4. 这些策略组默认选项是 ${chainProxyGroupName}，可手动切换`);
   console.log("5. 如需使用链式代理，在对应策略组中选择 🏠 链式代理\n");
-  
+
   return config;
 }
 
