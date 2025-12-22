@@ -524,6 +524,37 @@ const baseConfig = {
     },
 
     {
+      name: "Grok",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/grok.png",
+      "include-all": true,
+      proxies: [
+        "手动选择",
+        "自动选择",
+        "香港",
+        "澳门",
+        "台湾",
+        "日本",
+        "韩国",
+        "美国",
+        "英国",
+        "德国",
+        "法国",
+        "印度",
+        "新加坡",
+        "印尼",
+        "越南",
+        "泰国",
+        "澳洲",
+        "巴西",
+        "其他",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
       name: "Perplexity",
       type: "select",
       "disable-udp": false,
@@ -1445,6 +1476,10 @@ const baseConfig = {
     "DOMAIN-SUFFIX,cursorapi.com,Cursor",
     "DOMAIN-KEYWORD,cursor,Cursor",
 
+    // Grok 域名规则
+    "DOMAIN-SUFFIX,grok.com,Grok",
+    "DOMAIN-SUFFIX,x.ai,Grok",
+
     // 进程规则
     "PROCESS-NAME,prl_naptd,漏网之鱼",
 
@@ -1576,7 +1611,7 @@ function main(config, profileName) {
   }
 
   // 6. 修改应用分组，将 AI 服务默认指向链式代理
-  const aiGroups = ["指纹浏览器-1-7911", "指纹浏览器-2-7912", "指纹浏览器-3-7913", "手动选择", "GLOBAL", "Apple", "BiliBili", "Claude", "Cursor", "Disney", "Emby", "Gemini", "Perplexity", "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam", "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"]
+  const aiGroups = ["指纹浏览器-1-7911", "指纹浏览器-2-7912", "指纹浏览器-3-7913", "手动选择", "GLOBAL", "Apple", "BiliBili", "Claude", "Cursor", "Disney", "Emby", "Gemini", "Grok", "Perplexity", "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam", "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"]
   aiGroups.forEach(groupName => {
     const group = proxyGroups.find(g => g.name === groupName);
     if (group && group.proxies) {
@@ -1647,3 +1682,4 @@ function debugConfig(config) {
   console.log("规则集数:", Object.keys(config['rule-providers'] || {}).length);
   console.log("==================");
 }
+
