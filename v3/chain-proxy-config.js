@@ -8,7 +8,7 @@
 
 // 家宽节点识别关键词（用于从订阅中筛选家宽节点）
 // 支持正则表达式，多个关键词用 | 分隔
-const homeProxyFilter = "家宽|Home|住宅|Residential|IPLC|Hd|SC";
+const homeProxyFilter = "家宽|Home|住宅|Residential|IPLC|Hd|SC|DMIT|CORONA";
 
 // 链式代理组名称
 const chainProxyGroupName = "🏠 链式代理";
@@ -1517,30 +1517,35 @@ function main(config, profileName) {
   // 2. 识别家宽节点
   const homeProxies = proxies.filter(proxy => {
     const regex = new RegExp(homeProxyFilter, 'i');
-    return regex.test(proxy.name);
+    try {
+      const decodedName = decodeURIComponent(proxy.name);
+      return regex.test(proxy.name) || regex.test(decodedName);
+    } catch (e) {
+      return regex.test(proxy.name);
+    }
   });
 
-  if (homeProxies.length === 0) {
-    console.warn("⚠️  未找到家宽节点，请检查 homeProxyFilter 配置！");
-    console.log(`当前过滤规则: ${homeProxyFilter}`);
-    return config;
+  const hasHomeProxies = homeProxies.length > 0;
+  let chainHomeProxies = [];
+
+  if (hasHomeProxies) {
+    console.log(`🏠 识别到 ${homeProxies.length} 个家宽节点:`);
+    homeProxies.forEach(p => console.log(`   - ${p.name}`));
+
+    // 3. 为链式代理创建家宽节点的克隆（带 dialer-proxy）
+    chainHomeProxies = homeProxies.map(proxy => {
+      const clonedProxy = JSON.parse(JSON.stringify(proxy));
+      clonedProxy.name = '🔗 ' + proxy.name;
+      clonedProxy['dialer-proxy'] = dialerProxyGroupName;
+      return clonedProxy;
+    });
+
+    // 将克隆的链式家宽节点添加到 proxies 列表
+    proxies.push(...chainHomeProxies);
+    console.log(`✅ 已创建 ${chainHomeProxies.length} 个链式落地节点`);
+  } else {
+    console.warn("⚠️ 未找到家宽节点，将不创建链式落地节点。");
   }
-
-  console.log(`🏠 识别到 ${homeProxies.length} 个家宽节点:`);
-  homeProxies.forEach(p => console.log(`   - ${p.name}`));
-
-  // 3. 为链式代理创建家宽节点的克隆（带 dialer-proxy）
-  const chainHomeProxies = homeProxies.map(proxy => {
-    const clonedProxy = JSON.parse(JSON.stringify(proxy)); // 深拷贝
-    clonedProxy.name = '🔗 ' + proxy.name; // 添加前缀区分
-    clonedProxy['dialer-proxy'] = dialerProxyGroupName;
-    return clonedProxy;
-  });
-
-  // 将克隆的链式家宽节点添加到 proxies 列表
-  proxies.push(...chainHomeProxies);
-  console.log(`✅ 已创建 ${chainHomeProxies.length} 个链式家宽节点（带 dialer-proxy）`);
-  chainHomeProxies.forEach(p => console.log(`   - ${p.name}`));
 
   config.proxies = proxies;
 
@@ -1573,7 +1578,7 @@ function main(config, profileName) {
   console.log(`   - ${chainProxyGroupName} (链式家宽落地选择)`);
 
   // 5. 将链式代理添加到手动选择组（可选）
-  if (addToManualSelect) {
+  if (addToManualSelect && hasHomeProxies) {
     const manualGroup = proxyGroups.find(g =>
       g.name === '手动选择' ||
       g.name === '🚀 节点选择' ||
@@ -1588,15 +1593,16 @@ function main(config, profileName) {
   }
 
   // 6. 修改应用分组，将 AI 服务默认指向链式代理
-  const aiGroups = ["手动选择", "GLOBAL", "Apple", "BiliBili", "Claude", "Cursor", "Disney", "Emby", "Gemini", "Grok", "Perplexity", "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam", "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"]
-  aiGroups.forEach(groupName => {
-    const group = proxyGroups.find(g => g.name === groupName);
-    if (group && group.proxies) {
-      // 将链式代理放到第一位（默认选择）
-      group.proxies = [chainProxyGroupName, ...group.proxies.filter(p => p !== chainProxyGroupName)];
-      console.log(`✅ ${groupName} 默认使用链式代理`);
-    }
-  });
+  if (hasHomeProxies) {
+    const aiGroups = ["手动选择", "GLOBAL", "Apple", "BiliBili", "Claude", "Cursor", "Disney", "Emby", "Gemini", "Grok", "Perplexity", "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam", "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"]
+    aiGroups.forEach(groupName => {
+      const group = proxyGroups.find(g => g.name === groupName);
+      if (group && group.proxies) {
+        group.proxies = [chainProxyGroupName, ...group.proxies.filter(p => p !== chainProxyGroupName)];
+        console.log(`✅ ${groupName} 默认使用链式代理`);
+      }
+    });
+  }
 
   // 7. 不排除家宽节点，让所有组都能看到原始家宽节点
   // 但排除克隆的链式家宽节点（🔗 前缀），避免重复
