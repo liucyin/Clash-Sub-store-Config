@@ -1515,8 +1515,11 @@ function main(config, profileName) {
   console.log(`📡 总节点数: ${proxies.length}`);
 
   // 2. 识别家宽节点
+  const homeProxyFilterValue = typeof homeProxyFilter !== 'undefined' ? homeProxyFilter : '';
   const homeProxies = proxies.filter(proxy => {
-    const regex = new RegExp(homeProxyFilter, 'i');
+    // 如果没有定义 filter，则不匹配任何节点
+    if (!homeProxyFilterValue) return false;
+    const regex = new RegExp(homeProxyFilterValue, 'i');
     try {
       const decodedName = decodeURIComponent(proxy.name);
       return regex.test(proxy.name) || regex.test(decodedName);
@@ -1552,30 +1555,35 @@ function main(config, profileName) {
   // 4. 创建代理组
   const proxyGroups = config['proxy-groups'] || [];
 
-  // 创建链式中转节点选择组（包含所有节点，包括家宽节点）
-  const dialerGroup = {
-    name: dialerProxyGroupName,
-    type: 'select',
-    icon: 'https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png',
-    'include-all': true,
-    'exclude-filter': '🔗|DIRECT|REJECT'
-  };
+  // 只有检测到家宽节点时才创建链式代理组
+  if (hasHomeProxies) {
+    // 创建链式中转节点选择组（包含所有节点，包括家宽节点）
+    const dialerGroup = {
+      name: dialerProxyGroupName,
+      type: 'select',
+      icon: 'https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png',
+      'include-all': true,
+      'exclude-filter': '🔗|DIRECT|REJECT'
+    };
 
-  // 创建链式代理组（只包含克隆的链式家宽节点）
-  const chainGroup = {
-    name: chainProxyGroupName,
-    type: 'select',
-    icon: 'https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Static.png',
-    proxies: chainHomeProxies.map(p => p.name)
-  };
+    // 创建链式代理组（只包含克隆的链式家宽节点）
+    const chainGroup = {
+      name: chainProxyGroupName,
+      type: 'select',
+      icon: 'https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Static.png',
+      proxies: chainHomeProxies.map(p => p.name)
+    };
 
-  // 添加到代理组列表最前面（使用 unshift）
-  proxyGroups.unshift(chainGroup);      // 🏠 链式代理 放在最前
-  proxyGroups.unshift(dialerGroup);     // 🔗 链式中转 放在最前
+    // 添加到代理组列表最前面（使用 unshift）
+    proxyGroups.unshift(chainGroup);      // 🏠 链式代理 放在最前
+    proxyGroups.unshift(dialerGroup);     // 🔗 链式中转 放在最前
 
-  console.log("✅ 已创建链式代理组（已移至最前）:");
-  console.log(`   - ${dialerProxyGroupName} (中转节点选择，包含所有节点)`);
-  console.log(`   - ${chainProxyGroupName} (链式家宽落地选择)`);
+    console.log("✅ 已创建链式代理组（已移至最前）:");
+    console.log(`   - ${dialerProxyGroupName} (中转节点选择，包含所有节点)`);
+    console.log(`   - ${chainProxyGroupName} (链式家宽落地选择)`);
+  } else {
+    console.log("ℹ️ 未检测到家宽节点，跳过链式代理组创建");
+  }
 
   // 5. 将链式代理添加到手动选择组（可选）
   if (addToManualSelect && hasHomeProxies) {
@@ -1604,26 +1612,27 @@ function main(config, profileName) {
     });
   }
 
-  // 7. 不排除家宽节点，让所有组都能看到原始家宽节点
-  // 但排除克隆的链式家宽节点（🔗 前缀），避免重复
-  proxyGroups.forEach(group => {
-    // 跳过链式代理相关的组
-    if (group.name === chainProxyGroupName || group.name === dialerProxyGroupName) {
-      return;
-    }
-
-    // 为其他组添加排除规则，只排除克隆的链式节点
-    if (group.filter || group['include-all']) {
-      if (group['exclude-filter']) {
-        group['exclude-filter'] += '|🔗';
-      } else {
-        group['exclude-filter'] = '🔗';
+  // 7. 只有创建了链式代理时，才处理排除规则
+  if (hasHomeProxies) {
+    proxyGroups.forEach(group => {
+      // 跳过链式代理相关的组
+      if (group.name === chainProxyGroupName || group.name === dialerProxyGroupName) {
+        return;
       }
-    }
-  });
 
-  console.log("✅ 所有代理组现在都包含原始家宽节点（可直连）");
-  console.log("✅ 只有 🏠 链式代理 组中的节点走链式代理");
+      // 为其他组添加排除规则，只排除克隆的链式节点
+      if (group.filter || group['include-all']) {
+        if (group['exclude-filter']) {
+          group['exclude-filter'] += '|🔗';
+        } else {
+          group['exclude-filter'] = '🔗';
+        }
+      }
+    });
+
+    console.log("✅ 所有代理组现在都包含原始家宽节点（可直连）");
+    console.log("✅ 只有 🏠 链式代理 组中的节点走链式代理");
+  }
 
   config['proxy-groups'] = proxyGroups;
 
@@ -1641,13 +1650,17 @@ function main(config, profileName) {
   // console.log(`✅ 已添加 ${chainProxyRules.length} 条链式代理规则`);
   console.log("✅ 保留原有规则，AI 服务将走各自的策略组");
 
-  console.log("🎉 链式代理配置完成！");
-  console.log("\n使用说明：");
-  console.log(`1. 在 ${dialerProxyGroupName} 中选择机场中转节点`);
-  console.log(`2. 在 ${chainProxyGroupName} 中选择家宽落地节点（链式代理组）`);
-  console.log("3. AI 服务走各自的策略组（OpenAI/Gemini/Claude等）");
-  console.log(`4. 这些策略组默认选项是 ${chainProxyGroupName}，可手动切换`);
-  console.log("5. 如需使用链式代理，在对应策略组中选择 🏠 链式代理\n");
+  if (hasHomeProxies) {
+    console.log("🎉 链式代理配置完成！");
+    console.log("\n使用说明：");
+    console.log(`1. 在 ${dialerProxyGroupName} 中选择机场中转节点`);
+    console.log(`2. 在 ${chainProxyGroupName} 中选择家宽落地节点（链式代理组）`);
+    console.log("3. AI 服务走各自的策略组（OpenAI/Gemini/Claude等）");
+    console.log(`4. 这些策略组默认选项是 ${chainProxyGroupName}，可手动切换`);
+    console.log("5. 如需使用链式代理，在对应策略组中选择 🏠 链式代理\n");
+  } else {
+    console.log("🎉 配置完成！未检测到家宽节点，使用标准代理模式。\n");
+  }
 
   return config;
 }
