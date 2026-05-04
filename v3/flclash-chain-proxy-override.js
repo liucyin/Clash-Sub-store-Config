@@ -290,7 +290,21 @@ function main(config) {
     }
   });
 
-  // 5. 确保链式代理组在最前且可见
+  // 5. 将所有策略组的 proxies 最前面加上链式代理选项
+  var policyGroups = ["手动选择", "GLOBAL", "Apple", "AppStore", "BiliBili",
+    "Claude", "Cursor", "Disney", "Emby", "Gemini", "Grok", "Perplexity",
+    "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam",
+    "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"];
+
+  proxyGroups.forEach(function(g) {
+    if (policyGroups.indexOf(g.name) !== -1) {
+      if (g.proxies && g.proxies.indexOf(chainProxyGroupName) === -1) {
+        g.proxies.unshift(chainProxyGroupName);
+      }
+    }
+  });
+
+  // 6. 确保链式代理组在最前且可见
   proxyGroups.forEach(function(g) {
     if (g.name === dialerProxyGroupName || g.name === chainProxyGroupName) {
       g.hidden = false;
