@@ -315,6 +315,37 @@ const baseConfig = {
     },
 
     {
+      name: "AppStore",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/App_Store.png",
+      "include-all": true,
+      proxies: [
+        "手动选择",
+        "自动选择",
+        "香港",
+        "澳门",
+        "台湾",
+        "日本",
+        "韩国",
+        "美国",
+        "英国",
+        "德国",
+        "法国",
+        "印度",
+        "新加坡",
+        "印尼",
+        "越南",
+        "泰国",
+        "澳洲",
+        "巴西",
+        "其他",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
       name: "BiliBili",
       type: "select",
       "disable-udp": false,
@@ -1260,6 +1291,14 @@ const baseConfig = {
       proxy: "DIRECT",
       url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Apple/Apple_Classical.yaml"
     },
+    AppStore: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "DIRECT",
+      url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/AppStore/AppStore.yaml"
+    },
     BiliBili: {
       type: "http",
       behavior: "classical",
@@ -1478,6 +1517,7 @@ const baseConfig = {
     "RULE-SET,Disney,Disney",
     "RULE-SET,OpenAI,OpenAI",
     "RULE-SET,Twitter,Twitter",
+    "RULE-SET,AppStore,AppStore",
     "RULE-SET,Claude,Claude",
     "RULE-SET,Steam,Steam",
     "RULE-SET,Emby,Emby",
@@ -1602,7 +1642,7 @@ function main(config, profileName) {
 
   // 6. 修改应用分组，将 AI 服务默认指向链式代理
   if (hasHomeProxies) {
-    const aiGroups = ["手动选择", "GLOBAL", "Apple", "BiliBili", "Claude", "Cursor", "Disney", "Emby", "Gemini", "Grok", "Perplexity", "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam", "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"]
+    const aiGroups = ["手动选择", "GLOBAL", "Apple", "AppStore", "BiliBili", "Claude", "Cursor", "Disney", "Emby", "Gemini", "Grok", "Perplexity", "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam", "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"]
     aiGroups.forEach(groupName => {
       const group = proxyGroups.find(g => g.name === groupName);
       if (group && group.proxies) {
