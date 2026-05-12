@@ -377,6 +377,37 @@ const baseConfig = {
     },
 
     {
+      name: "Bybit",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png",
+      "include-all": true,
+      proxies: [
+        "手动选择",
+        "自动选择",
+        "香港",
+        "澳门",
+        "台湾",
+        "日本",
+        "韩国",
+        "美国",
+        "英国",
+        "德国",
+        "法国",
+        "印度",
+        "新加坡",
+        "印尼",
+        "越南",
+        "泰国",
+        "澳洲",
+        "巴西",
+        "其他",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
       name: "Claude",
       type: "select",
       "disable-udp": false,
@@ -1307,6 +1338,14 @@ const baseConfig = {
       proxy: "DIRECT",
       url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/BiliBili/BiliBili.yaml"
     },
+    Bybit: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "DIRECT",
+      url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/bybit.yaml"
+    },
     China: {
       type: "http",
       behavior: "classical",
@@ -1503,6 +1542,7 @@ const baseConfig = {
     "RULE-SET,Lan,直连,no-resolve",
     "RULE-SET,DNSLeak,手动选择",
     "RULE-SET,Microsoft,Microsoft",
+    "RULE-SET,Bybit,Bybit",
     "RULE-SET,China,直连,no-resolve",
     "RULE-SET,Telegram,Telegram",
     "RULE-SET,Gemini,Gemini",
