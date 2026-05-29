@@ -93,6 +93,7 @@ const defaultRules = [
   "DOMAIN-SUFFIX,api.getfiddler.com,REJECT",
   "DOMAIN-SUFFIX,portal101.cn,直连",
   "DOMAIN-SUFFIX,javasec.org,直连",
+  "DOMAIN-SUFFIX,deepseek.com,直连",
   "DOMAIN-SUFFIX,grok.com,Grok",
   "DOMAIN-SUFFIX,x.ai,Grok",
   "DOMAIN-SUFFIX,perplexity.ai,Perplexity",
