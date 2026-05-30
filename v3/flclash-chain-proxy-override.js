@@ -128,6 +128,7 @@ const defaultRules = [
   "RULE-SET,Steam,Steam",
   "RULE-SET,Emby,Emby",
   "RULE-SET,Hijacking,DIRECT",
+  "GEOIP,CN,直连,no-resolve",
   "MATCH,漏网之鱼"
 ];
 
@@ -229,7 +230,22 @@ function main(config) {
 
   config['proxy-groups'] = proxyGroups;
 
-  // 7. 补全 rule-providers
+  // 7. 开启嗅探，尽量恢复域名供 China 规则使用
+  config.sniffer = config.sniffer || {};
+  config.sniffer.enable = true;
+  config.sniffer['force-dns-mapping'] = true;
+  config.sniffer['parse-pure-ip'] = true;
+  if (typeof config.sniffer['override-destination'] === 'undefined') {
+    config.sniffer['override-destination'] = false;
+  }
+  config.sniffer.sniff = config.sniffer.sniff || {};
+  config.sniffer.sniff.TLS = config.sniffer.sniff.TLS || { ports: [443, 8443] };
+  config.sniffer.sniff.HTTP = config.sniffer.sniff.HTTP || { ports: [80, '8080-8880'], 'override-destination': true };
+  config.sniffer.sniff.QUIC = config.sniffer.sniff.QUIC || { ports: [443, 8443] };
+  config.sniffer['force-domain'] = config.sniffer['force-domain'] || [];
+  config.sniffer['skip-domain'] = config.sniffer['skip-domain'] || ['+.oray.com', 'Mijia Cloud', '+.push.apple.com'];
+
+  // 8. 补全 rule-providers
   var currentProviders = config['rule-providers'] || {};
   Object.keys(defaultRuleProviders).forEach(function(key) {
     if (!currentProviders[key]) {
@@ -238,7 +254,7 @@ function main(config) {
   });
   config['rule-providers'] = currentProviders;
 
-  // 8. 补全路由规则
+  // 9. 补全路由规则
   var currentRules = config.rules || [];
   if (currentRules.length < 5) {
     config.rules = defaultRules;

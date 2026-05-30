@@ -172,7 +172,7 @@ const baseConfig = {
 
   // 嗅探配置
   sniffer: {
-    enable: false,
+    enable: true,
     "force-dns-mapping": true,
     "parse-pure-ip": true,
     "override-destination": false,
@@ -1563,6 +1563,7 @@ const baseConfig = {
     "RULE-SET,Steam,Steam",
     "RULE-SET,Emby,Emby",
     "RULE-SET,Hijacking,DIRECT",
+    "GEOIP,CN,直连,no-resolve",
 
     // 兜底规则
     "MATCH,漏网之鱼"
@@ -1759,4 +1760,3 @@ function debugConfig(config) {
   console.log("规则集数:", Object.keys(config['rule-providers'] || {}).length);
   console.log("==================");
 }
-
