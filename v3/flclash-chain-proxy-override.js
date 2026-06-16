@@ -29,7 +29,7 @@ const allGroupDefinitions = [
   { name: "AppStore", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/App_Store.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "BiliBili", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/bilibili_4.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Bybit", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
-  { name: "Claude", type: "select", "disable-udp": false, icon: "https://github.com/liucyin/Clash-Sub-store-Config/blob/main/icon/claude.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
+  { name: "Claude", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/claude.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Cursor", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/cursor.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Disney", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Disney.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Duolingo", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/duolingo.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
