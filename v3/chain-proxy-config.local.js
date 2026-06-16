@@ -434,7 +434,7 @@ const baseConfig = {
       name: "Claude",
       type: "select",
       "disable-udp": false,
-      icon: "https://testingcf.jsdelivr.net/gh/wanswu/my-backup@main/IconSet/AI/Claude.png",
+      icon: "https://github.com/liucyin/Clash-Sub-store-Config/blob/main/icon/claude.png",
       "include-all": true,
       proxies: [
         "手动选择",
