@@ -32,6 +32,7 @@ const allGroupDefinitions = [
   { name: "Claude", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/wanswu/my-backup@main/IconSet/AI/Claude.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Cursor", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/cursor.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Disney", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Disney.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
+  { name: "Duolingo", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/duolingo.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Emby", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Emby.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Gemini", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/guaishouxiaoqi/icons@master/Color/Gemini.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Grok", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/grok.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
@@ -49,7 +50,12 @@ const allGroupDefinitions = [
   { name: "Twitter", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Twitter.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "YouTube", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/YouTube.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "漏网之鱼", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Final.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
-  { name: "直连", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Direct.png", proxies: ["DIRECT", "REJECT"] }
+  { name: "直连", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Direct.png", proxies: ["DIRECT", "REJECT"] },
+  { name: "香港手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Hong_Kong.png", "include-all": true, "exclude-filter": "🔗", filter: "🇭🇰|香港|港|HK|hongkong|hong kong", proxies: ["DIRECT", "REJECT"] },
+  { name: "台湾手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png", "include-all": true, "exclude-filter": "🔗", filter: "🇹🇼|台湾|台|TW|taiwan|taipei", proxies: ["DIRECT", "REJECT"] },
+  { name: "日本手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png", "include-all": true, "exclude-filter": "🔗", filter: "🇯🇵|日本|日|JP|japan|tokyo", proxies: ["DIRECT", "REJECT"] },
+  { name: "新加坡手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Singapore.png", "include-all": true, "exclude-filter": "🔗", filter: "🇸🇬|新加坡|新|SG|singapore", proxies: ["DIRECT", "REJECT"] },
+  { name: "美国手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png", "include-all": true, "exclude-filter": "🔗", filter: "🇺🇸|美国|美|US|united states|america", proxies: ["DIRECT", "REJECT"] },
 ];
 
 // ========================================
@@ -104,6 +110,11 @@ const defaultRules = [
   "DOMAIN-SUFFIX,cursor.sh,Cursor",
   "DOMAIN-SUFFIX,cursorapi.com,Cursor",
   "DOMAIN-KEYWORD,cursor,Cursor",
+  "DOMAIN-SUFFIX,duolingo.com,Duolingo",
+  "DOMAIN-SUFFIX,duolingo.cn,Duolingo",
+  "DOMAIN-SUFFIX,ads-api.duolingo.com,Duolingo",
+  "DOMAIN-SUFFIX,analytics.vpc.duolingo.com,Duolingo",
+  "DOMAIN-SUFFIX,metrics.duolingo.com,Duolingo",
   "PROCESS-NAME,prl_naptd,漏网之鱼",
   "RULE-SET,Lan,直连,no-resolve",
   "RULE-SET,DNSLeak,手动选择",

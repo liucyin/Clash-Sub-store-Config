@@ -501,6 +501,38 @@ const baseConfig = {
     },
 
     {
+      name: "Duolingo",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/duolingo.png",
+      "include-all": true,
+      proxies: [
+        "美国手动选择",
+        "手动选择",
+        "自动选择",
+        "香港",
+        "澳门",
+        "台湾",
+        "日本",
+        "韩国",
+        "美国",
+        "英国",
+        "德国",
+        "法国",
+        "印度",
+        "新加坡",
+        "印尼",
+        "越南",
+        "泰国",
+        "澳洲",
+        "巴西",
+        "其他",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
       name: "Emby",
       type: "select",
       "disable-udp": false,
@@ -1309,7 +1341,54 @@ const baseConfig = {
       "include-all": true,
       icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png",
       filter: "(?i)^(?!.*(香港|台湾|日本|韩国|新加坡|美国|英国|德国|法国|印度|泰国|越南|印尼|澳大利亚|巴西|港|台|日|韩|新|美|英|德|法|印|泰|越|尼|澳|巴|hk|tw|jp|kr|sg|us|uk|de|fr|in|th|vn|id|au|br)).*"
-    }
+    },
+
+    // 地区手动选择分组 - 手动选择对应地区节点
+    {
+      name: "香港手动选择",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Hong_Kong.png",
+      "include-all": true,
+      "exclude-filter": "🔗",
+      filter: "🇭🇰|香港|港|HK|hongkong|hong kong"
+    },
+    {
+      name: "台湾手动选择",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png",
+      "include-all": true,
+      "exclude-filter": "🔗",
+      filter: "🇹🇼|台湾|台|TW|taiwan|taipei"
+    },
+    {
+      name: "日本手动选择",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png",
+      "include-all": true,
+      "exclude-filter": "🔗",
+      filter: "🇯🇵|日本|日|JP|japan|tokyo"
+    },
+    {
+      name: "新加坡手动选择",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Singapore.png",
+      "include-all": true,
+      "exclude-filter": "🔗",
+      filter: "🇸🇬|新加坡|新|SG|singapore"
+    },
+    {
+      name: "美国手动选择",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png",
+      "include-all": true,
+      "exclude-filter": "🔗",
+      filter: "🇺🇸|美国|美|US|united states|america"
+    },
   ],
 
   // 规则提供者
@@ -1535,6 +1614,13 @@ const baseConfig = {
     "DOMAIN-SUFFIX,cursor.sh,Cursor",
     "DOMAIN-SUFFIX,cursorapi.com,Cursor",
     "DOMAIN-KEYWORD,cursor,Cursor",
+
+    // Duolingo 域名规则
+    "DOMAIN-SUFFIX,duolingo.com,Duolingo",
+    "DOMAIN-SUFFIX,duolingo.cn,Duolingo",
+    "DOMAIN-SUFFIX,ads-api.duolingo.com,Duolingo",
+    "DOMAIN-SUFFIX,analytics.vpc.duolingo.com,Duolingo",
+    "DOMAIN-SUFFIX,metrics.duolingo.com,Duolingo",
 
     // 进程规则
     "PROCESS-NAME,prl_naptd,漏网之鱼",
