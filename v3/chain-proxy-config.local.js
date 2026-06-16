@@ -1641,6 +1641,22 @@ const baseConfig = {
     "DOMAIN-SUFFIX,analytics.vpc.duolingo.com,Duolingo",
     "DOMAIN-SUFFIX,metrics.duolingo.com,Duolingo",
 
+    // Cloudbet 域名规则 - 默认走日本手动选择
+    "DOMAIN-SUFFIX,cloudbet.com,日本手动选择",
+    "DOMAIN-SUFFIX,cldbt.cloud,日本手动选择",
+    "DOMAIN-SUFFIX,sports-api.cloudbet.com,日本手动选择",
+    "DOMAIN-SUFFIX,api.cloudbet.com,日本手动选择",
+    "DOMAIN-SUFFIX,cdn.cloudbet.com,日本手动选择",
+    "DOMAIN-SUFFIX,media.cloudbet.com,日本手动选择",
+    "DOMAIN-SUFFIX,affiliates.cloudbet.com,日本手动选择",
+    "DOMAIN-SUFFIX,play-cloudbet.com,日本手动选择",
+    "DOMAIN-SUFFIX,share.cloudbet.com,日本手动选择",
+    "DOMAIN-SUFFIX,a.cloudbet.com,日本手动选择",
+    "DOMAIN-SUFFIX,int.cloudbet.com,日本手动选择",
+    "DOMAIN-SUFFIX,ws.cloudbet.com,日本手动选择",
+    "DOMAIN-SUFFIX,wss.cloudbet.com,日本手动选择",
+    "DOMAIN-KEYWORD,cloudbet,日本手动选择",
+
     // Grok 域名规则
     "DOMAIN-SUFFIX,grok.com,Grok",
     "DOMAIN-SUFFIX,x.ai,Grok",
