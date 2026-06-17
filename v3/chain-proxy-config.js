@@ -1638,6 +1638,26 @@ const baseConfig = {
     "DOMAIN-SUFFIX,wss.cloudbet.com,日本手动选择",
     "DOMAIN-KEYWORD,cloudbet,日本手动选择",
 
+    // BC.Game 域名规则 - 默认走日本手动选择
+    "DOMAIN-SUFFIX,bc.game,日本手动选择",
+    "DOMAIN-SUFFIX,bc.fun,日本手动选择",
+    "DOMAIN-SUFFIX,bc.app,日本手动选择",
+    "DOMAIN-SUFFIX,hash.game,日本手动选择",
+    "DOMAIN-SUFFIX,api.bc.game,日本手动选择",
+    "DOMAIN-SUFFIX,sports.bc.game,日本手动选择",
+    "DOMAIN-SUFFIX,cdn.bc.game,日本手动选择",
+    "DOMAIN-SUFFIX,img.bc.game,日本手动选择",
+    "DOMAIN-SUFFIX,img2.bc.game,日本手动选择",
+    "DOMAIN-SUFFIX,forum.bc.game,日本手动选择",
+    "DOMAIN-SUFFIX,assets.bc.game,日本手动选择",
+    "DOMAIN-SUFFIX,ws.bc.game,日本手动选择",
+    "DOMAIN-SUFFIX,wss.bc.game,日本手动选择",
+    "DOMAIN-SUFFIX,payment.bc.game,日本手动选择",
+    "DOMAIN-KEYWORD,deposit.bc.game,日本手动选择",
+    "DOMAIN-KEYWORD,withdraw.bc.game,日本手动选择",
+    "DOMAIN-KEYWORD,bc.game,日本手动选择",
+    "DOMAIN-KEYWORD,bc.fun,日本手动选择",
+
     // 进程规则
     "PROCESS-NAME,prl_naptd,漏网之鱼",
 
