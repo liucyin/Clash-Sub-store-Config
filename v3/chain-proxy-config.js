@@ -1638,6 +1638,27 @@ const baseConfig = {
     "DOMAIN-SUFFIX,wss.cloudbet.com,日本手动选择",
     "DOMAIN-KEYWORD,cloudbet,日本手动选择",
 
+    // Stake.com 域名规则 - 默认走日本手动选择
+    "DOMAIN-SUFFIX,stake.com,日本手动选择",
+    "DOMAIN-SUFFIX,stake.bet,日本手动选择",
+    "DOMAIN-SUFFIX,stake.games,日本手动选择",
+    "DOMAIN-SUFFIX,stake.ac,日本手动选择",
+    "DOMAIN-SUFFIX,stake.pet,日本手动选择",
+    "DOMAIN-SUFFIX,api.stake.com,日本手动选择",
+    "DOMAIN-SUFFIX,sports.stake.com,日本手动选择",
+    "DOMAIN-SUFFIX,cdn.stake.com,日本手动选择",
+    "DOMAIN-SUFFIX,assets.stake.com,日本手动选择",
+    "DOMAIN-SUFFIX,img.stake.com,日本手动选择",
+    "DOMAIN-SUFFIX,ws.stake.com,日本手动选择",
+    "DOMAIN-SUFFIX,wss.stake.com,日本手动选择",
+    "DOMAIN-SUFFIX,payment.stake.com,日本手动选择",
+    "DOMAIN-KEYWORD,deposit.stake,日本手动选择",
+    "DOMAIN-KEYWORD,withdraw.stake,日本手动选择",
+    "DOMAIN-SUFFIX,stake.bet.br,日本手动选择",
+    "DOMAIN-SUFFIX,stake.com.co,日本手动选择",
+    "DOMAIN-SUFFIX,stake.mx,日本手动选择",
+    "DOMAIN-KEYWORD,stake,日本手动选择",
+
     // 进程规则
     "PROCESS-NAME,prl_naptd,漏网之鱼",
 
