@@ -1598,6 +1598,8 @@ const baseConfig = {
     "DOMAIN-SUFFIX,portal101.cn,直连",
     "DOMAIN-SUFFIX,javasec.org,直连",
     "DOMAIN-SUFFIX,deepseek.com,直连",
+    "DOMAIN-SUFFIX,transferwise.com,直连",
+    "DOMAIN-SUFFIX,wise.com,直连",
 
     // Grok 域名规则
     "DOMAIN-SUFFIX,grok.com,Grok",
