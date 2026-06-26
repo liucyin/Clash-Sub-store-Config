@@ -36,6 +36,7 @@ const allGroupDefinitions = [
   { name: "Emby", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Emby.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Gemini", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/guaishouxiaoqi/icons@master/Color/Gemini.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Grok", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/grok.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
+  { name: "Kraken", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/kraken.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Perplexity", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/perplexity.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Github", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/GitHub.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Google", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Google_Search.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
@@ -117,6 +118,8 @@ const defaultRules = [
   "DOMAIN-SUFFIX,ads-api.duolingo.com,Duolingo",
   "DOMAIN-SUFFIX,analytics.vpc.duolingo.com,Duolingo",
   "DOMAIN-SUFFIX,metrics.duolingo.com,Duolingo",
+  "DOMAIN-SUFFIX,kraken.com,Kraken",
+  "DOMAIN-SUFFIX,kraken.onl,Kraken",
   "DOMAIN-SUFFIX,cloudbet.com,日本手动选择",
   "DOMAIN-SUFFIX,cldbt.cloud,日本手动选择",
   "DOMAIN-SUFFIX,sports-api.cloudbet.com,日本手动选择",
@@ -255,7 +258,7 @@ function main(config) {
 
   // 5. 将所有策略组的 proxies 加上链式代理选项
   var policyGroups = ["手动选择", "GLOBAL", "Apple", "AppStore", "BiliBili", "Bybit",
-    "Claude", "Cursor", "Disney", "Emby", "Gemini", "Grok", "Perplexity",
+    "Claude", "Cursor", "Disney", "Emby", "Gemini", "Grok", "Kraken", "Perplexity",
     "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam",
     "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"];
 

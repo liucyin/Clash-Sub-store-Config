@@ -626,6 +626,37 @@ const baseConfig = {
     },
 
     {
+      name: "Kraken",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/kraken.png",
+      "include-all": true,
+      proxies: [
+        "手动选择",
+        "自动选择",
+        "香港",
+        "澳门",
+        "台湾",
+        "日本",
+        "韩国",
+        "美国",
+        "英国",
+        "德国",
+        "法国",
+        "印度",
+        "新加坡",
+        "印尼",
+        "越南",
+        "泰国",
+        "澳洲",
+        "巴西",
+        "其他",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
       name: "Perplexity",
       type: "select",
       "disable-udp": false,
@@ -1623,6 +1654,10 @@ const baseConfig = {
     "DOMAIN-SUFFIX,ads-api.duolingo.com,Duolingo",
     "DOMAIN-SUFFIX,analytics.vpc.duolingo.com,Duolingo",
     "DOMAIN-SUFFIX,metrics.duolingo.com,Duolingo",
+
+    // Kraken 域名规则
+    "DOMAIN-SUFFIX,kraken.com,Kraken",
+    "DOMAIN-SUFFIX,kraken.onl,Kraken",
 
     // Cloudbet 域名规则 - 默认走日本手动选择
     "DOMAIN-SUFFIX,cloudbet.com,日本手动选择",
