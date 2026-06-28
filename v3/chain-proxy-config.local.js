@@ -1638,6 +1638,54 @@ const baseConfig = {
       format: "yaml",
       proxy: "DIRECT",
       url: "https://testingcf.jsdelivr.net/gh/wanswu/my-backup@master/clash/rule/DNSLeak.yaml"
+    },
+    duolingo: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "DIRECT",
+      url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/duolingo.yaml"
+    },
+    kraken: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "DIRECT",
+      url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/kraken.yaml"
+    },
+    cursor: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "DIRECT",
+      url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/cursor.yaml"
+    },
+    wise: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "DIRECT",
+      url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/wise.yaml"
+    },
+    perplexity: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "DIRECT",
+      url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/perplexity.yaml"
+    },
+    ifast: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "DIRECT",
+      url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/ifast.yaml"
     }
   },
 
@@ -1652,31 +1700,23 @@ const baseConfig = {
     "DOMAIN-SUFFIX,portal101.cn,直连",
     "DOMAIN-SUFFIX,javasec.org,直连",
     "DOMAIN-SUFFIX,deepseek.com,直连",
-    "DOMAIN-SUFFIX,transferwise.com,直连",
-    "DOMAIN-SUFFIX,wise.com,直连",
-
     // Perplexity 域名规则
-    "DOMAIN-SUFFIX,perplexity.ai,Perplexity",
-    "DOMAIN-SUFFIX,pplx.ai,Perplexity",
-    "DOMAIN-KEYWORD,perplexity,Perplexity",
+    "RULE-SET,perplexity,Perplexity",
 
     // Cursor 域名规则
-    "DOMAIN-SUFFIX,cursor-cdn.com,Cursor",
-    "DOMAIN-SUFFIX,cursor.com,Cursor",
-    "DOMAIN-SUFFIX,cursor.sh,Cursor",
-    "DOMAIN-SUFFIX,cursorapi.com,Cursor",
-    "DOMAIN-KEYWORD,cursor,Cursor",
+    "RULE-SET,cursor,Cursor",
 
     // Duolingo 域名规则
-    "DOMAIN-SUFFIX,duolingo.com,Duolingo",
-    "DOMAIN-SUFFIX,duolingo.cn,Duolingo",
-    "DOMAIN-SUFFIX,ads-api.duolingo.com,Duolingo",
-    "DOMAIN-SUFFIX,analytics.vpc.duolingo.com,Duolingo",
-    "DOMAIN-SUFFIX,metrics.duolingo.com,Duolingo",
+    "RULE-SET,duolingo,Duolingo",
 
     // Kraken 域名规则
-    "DOMAIN-SUFFIX,kraken.com,Kraken",
-    "DOMAIN-SUFFIX,kraken.onl,Kraken",
+    "RULE-SET,kraken,Kraken",
+
+    // Wise 域名规则
+    "RULE-SET,wise,直连",
+
+    // iFast 域名规则
+    "RULE-SET,ifast,直连",
 
     // Cloudbet 域名规则 - 默认走日本手动选择
     "DOMAIN-SUFFIX,cloudbet.com,日本手动选择",
