@@ -56,7 +56,7 @@ const aiRuleProviders = {
 const baseConfig = {
   // 通用配置
   mode: "rule",
-  ipv6: true,
+  ipv6: false,
   "mixed-port": 7890,
   "allow-lan": true,
   "bind-address": "0.0.0.0",
@@ -81,11 +81,11 @@ const baseConfig = {
   "keep-alive-idle": 15,
   "disable-keep-alive": true,
 
-  // DNS 配置（融合优化版）
+  // DNS 配置（防泄露优化版 - 参考 lvbibir/mihomo.yaml）
   dns: {
     enable: true,
-    listen: "0.0.0.0:1053", // 如需局域网设备使用这个DNS，取消注释
-    ipv6: true,
+    listen: "0.0.0.0:1053",
+    ipv6: false,
     "prefer-h3": false,
     "respect-rules": true, // 尊重分流规则，DNS 查询也会遵循代理规则
     "use-hosts": false,
@@ -93,6 +93,7 @@ const baseConfig = {
     "cache-algorithm": "arc", // 使用 ARC 缓存算法，性能更好
     "enhanced-mode": "fake-ip",
     "fake-ip-range": "198.18.0.1/16",
+    "fake-ip-filter-mode": "blacklist",
     "fake-ip-filter": [
       // 本地主机/设备
       "+.lan",
@@ -135,6 +136,10 @@ const baseConfig = {
       "geosite:cn": [
         "https://223.5.5.5/dns-query",
         "https://doh.pub/dns-query"
+      ],
+      "geosite:private": [
+        "https://223.5.5.5/dns-query",
+        "https://doh.pub/dns-query"
       ]
     }
   },
@@ -162,8 +167,9 @@ const baseConfig = {
 
   // 入站配置
   tun: {
-    enable: false,
+    enable: true,
     stack: "mixed",
+    "strict-route": true,
     "auto-route": true,
     "auto-redirect": false,
     "auto-detect-interface": true,
@@ -1631,14 +1637,6 @@ const baseConfig = {
       proxy: "DIRECT",
       url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTube/YouTube.yaml"
     },
-    DNSLeak: {
-      type: "http",
-      behavior: "classical",
-      interval: 3600,
-      format: "yaml",
-      proxy: "DIRECT",
-      url: "https://testingcf.jsdelivr.net/gh/wanswu/my-backup@master/clash/rule/DNSLeak.yaml"
-    },
     duolingo: {
       type: "http",
       behavior: "classical",
@@ -1764,7 +1762,6 @@ const baseConfig = {
 
     // 规则集匹配
     "RULE-SET,Lan,直连,no-resolve",
-    "RULE-SET,DNSLeak,手动选择",
     "RULE-SET,Microsoft,Microsoft",
     "RULE-SET,Bybit,Bybit",
     "RULE-SET,China,直连,no-resolve",

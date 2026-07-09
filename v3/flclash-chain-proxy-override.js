@@ -104,7 +104,6 @@ const defaultRuleProviders = {
   Twitter: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Twitter/Twitter.yaml" },
   Telegram: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Telegram/Telegram.yaml" },
   YouTube: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTube/YouTube.yaml" },
-  DNSLeak: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/wanswu/my-backup@master/clash/rule/DNSLeak.yaml" },
   duolingo: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/duolingo.yaml" },
   kraken: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/kraken.yaml" },
   cursor: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/cursor.yaml" },
@@ -167,7 +166,6 @@ const defaultRules = [
   "DOMAIN-KEYWORD,stake,日本",
   "PROCESS-NAME,prl_naptd,漏网之鱼",
   "RULE-SET,Lan,直连,no-resolve",
-  "RULE-SET,DNSLeak,手动选择",
   "RULE-SET,Microsoft,Microsoft",
   "RULE-SET,Bybit,Bybit",
   "RULE-SET,China,直连,no-resolve",
@@ -306,7 +304,19 @@ function main(config) {
   config.sniffer['force-domain'] = config.sniffer['force-domain'] || [];
   config.sniffer['skip-domain'] = config.sniffer['skip-domain'] || ['+.oray.com', 'Mijia Cloud', '+.push.apple.com'];
 
-  // 8. 补全 rule-providers
+  // 8. 强制 DNS/TUN 防泄露设置
+  if (typeof config.ipv6 !== 'undefined') { config.ipv6 = false; }
+  config.tun = config.tun || {};
+  config.tun.enable = true;
+  config.tun['strict-route'] = true;
+  config.tun['dns-hijack'] = config.tun['dns-hijack'] || ['any:53', 'tcp://any:53'];
+  config.dns = config.dns || {};
+  config.dns.ipv6 = false;
+  config.dns['fake-ip-filter-mode'] = 'blacklist';
+  config.dns['respect-rules'] = true;
+  config.dns['enhanced-mode'] = config.dns['enhanced-mode'] || 'fake-ip';
+
+  // 9. 补全 rule-providers
   var currentProviders = config['rule-providers'] || {};
   Object.keys(defaultRuleProviders).forEach(function(key) {
     if (!currentProviders[key]) {
@@ -315,7 +325,7 @@ function main(config) {
   });
   config['rule-providers'] = currentProviders;
 
-  // 9. 补全路由规则
+  // 10. 补全路由规则
   var currentRules = config.rules || [];
   if (currentRules.length < 5) {
     config.rules = defaultRules;
