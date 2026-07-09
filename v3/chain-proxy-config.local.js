@@ -156,6 +156,14 @@ const baseConfig = {
     asn: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb"
   },
 
+  // 主机名映射 - 强制 DoH 域名走指定 IP，避免 DNS 解析死循环
+  hosts: {
+    "dns.alidns.com": ["223.5.5.5", "223.6.6.6"],
+    "doh.pub": ["1.12.12.12", "120.53.53.53"],
+    "dns.google": ["8.8.8.8", "8.8.4.4"],
+    "cloudflare-dns.com": ["1.1.1.1", "1.0.0.1"]
+  },
+
   // 时间同步
   ntp: {
     enable: true,
