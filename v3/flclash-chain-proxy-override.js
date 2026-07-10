@@ -218,11 +218,11 @@ const defaultRules = [
 // ========================================
 
 const orderedApplicationGroups = [
-  "Speedtest", "Binance", "Bybit", "Claude", "Cursor", "Disney", "Duolingo",
-  "Emby", "Gemini", "Github", "Google", "Grok", "Kraken", "Microsoft",
-  "Monzo", "Netflix", "OKX", "OneDrive", "OpenAI", "PayPal", "Perplexity",
-  "Revolut", "Spotify", "Steam", "Telegram", "TikTok", "Twitter", "Wise",
-  "YouTube"
+  "Apple", "AppStore", "BiliBili", "Binance", "Bybit", "Claude", "Cursor",
+  "Disney", "Duolingo", "Emby", "Gemini", "Github", "Google", "Grok",
+  "Kraken", "Microsoft", "Monzo", "Netflix", "OKX", "OneDrive", "OpenAI",
+  "PayPal", "Perplexity", "Revolut", "Speedtest", "Spotify", "Steam",
+  "Telegram", "TikTok", "Twitter", "Wise", "YouTube"
 ];
 
 function orderApplicationProxyGroups(proxyGroups) {
