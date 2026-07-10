@@ -217,6 +217,30 @@ const defaultRules = [
 // 脚本主函数
 // ========================================
 
+const orderedApplicationGroups = [
+  "Speedtest", "Binance", "Bybit", "Claude", "Cursor", "Disney", "Duolingo",
+  "Emby", "Gemini", "Github", "Google", "Grok", "Kraken", "Microsoft",
+  "Monzo", "Netflix", "OKX", "OneDrive", "OpenAI", "PayPal", "Perplexity",
+  "Revolut", "Spotify", "Steam", "Telegram", "TikTok", "Twitter", "Wise",
+  "YouTube"
+];
+
+function orderApplicationProxyGroups(proxyGroups) {
+  var orderedNames = {};
+  orderedApplicationGroups.forEach(function(name) { orderedNames[name] = true; });
+  var firstIndex = proxyGroups.findIndex(function(group) { return orderedNames[group.name]; });
+  if (firstIndex === -1) return proxyGroups;
+
+  var groupsByName = {};
+  proxyGroups.forEach(function(group) { groupsByName[group.name] = group; });
+  var orderedGroups = orderedApplicationGroups
+    .map(function(name) { return groupsByName[name]; })
+    .filter(Boolean);
+  var remainingGroups = proxyGroups.filter(function(group) { return !orderedNames[group.name]; });
+  remainingGroups.splice.apply(remainingGroups, [firstIndex, 0].concat(orderedGroups));
+  return remainingGroups;
+}
+
 function main(config) {
   console.log("🚀 FlClash 链式代理覆写开始...");
 
@@ -313,6 +337,7 @@ function main(config) {
     }
   });
 
+  proxyGroups = orderApplicationProxyGroups(proxyGroups);
   config['proxy-groups'] = proxyGroups;
 
   // 7. 开启嗅探，尽量恢复域名供 China 规则使用

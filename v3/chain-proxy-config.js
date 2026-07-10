@@ -2088,6 +2088,28 @@ const baseConfig = {
 // 脚本主函数
 // ========================================
 
+const orderedApplicationGroups = [
+  "Speedtest", "Binance", "Bybit", "Claude", "Cursor", "Disney", "Duolingo",
+  "Emby", "Gemini", "Github", "Google", "Grok", "Kraken", "Microsoft",
+  "Monzo", "Netflix", "OKX", "OneDrive", "OpenAI", "PayPal", "Perplexity",
+  "Revolut", "Spotify", "Steam", "Telegram", "TikTok", "Twitter", "Wise",
+  "YouTube"
+];
+
+function orderApplicationProxyGroups(proxyGroups) {
+  const orderedNames = new Set(orderedApplicationGroups);
+  const firstIndex = proxyGroups.findIndex(group => orderedNames.has(group.name));
+  if (firstIndex === -1) return proxyGroups;
+
+  const groupsByName = new Map(proxyGroups.map(group => [group.name, group]));
+  const orderedGroups = orderedApplicationGroups
+    .map(name => groupsByName.get(name))
+    .filter(Boolean);
+  const remainingGroups = proxyGroups.filter(group => !orderedNames.has(group.name));
+  remainingGroups.splice(firstIndex, 0, ...orderedGroups);
+  return remainingGroups;
+}
+
 function main(config, profileName) {
   console.log("🚀 开始处理链式代理配置...");
 
@@ -2236,7 +2258,7 @@ function main(config, profileName) {
     console.log("✅ 只有 🏠 链式代理 组中的节点走链式代理");
   }
 
-  config['proxy-groups'] = proxyGroups;
+  config['proxy-groups'] = orderApplicationProxyGroups(proxyGroups);
 
   // 8. 添加 AI 规则集（可选，如果需要更全面的 AI 规则）
   // 注释掉以避免与策略组规则冲突，让用户可以在策略组中灵活切换
