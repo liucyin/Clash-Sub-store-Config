@@ -58,12 +58,11 @@ const baseConfig = {
   mode: "rule",
   ipv6: false,
   "mixed-port": 7890,
-  "allow-lan": true,
-  "bind-address": "0.0.0.0",
+  "allow-lan": false,
+  "bind-address": "127.0.0.1",
   "log-level": "error",
   "unified-delay": true,
   "find-process-mode": "strict",
-  "global-client-fingerprint": "chrome",
 
   // 规则选择缓存
   profile: {
@@ -79,11 +78,11 @@ const baseConfig = {
   // DNS 配置（防泄露优化版 - 参考 lvbibir/mihomo.yaml）
   dns: {
     enable: true,
-    listen: "0.0.0.0:1053",
+    listen: "127.0.0.1:1053",
     ipv6: false,
     "prefer-h3": false,
     "respect-rules": true, // 尊重分流规则，DNS 查询也会遵循代理规则
-    "use-hosts": false,
+    "use-hosts": true,
     "use-system-hosts": false,
     "cache-algorithm": "arc", // 使用 ARC 缓存算法，性能更好
     "enhanced-mode": "fake-ip",
@@ -102,39 +101,94 @@ const baseConfig = {
       "localhost.work.weixin.qq.com"
     ],
     "default-nameserver": [
-      "223.5.5.5",
-      "1.2.4.8"
+      "tls://223.5.5.5:853",
+      "https://223.5.5.5/dns-query"
     ],
-    // 国外 DNS 服务器（代理流量使用）
+    // 国外 DNS 默认跟随漏网之鱼策略组
     nameserver: [
-      "https://1.1.1.1/dns-query", // Cloudflare
-      "https://cloudflare-dns.com/dns-query",
-      "https://dns.google.com/dns-query", // Google
-      "https://8.8.4.4/dns-query",
-      "https://208.67.222.222/dns-query", // OpenDNS
-      "https://9.9.9.9/dns-query" // Quad9
+      "https://1.1.1.1/dns-query#漏网之鱼", // Cloudflare
+      "https://dns.google/dns-query#漏网之鱼" // Google
     ],
     // 代理服务器节点解析使用国内 DNS（避免污染）
     "proxy-server-nameserver": [
-      "https://223.5.5.5/dns-query",
-      "https://doh.pub/dns-query"
+      "https://223.5.5.5/dns-query#DIRECT",
+      "https://doh.pub/dns-query#DIRECT"
     ],
     // 直连流量使用国内 DNS
     "direct-nameserver": [
-      "https://doh.pub/dns-query",
-      "https://223.5.5.5/dns-query",
-      "https://dns.alidns.com/dns-query"
+      "https://doh.pub/dns-query#DIRECT",
+      "https://223.5.5.5/dns-query#DIRECT",
+      "https://dns.alidns.com/dns-query#DIRECT"
     ],
-    "direct-nameserver-follow-policy": false,
-    // 国内域名使用国内 DNS
+    "direct-nameserver-follow-policy": true,
+    // DNS 与业务策略组联动，切换策略组时 DNS 出口同步切换
     "nameserver-policy": {
       "geosite:cn": [
-        "https://223.5.5.5/dns-query",
-        "https://doh.pub/dns-query"
+        "https://223.5.5.5/dns-query#DIRECT",
+        "https://doh.pub/dns-query#DIRECT"
+      ],
+      "rule-set:OpenAI": [
+        "https://1.1.1.1/dns-query#OpenAI",
+        "https://dns.google/dns-query#OpenAI"
+      ],
+      "rule-set:Claude": [
+        "https://1.1.1.1/dns-query#Claude",
+        "https://dns.google/dns-query#Claude"
+      ],
+      "rule-set:Gemini": [
+        "https://1.1.1.1/dns-query#Gemini",
+        "https://dns.google/dns-query#Gemini"
+      ],
+      "geosite:ookla-speedtest": [
+        "https://1.1.1.1/dns-query#Speedtest",
+        "https://dns.google/dns-query#Speedtest"
+      ],
+      "rule-set:Speedtest": [
+        "https://1.1.1.1/dns-query#Speedtest",
+        "https://dns.google/dns-query#Speedtest"
+      ],
+      "+.oca.nflxvideo.net": [
+        "https://1.1.1.1/dns-query#Speedtest",
+        "https://dns.google/dns-query#Speedtest"
+      ],
+      "rule-set:Bybit": [
+        "https://1.1.1.1/dns-query#Bybit",
+        "https://dns.google/dns-query#Bybit"
+      ],
+      "rule-set:kraken": [
+        "https://1.1.1.1/dns-query#Kraken",
+        "https://dns.google/dns-query#Kraken"
+      ],
+      "rule-set:wise": [
+        "https://1.1.1.1/dns-query#Wise",
+        "https://dns.google/dns-query#Wise"
+      ],
+      "rule-set:okx": [
+        "https://1.1.1.1/dns-query#OKX",
+        "https://dns.google/dns-query#OKX"
+      ],
+      "rule-set:paypal": [
+        "https://1.1.1.1/dns-query#PayPal",
+        "https://dns.google/dns-query#PayPal"
+      ],
+      "rule-set:binance": [
+        "https://1.1.1.1/dns-query#Binance",
+        "https://dns.google/dns-query#Binance"
+      ],
+      "rule-set:monzo": [
+        "https://1.1.1.1/dns-query#Monzo",
+        "https://dns.google/dns-query#Monzo"
+      ],
+      "rule-set:revolut": [
+        "https://1.1.1.1/dns-query#Revolut",
+        "https://dns.google/dns-query#Revolut"
+      ],
+      "+.grok.com,+.x.ai": [
+        "https://1.1.1.1/dns-query#Grok",
+        "https://dns.google/dns-query#Grok"
       ],
       "geosite:private": [
-        "https://223.5.5.5/dns-query",
-        "https://doh.pub/dns-query"
+        "system://"
       ]
     }
   },
@@ -391,6 +445,42 @@ const baseConfig = {
     },
 
     {
+      name: "Speedtest",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Speedtest.png",
+      "include-all": true,
+      proxies: [
+        "DIRECT",
+        "手动选择",
+        "自动选择",
+        "香港手动选择",
+        "台湾手动选择",
+        "日本手动选择",
+        "新加坡手动选择",
+        "美国手动选择",
+        "香港",
+        "澳门",
+        "台湾",
+        "日本",
+        "韩国",
+        "美国",
+        "英国",
+        "德国",
+        "法国",
+        "印度",
+        "新加坡",
+        "印尼",
+        "越南",
+        "泰国",
+        "澳洲",
+        "巴西",
+        "其他",
+        "REJECT"
+      ]
+    },
+
+    {
       name: "Bybit",
       type: "select",
       "disable-udp": false,
@@ -416,6 +506,154 @@ const baseConfig = {
         "澳洲",
         "巴西",
         "其他",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
+      name: "Wise",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/wise.png",
+      "include-all": true,
+      proxies: [
+        "DIRECT",
+        "美国手动选择",
+        "美国",
+        "英国",
+        "手动选择",
+        "自动选择",
+        "香港",
+        "澳门",
+        "台湾",
+        "日本",
+        "韩国",
+        "德国",
+        "法国",
+        "印度",
+        "新加坡",
+        "印尼",
+        "越南",
+        "泰国",
+        "澳洲",
+        "巴西",
+        "其他",
+        "REJECT"
+      ]
+    },
+
+    {
+      name: "OKX",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/okx.png",
+      "include-all": true,
+      proxies: [
+        "美国手动选择",
+        "美国",
+        "日本手动选择",
+        "日本",
+        "新加坡手动选择",
+        "新加坡",
+        "香港手动选择",
+        "香港",
+        "台湾手动选择",
+        "台湾",
+        "手动选择",
+        "自动选择",
+        "澳门",
+        "韩国",
+        "英国",
+        "德国",
+        "法国",
+        "印度",
+        "印尼",
+        "越南",
+        "泰国",
+        "澳洲",
+        "巴西",
+        "其他",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
+      name: "PayPal",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/PayPal.png",
+      "include-all": true,
+      proxies: [
+        "美国手动选择",
+        "美国",
+        "英国手动选择",
+        "英国",
+        "手动选择",
+        "自动选择",
+        "日本",
+        "新加坡",
+        "香港",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
+      name: "Binance",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/binance.png",
+      "include-all": true,
+      proxies: [
+        "日本手动选择",
+        "日本",
+        "新加坡手动选择",
+        "新加坡",
+        "香港手动选择",
+        "香港",
+        "台湾手动选择",
+        "台湾",
+        "手动选择",
+        "自动选择",
+        "美国",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
+      name: "Monzo",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/monzo.png",
+      "include-all": true,
+      proxies: [
+        "英国手动选择",
+        "英国",
+        "手动选择",
+        "美国手动选择",
+        "美国",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
+      name: "Revolut",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/revolut.png",
+      "include-all": true,
+      proxies: [
+        "英国手动选择",
+        "英国",
+        "美国手动选择",
+        "美国",
+        "新加坡手动选择",
+        "新加坡",
+        "手动选择",
         "DIRECT",
         "REJECT"
       ]
@@ -1304,7 +1542,7 @@ const baseConfig = {
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
-      icon: "https://testingcf.jsdelivr.net/gh/wanswu/my-backup@master/IconSet/Country/Indonesia.png",
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/indonesia.png",
       filter: "🇮🇩|印尼|印度尼西亚|ID|indonesia|jakarta"
     },
 
@@ -1320,7 +1558,7 @@ const baseConfig = {
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
-      icon: "https://testingcf.jsdelivr.net/gh/wanswu/my-backup@master/IconSet/Country/Vietnam.png",
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/vietnam.png",
       filter: "🇻🇳|越南|VN|vietnam"
     },
 
@@ -1433,6 +1671,15 @@ const baseConfig = {
       "include-all": true,
       "exclude-filter": "🔗",
       filter: "🇺🇸|美国|美|US|united states|america"
+    },
+    {
+      name: "英国手动选择",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png",
+      "include-all": true,
+      "exclude-filter": "🔗",
+      filter: "🇬🇧|英国|英|UK|united kingdom|london"
     },
   ],
 
@@ -1622,12 +1869,20 @@ const baseConfig = {
       proxy: "DIRECT",
       url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTube/YouTube.yaml"
     },
-    duolingo: {
+    Speedtest: {
       type: "http",
       behavior: "classical",
       interval: 3600,
       format: "yaml",
       proxy: "DIRECT",
+      url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Speedtest/Speedtest.yaml"
+    },
+    duolingo: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "漏网之鱼",
       url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/duolingo.yaml"
     },
     kraken: {
@@ -1635,7 +1890,7 @@ const baseConfig = {
       behavior: "classical",
       interval: 3600,
       format: "yaml",
-      proxy: "DIRECT",
+      proxy: "漏网之鱼",
       url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/kraken.yaml"
     },
     cursor: {
@@ -1643,7 +1898,7 @@ const baseConfig = {
       behavior: "classical",
       interval: 3600,
       format: "yaml",
-      proxy: "DIRECT",
+      proxy: "漏网之鱼",
       url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/cursor.yaml"
     },
     wise: {
@@ -1651,15 +1906,55 @@ const baseConfig = {
       behavior: "classical",
       interval: 3600,
       format: "yaml",
-      proxy: "DIRECT",
+      proxy: "漏网之鱼",
       url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/wise.yaml"
+    },
+    okx: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "漏网之鱼",
+      url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/okx.yaml"
+    },
+    paypal: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "DIRECT",
+      url: "https://cdn.jsdelivr.net/gh/Accademia/Additional_Rule_For_Clash@latest/VirtualFinance/Paypal.yaml"
+    },
+    binance: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "漏网之鱼",
+      url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/binance.yaml"
+    },
+    monzo: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "DIRECT",
+      url: "https://cdn.jsdelivr.net/gh/Accademia/Additional_Rule_For_Clash@latest/VirtualFinance/Monzo.yaml"
+    },
+    revolut: {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "yaml",
+      proxy: "DIRECT",
+      url: "https://cdn.jsdelivr.net/gh/Accademia/Additional_Rule_For_Clash@latest/VirtualFinance/Revolut.yaml"
     },
     perplexity: {
       type: "http",
       behavior: "classical",
       interval: 3600,
       format: "yaml",
-      proxy: "DIRECT",
+      proxy: "漏网之鱼",
       url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/perplexity.yaml"
     },
     ifast: {
@@ -1667,7 +1962,7 @@ const baseConfig = {
       behavior: "classical",
       interval: 3600,
       format: "yaml",
-      proxy: "DIRECT",
+      proxy: "漏网之鱼",
       url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/ifast.yaml"
     }
   },
@@ -1687,6 +1982,11 @@ const baseConfig = {
     "DOMAIN-SUFFIX,grok.com,Grok",
     "DOMAIN-SUFFIX,x.ai,Grok",
 
+    // 测速服务规则
+    "GEOSITE,ookla-speedtest,Speedtest",
+    "RULE-SET,Speedtest,Speedtest",
+    "DOMAIN-SUFFIX,oca.nflxvideo.net,Speedtest",
+
     // Perplexity 域名规则
     "RULE-SET,perplexity,Perplexity",
 
@@ -1700,7 +2000,16 @@ const baseConfig = {
     "RULE-SET,kraken,Kraken",
 
     // Wise 域名规则
-    "RULE-SET,wise,直连",
+    "RULE-SET,wise,Wise",
+
+    // OKX 域名规则
+    "RULE-SET,okx,OKX",
+
+    // 金融服务域名规则
+    "RULE-SET,paypal,PayPal",
+    "RULE-SET,binance,Binance",
+    "RULE-SET,monzo,Monzo",
+    "RULE-SET,revolut,Revolut",
 
     // iFast 域名规则
     "RULE-SET,ifast,直连",
@@ -1767,7 +2076,7 @@ const baseConfig = {
     "RULE-SET,Claude,Claude",
     "RULE-SET,Steam,Steam",
     "RULE-SET,Emby,Emby",
-    "RULE-SET,Hijacking,DIRECT",
+    "RULE-SET,Hijacking,REJECT",
     "GEOIP,CN,直连,no-resolve",
 
     // 兜底规则
@@ -1796,6 +2105,12 @@ function main(config, profileName) {
     mergedConfig.rules = config.rules || baseConfig.rules;
     config = mergedConfig;
   }
+
+  Object.values(config['rule-providers'] || {}).forEach(provider => {
+    if (provider?.url?.includes('raw.githubusercontent.com')) {
+      provider.proxy = '漏网之鱼';
+    }
+  });
 
   // 1. 获取所有节点
   const proxies = config.proxies || [];

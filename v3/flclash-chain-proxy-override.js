@@ -28,7 +28,14 @@ const allGroupDefinitions = [
   { name: "Apple", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Apple.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "AppStore", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/App_Store.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "BiliBili", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/bilibili_4.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
+  { name: "Speedtest", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Speedtest.png", "include-all": true, proxies: ["DIRECT", "手动选择", "自动选择", "香港手动选择", "台湾手动选择", "日本手动选择", "新加坡手动选择", "美国手动选择", "REJECT"] },
   { name: "Bybit", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
+  { name: "Wise", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/wise.png", "include-all": true, proxies: ["DIRECT", "美国手动选择", "美国", "英国", "手动选择", "REJECT"] },
+  { name: "OKX", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/okx.png", "include-all": true, proxies: ["美国手动选择", "美国", "日本手动选择", "日本", "新加坡手动选择", "新加坡", "香港手动选择", "香港", "台湾手动选择", "台湾", "手动选择", "DIRECT", "REJECT"] },
+  { name: "PayPal", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/PayPal.png", "include-all": true, proxies: ["美国手动选择", "美国", "英国手动选择", "英国", "手动选择", "DIRECT", "REJECT"] },
+  { name: "Binance", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/binance.png", "include-all": true, proxies: ["日本手动选择", "日本", "新加坡手动选择", "新加坡", "香港手动选择", "香港", "台湾手动选择", "台湾", "手动选择", "DIRECT", "REJECT"] },
+  { name: "Monzo", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/monzo.png", "include-all": true, proxies: ["英国手动选择", "英国", "手动选择", "美国手动选择", "美国", "DIRECT", "REJECT"] },
+  { name: "Revolut", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/revolut.png", "include-all": true, proxies: ["英国手动选择", "英国", "美国手动选择", "美国", "新加坡手动选择", "新加坡", "手动选择", "DIRECT", "REJECT"] },
   { name: "Claude", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/claude.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Cursor", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/cursor.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Disney", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Disney.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
@@ -63,8 +70,8 @@ const allGroupDefinitions = [
   { name: "法国", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/France.png", filter: "🇫🇷|法国|法|FR|france|paris" },
   { name: "印度", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/India.png", filter: "🇮🇳|印度|IN|india|mumbai" },
   { name: "新加坡", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Singapore.png", filter: "🇸🇬|新加坡|新|SG|singapore" },
-  { name: "印尼", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/wanswu/my-backup@master/IconSet/Country/Indonesia.png", filter: "🇮🇩|印尼|印度尼西亚|ID|indonesia|jakarta" },
-  { name: "越南", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/wanswu/my-backup@master/IconSet/Country/Vietnam.png", filter: "🇻🇳|越南|VN|vietnam" },
+  { name: "印尼", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/indonesia.png", filter: "🇮🇩|印尼|印度尼西亚|ID|indonesia|jakarta" },
+  { name: "越南", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/vietnam.png", filter: "🇻🇳|越南|VN|vietnam" },
   { name: "泰国", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Thailand.png", filter: "🇹🇭|泰国|TH|thailand|bangkok" },
   { name: "澳洲", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Australia.png", filter: "🇦🇺|澳大利亚|AU|australia|sydney" },
   { name: "巴西", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Brazil.png", filter: "🇧🇷|巴西|brazil" },
@@ -74,6 +81,7 @@ const allGroupDefinitions = [
   { name: "日本手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png", "include-all": true, "exclude-filter": "🔗", filter: "🇯🇵|日本|日|JP|japan|tokyo", proxies: ["DIRECT", "REJECT"] },
   { name: "新加坡手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Singapore.png", "include-all": true, "exclude-filter": "🔗", filter: "🇸🇬|新加坡|新|SG|singapore", proxies: ["DIRECT", "REJECT"] },
   { name: "美国手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png", "include-all": true, "exclude-filter": "🔗", filter: "🇺🇸|美国|美|US|united states|america", proxies: ["DIRECT", "REJECT"] },
+  { name: "英国手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png", "include-all": true, "exclude-filter": "🔗", filter: "🇬🇧|英国|英|UK|united kingdom|london", proxies: ["DIRECT", "REJECT"] },
 ];
 
 // ========================================
@@ -104,12 +112,18 @@ const defaultRuleProviders = {
   Twitter: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Twitter/Twitter.yaml" },
   Telegram: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Telegram/Telegram.yaml" },
   YouTube: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTube/YouTube.yaml" },
-  duolingo: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/duolingo.yaml" },
-  kraken: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/kraken.yaml" },
-  cursor: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/cursor.yaml" },
-  wise: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/wise.yaml" },
-  perplexity: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/perplexity.yaml" },
-  ifast: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/ifast.yaml" }
+  Speedtest: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Speedtest/Speedtest.yaml" },
+  duolingo: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "漏网之鱼", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/duolingo.yaml" },
+  kraken: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "漏网之鱼", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/kraken.yaml" },
+  cursor: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "漏网之鱼", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/cursor.yaml" },
+  wise: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "漏网之鱼", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/wise.yaml" },
+  okx: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "漏网之鱼", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/okx.yaml" },
+  paypal: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://cdn.jsdelivr.net/gh/Accademia/Additional_Rule_For_Clash@latest/VirtualFinance/Paypal.yaml" },
+  binance: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "漏网之鱼", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/binance.yaml" },
+  monzo: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://cdn.jsdelivr.net/gh/Accademia/Additional_Rule_For_Clash@latest/VirtualFinance/Monzo.yaml" },
+  revolut: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://cdn.jsdelivr.net/gh/Accademia/Additional_Rule_For_Clash@latest/VirtualFinance/Revolut.yaml" },
+  perplexity: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "漏网之鱼", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/perplexity.yaml" },
+  ifast: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "漏网之鱼", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/ifast.yaml" }
 };
 
 // ========================================
@@ -125,11 +139,19 @@ const defaultRules = [
   "DOMAIN-SUFFIX,deepseek.com,直连",
   "DOMAIN-SUFFIX,grok.com,Grok",
   "DOMAIN-SUFFIX,x.ai,Grok",
+  "GEOSITE,ookla-speedtest,Speedtest",
+  "RULE-SET,Speedtest,Speedtest",
+  "DOMAIN-SUFFIX,oca.nflxvideo.net,Speedtest",
   "RULE-SET,perplexity,Perplexity",
   "RULE-SET,cursor,Cursor",
   "RULE-SET,duolingo,Duolingo",
   "RULE-SET,kraken,Kraken",
-  "RULE-SET,wise,直连",
+  "RULE-SET,wise,Wise",
+  "RULE-SET,okx,OKX",
+  "RULE-SET,paypal,PayPal",
+  "RULE-SET,binance,Binance",
+  "RULE-SET,monzo,Monzo",
+  "RULE-SET,revolut,Revolut",
   "RULE-SET,ifast,直连",
   "DOMAIN-SUFFIX,cloudbet.com,日本",
   "DOMAIN-SUFFIX,cldbt.cloud,日本",
@@ -186,7 +208,7 @@ const defaultRules = [
   "RULE-SET,Claude,Claude",
   "RULE-SET,Steam,Steam",
   "RULE-SET,Emby,Emby",
-  "RULE-SET,Hijacking,DIRECT",
+  "RULE-SET,Hijacking,REJECT",
   "GEOIP,CN,直连,no-resolve",
   "MATCH,漏网之鱼"
 ];
@@ -197,6 +219,9 @@ const defaultRules = [
 
 function main(config) {
   console.log("🚀 FlClash 链式代理覆写开始...");
+
+  config['allow-lan'] = false;
+  config['bind-address'] = '127.0.0.1';
 
   // 1. 获取现有代理组
   var proxyGroups = config['proxy-groups'] || [];
@@ -271,9 +296,10 @@ function main(config) {
     "Claude", "Cursor", "Disney", "Emby", "Gemini", "Grok", "Kraken", "Perplexity",
     "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam",
     "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"];
+  var chainGroupAvailable = proxyGroups.some(function(g) { return g.name === chainProxyGroupName; });
 
   proxyGroups.forEach(function(g) {
-    if (policyGroups.indexOf(g.name) !== -1) {
+    if (chainGroupAvailable && policyGroups.indexOf(g.name) !== -1) {
       if (g.proxies && g.proxies.indexOf(chainProxyGroupName) === -1) {
         g.proxies.unshift(chainProxyGroupName);
       }
@@ -311,22 +337,132 @@ function main(config) {
   config.tun['strict-route'] = true;
   config.tun['dns-hijack'] = config.tun['dns-hijack'] || ['any:53', 'tcp://any:53'];
   config.dns = config.dns || {};
+  config.dns.enable = true;
+  config.dns.listen = '127.0.0.1:1053';
   config.dns.ipv6 = false;
+  config.dns['use-hosts'] = true;
+  config.dns['use-system-hosts'] = false;
+  config.dns['fake-ip-range'] = config.dns['fake-ip-range'] || '198.18.0.1/16';
   config.dns['fake-ip-filter-mode'] = 'blacklist';
+  config.dns['fake-ip-filter'] = config.dns['fake-ip-filter'] || [
+    '+.lan',
+    '+.local',
+    '+.msftconnecttest.com',
+    '+.msftncsi.com',
+    'localhost.ptlogin2.qq.com',
+    'localhost.sec.qq.com',
+    'localhost.work.weixin.qq.com'
+  ];
   config.dns['respect-rules'] = true;
   config.dns['enhanced-mode'] = config.dns['enhanced-mode'] || 'fake-ip';
-  config.hosts = config.hosts || {
+  config.dns['default-nameserver'] = [
+    'tls://223.5.5.5:853',
+    'https://223.5.5.5/dns-query'
+  ];
+  config.dns.nameserver = [
+    'https://1.1.1.1/dns-query#漏网之鱼',
+    'https://dns.google/dns-query#漏网之鱼'
+  ];
+  config.dns['proxy-server-nameserver'] = [
+    'https://223.5.5.5/dns-query#DIRECT',
+    'https://doh.pub/dns-query#DIRECT'
+  ];
+  config.dns['direct-nameserver'] = [
+    'https://doh.pub/dns-query#DIRECT',
+    'https://223.5.5.5/dns-query#DIRECT',
+    'https://dns.alidns.com/dns-query#DIRECT'
+  ];
+  config.dns['direct-nameserver-follow-policy'] = true;
+  var nameserverPolicy = config.dns['nameserver-policy'] || {};
+  nameserverPolicy['geosite:cn'] = [
+    'https://223.5.5.5/dns-query#DIRECT',
+    'https://doh.pub/dns-query#DIRECT'
+  ];
+  nameserverPolicy['rule-set:OpenAI'] = [
+    'https://1.1.1.1/dns-query#OpenAI',
+    'https://dns.google/dns-query#OpenAI'
+  ];
+  nameserverPolicy['rule-set:Claude'] = [
+    'https://1.1.1.1/dns-query#Claude',
+    'https://dns.google/dns-query#Claude'
+  ];
+  nameserverPolicy['rule-set:Gemini'] = [
+    'https://1.1.1.1/dns-query#Gemini',
+    'https://dns.google/dns-query#Gemini'
+  ];
+  nameserverPolicy['geosite:ookla-speedtest'] = [
+    'https://1.1.1.1/dns-query#Speedtest',
+    'https://dns.google/dns-query#Speedtest'
+  ];
+  nameserverPolicy['rule-set:Speedtest'] = [
+    'https://1.1.1.1/dns-query#Speedtest',
+    'https://dns.google/dns-query#Speedtest'
+  ];
+  nameserverPolicy['+.oca.nflxvideo.net'] = [
+    'https://1.1.1.1/dns-query#Speedtest',
+    'https://dns.google/dns-query#Speedtest'
+  ];
+  nameserverPolicy['rule-set:Bybit'] = [
+    'https://1.1.1.1/dns-query#Bybit',
+    'https://dns.google/dns-query#Bybit'
+  ];
+  nameserverPolicy['rule-set:kraken'] = [
+    'https://1.1.1.1/dns-query#Kraken',
+    'https://dns.google/dns-query#Kraken'
+  ];
+  nameserverPolicy['rule-set:wise'] = [
+    'https://1.1.1.1/dns-query#Wise',
+    'https://dns.google/dns-query#Wise'
+  ];
+  nameserverPolicy['rule-set:okx'] = [
+    'https://1.1.1.1/dns-query#OKX',
+    'https://dns.google/dns-query#OKX'
+  ];
+  nameserverPolicy['rule-set:paypal'] = [
+    'https://1.1.1.1/dns-query#PayPal',
+    'https://dns.google/dns-query#PayPal'
+  ];
+  nameserverPolicy['rule-set:binance'] = [
+    'https://1.1.1.1/dns-query#Binance',
+    'https://dns.google/dns-query#Binance'
+  ];
+  nameserverPolicy['rule-set:monzo'] = [
+    'https://1.1.1.1/dns-query#Monzo',
+    'https://dns.google/dns-query#Monzo'
+  ];
+  nameserverPolicy['rule-set:revolut'] = [
+    'https://1.1.1.1/dns-query#Revolut',
+    'https://dns.google/dns-query#Revolut'
+  ];
+  nameserverPolicy['+.grok.com,+.x.ai'] = [
+    'https://1.1.1.1/dns-query#Grok',
+    'https://dns.google/dns-query#Grok'
+  ];
+  nameserverPolicy['geosite:private'] = ['system://'];
+  config.dns['nameserver-policy'] = nameserverPolicy;
+
+  config.hosts = config.hosts || {};
+  var dnsHosts = {
     "dns.alidns.com": ["223.5.5.5", "223.6.6.6"],
     "doh.pub": ["1.12.12.12", "120.53.53.53"],
     "dns.google": ["8.8.8.8", "8.8.4.4"],
     "cloudflare-dns.com": ["1.1.1.1", "1.0.0.1"]
   };
+  Object.keys(dnsHosts).forEach(function(host) {
+    if (!config.hosts[host]) { config.hosts[host] = dnsHosts[host]; }
+  });
 
   // 9. 补全 rule-providers
   var currentProviders = config['rule-providers'] || {};
   Object.keys(defaultRuleProviders).forEach(function(key) {
     if (!currentProviders[key]) {
       currentProviders[key] = defaultRuleProviders[key];
+    }
+  });
+  Object.keys(currentProviders).forEach(function(key) {
+    var provider = currentProviders[key];
+    if (provider && typeof provider.url === 'string' && provider.url.indexOf('raw.githubusercontent.com') !== -1) {
+      provider.proxy = '漏网之鱼';
     }
   });
   config['rule-providers'] = currentProviders;
