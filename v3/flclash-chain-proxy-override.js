@@ -41,6 +41,7 @@ const allGroupDefinitions = [
   { name: "Disney", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Disney.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Duolingo", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/duolingo.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Emby", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Emby.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
+  { name: "Facebook", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Facebook.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Gemini", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/guaishouxiaoqi/icons@master/Color/Gemini.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Grok", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/grok.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Kraken", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/kraken.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
@@ -97,6 +98,7 @@ const defaultRuleProviders = {
   Claude: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Claude/Claude.yaml" },
   Disney: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Disney/Disney.yaml" },
   Emby: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Emby/Emby.yaml" },
+  Facebook: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Facebook/Facebook.yaml" },
   Gemini: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Gemini/Gemini.yaml" },
   Github: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GitHub/GitHub.yaml" },
   Google: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Google/Google.yaml" },
@@ -192,6 +194,7 @@ const defaultRules = [
   "RULE-SET,Bybit,Bybit",
   "RULE-SET,China,直连,no-resolve",
   "RULE-SET,Telegram,Telegram",
+  "RULE-SET,Facebook,Facebook",
   "RULE-SET,Gemini,Gemini",
   "RULE-SET,YouTube,YouTube",
   "RULE-SET,Google,Google",
@@ -219,7 +222,7 @@ const defaultRules = [
 
 const orderedApplicationGroups = [
   "Apple", "AppStore", "BiliBili", "Binance", "Bybit", "Claude", "Cursor",
-  "Disney", "Duolingo", "Emby", "Gemini", "Github", "Google", "Grok",
+  "Disney", "Duolingo", "Emby", "Facebook", "Gemini", "Github", "Google", "Grok",
   "Kraken", "Microsoft", "Monzo", "Netflix", "OKX", "OneDrive", "OpenAI",
   "PayPal", "Perplexity", "Revolut", "Speedtest", "Spotify", "Steam",
   "Telegram", "TikTok", "Twitter", "Wise", "YouTube"
@@ -317,7 +320,7 @@ function main(config) {
 
   // 5. 将所有策略组的 proxies 加上链式代理选项
   var policyGroups = ["手动选择", "GLOBAL", "Apple", "AppStore", "BiliBili", "Bybit",
-    "Claude", "Cursor", "Disney", "Emby", "Gemini", "Grok", "Kraken", "Perplexity",
+    "Claude", "Cursor", "Disney", "Emby", "Facebook", "Gemini", "Grok", "Kraken", "Perplexity",
     "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam",
     "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"];
   var chainGroupAvailable = proxyGroups.some(function(g) { return g.name === chainProxyGroupName; });
@@ -410,6 +413,10 @@ function main(config) {
   nameserverPolicy['rule-set:Claude'] = [
     'https://1.1.1.1/dns-query#Claude',
     'https://dns.google/dns-query#Claude'
+  ];
+  nameserverPolicy['rule-set:Facebook'] = [
+    'https://1.1.1.1/dns-query#Facebook',
+    'https://dns.google/dns-query#Facebook'
   ];
   nameserverPolicy['rule-set:Gemini'] = [
     'https://1.1.1.1/dns-query#Gemini',
