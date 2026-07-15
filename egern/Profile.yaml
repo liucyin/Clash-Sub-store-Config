@@ -759,7 +759,7 @@ modules:
     enabled: false
   - url: https://kelee.one/Tool/Loon/Lpx/BoxJs.lpx
     compat_arguments:
-      PROXY: 兜底后备策略
+      PROXY: 美国手动选择
     enabled: true
   - url: https://kelee.one/Tool/Loon/Lpx/Sub-Store.lpx
     compat_arguments:
