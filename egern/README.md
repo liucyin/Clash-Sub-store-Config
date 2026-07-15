@@ -9,12 +9,10 @@ higher priority than the additional Loon rules.
 2. Replace `<TOKEN>` in the `全部节点` URL with the private Sub-Store token, or
    import the profile first and edit the `全部节点` policy group in Egern.
 3. Keep `target=Egern`; a Loon subscription is not a valid Egern proxy source.
-4. Select the entry and US exit in `全球手动选择` and `美国手动选择` before
-   using `T-Mobile`.
 
 The live subscription URL is intentionally excluded because this repository is
-public. Loon `.lpx` and `.plugin` resources are also excluded; convert them with
-Script Hub before adding them as Egern modules.
+public. The supplied Loon `.lpx` and `.plugin` resources are referenced through
+Egern's compatible module importer.
 
 ## DNS
 

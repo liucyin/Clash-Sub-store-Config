@@ -368,14 +368,6 @@ policy_groups:
       timeout: 2
       icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/fallback.png
 
-  # Egern native chain: device -> 全球手动选择 -> selected US exit -> target.
-  - select:
-      name: T-Mobile
-      policies: [美国手动选择]
-      flatten: true
-      prev_hop: 全球手动选择
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Static.png
-
   - select:
       name: 手动选择
       policies: [自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 韩国手动选择, 新加坡手动选择, 美国手动选择, 英国手动选择, 游戏手动选择, 全球手动选择, 香港, 澳门, 台湾, 日本, 韩国, 美国, 英国, 德国, 法国, 印度, 新加坡, 印尼, 越南, 泰国, 澳洲, 巴西, 其他, 全部节点, DIRECT, REJECT]
@@ -408,11 +400,11 @@ policy_groups:
       icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png
   - select:
       name: Claude
-      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
       icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/claude.png
   - select:
       name: Cursor
-      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
       icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/cursor.png
   - select:
       name: Disney
@@ -432,7 +424,7 @@ policy_groups:
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Facebook.png
   - select:
       name: Gemini
-      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
       icon: https://testingcf.jsdelivr.net/gh/guaishouxiaoqi/icons@master/Color/Gemini.png
   - select:
       name: Github
@@ -444,7 +436,7 @@ policy_groups:
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Google_Search.png
   - select:
       name: Grok
-      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, DIRECT, REJECT]
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, DIRECT, REJECT]
       icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/grok.png
   - select:
       name: Kraken
@@ -472,7 +464,7 @@ policy_groups:
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/OneDrive.png
   - select:
       name: OpenAI
-      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ChatGPT.png
   - select:
       name: PayPal
@@ -480,7 +472,7 @@ policy_groups:
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/PayPal.png
   - select:
       name: Perplexity
-      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
       icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/perplexity.png
   - select:
       name: Revolut
@@ -723,14 +715,57 @@ rules:
 default_subscription_group: 全部节点
 default_proxy_group: 手动选择
 
-# Keep only native Egern modules here. Loon .lpx/.plugin files should be
-# converted with Script Hub before enabling them in Egern.
 modules:
-  - name: Sub-Store
-    url: https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/Egern.yaml
-    update_interval: 86400
+  - url: https://kelee.one/Tool/Loon/Lpx/Amap_remove_ads.lpx
     enabled: true
-  - name: Script Hub
-    url: https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/refs/heads/main/modules/script-hub.beta.egern.yaml
-    update_interval: 86400
+  - url: https://kelee.one/Tool/Loon/Lpx/Douyu_remove_ads.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/DiDi_remove_ads.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/Reddit_remove_ads.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/12306_remove_ads.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/RedPaper_remove_ads.lpx
+    enabled: true
+  - url: https://github.com/fmz200/wool_scripts/raw/main/Loon/plugin/blockAds.plugin
+    enabled: true
+  - name: 可莉去广告
+    url: https://kelee.one/Tool/Loon/Lpx/Remove_ads_by_keli.lpx
+    enabled: true
+  - name: bili去广
+    url: https://kelee.one/Tool/Loon/Lpx/Bilibili_remove_ads.lpx
+    enabled: true
+  - name: 禁用ios更新
+    url: https://yfamilys.com/plugin/DisableUpdate.plugin
     enabled: false
+  - url: https://kelee.one/Tool/Loon/Lpx/QQ_Redirect.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/Block_HTTPDNS.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/BlockAdvertisers.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/QuickSearch.lpx
+    enabled: false
+  - url: https://kelee.one/Tool/Loon/Lpx/Prevent_DNS_Leaks.lpx
+    compat_arguments:
+      PROXY: 兜底后备策略
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/Node_detection_tool.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/TestFlightRegionUnlock.lpx
+    compat_arguments:
+      PROXY: DIRECT
+    enabled: false
+  - url: https://kelee.one/Tool/Loon/Lpx/BoxJs.lpx
+    compat_arguments:
+      PROXY: 兜底后备策略
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/Sub-Store.lpx
+    compat_arguments:
+      PROXY: 兜底后备策略
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/Script-Hub.lpx
+    compat_arguments:
+      PROXY: 兜底后备策略
+    enabled: true
