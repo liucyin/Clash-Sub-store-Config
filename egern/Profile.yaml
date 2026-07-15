@@ -1,0 +1,736 @@
+# Egern profile converted from the v3 Mihomo rules and the supplied Loon profile.
+# Replace <TOKEN> in the external subscription URL, or edit "全部节点" in Egern.
+
+ipv6: false
+http_port: 7222
+socks_port: 7221
+allow_external_connections: false
+vif_only: false
+hide_vpn_icon: false
+block_quic: true
+close_connections_on_policy_change: false
+compat_route: true
+include_all_networks: false
+include_apns: false
+include_cellular_services: false
+include_local_networks: false
+
+geoip_db_url: https://geodata.kelee.one/Country-Masaiki.mmdb
+asn_db_url: https://geodata.kelee.one/GeoLite2-ASN-P3TERX.mmdb
+proxy_latency_test_url: http://www.gstatic.com/generate_204
+direct_latency_test_url: http://connectivitycheck.platform.hicloud.com/generate_204
+
+hijack_dns:
+  - "*:53"
+
+bypass_tunnel_proxy:
+  - 192.168.0.0/16
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - localhost
+  - "*.local"
+  - e.crashlynatics.com
+
+vif_excluded_routes:
+  - 10.0.0.0/8
+  - 100.64.0.0/10
+  - 127.0.0.0/8
+  - 169.254.0.0/16
+  - 172.16.0.0/12
+  - 192.0.0.0/24
+  - 192.0.2.0/24
+  - 192.88.99.0/24
+  - 192.168.0.0/16
+  - 198.51.100.0/24
+  - 203.0.113.0/24
+  - 224.0.0.0/4
+  - 255.255.255.255/32
+
+real_ip_domains:
+  - "*.lan"
+  - "*.local"
+  - "*.msftconnecttest.com"
+  - "*.msftncsi.com"
+  - localhost.ptlogin2.qq.com
+  - localhost.sec.qq.com
+  - localhost.work.weixin.qq.com
+  - "*.push.apple.com"
+  - "*.stun.*"
+
+# Domestic domains use domestic encrypted DNS. All other domains use overseas
+# encrypted DNS whose IPs are forced through "漏网之鱼" by the first rules.
+dns:
+  bootstrap:
+    - 223.5.5.5
+    - 119.29.29.29
+  upstreams:
+    Domestic:
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    Overseas:
+      - https://1.1.1.1/dns-query
+      - https://8.8.8.8/dns-query
+  forward:
+    - domain_suffix:
+        match: local
+        value: system
+    - domain_suffix:
+        match: lan
+        value: system
+    - domain_suffix:
+        match: arpa
+        value: system
+    - proxy_rule_set:
+        match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/cn.list
+        value: Domestic
+        update_interval: 86400
+    - domain_suffix:
+        match: cn
+        value: Domestic
+    - domain_wildcard:
+        match: "*"
+        value: Overseas
+  hosts:
+    dns.alidns.com:
+      - 223.5.5.5
+      - 223.6.6.6
+    doh.pub:
+      - 1.12.12.12
+      - 120.53.53.53
+    localhost: 127.0.0.1
+  # Proxy server hostnames must resolve directly to avoid DNS/proxy loops.
+  proxy_nameservers:
+    - 223.5.5.5
+    - 119.29.29.29
+  block_ips:
+    - 0.0.0.0
+    - 127.0.0.0/8
+    - "::/128"
+    - "::1/128"
+  skip_tls_verify: false
+
+policy_groups:
+  # Public template: never commit a live subscription token to this repository.
+  - external:
+      name: 全部节点
+      type: select
+      urls:
+        - "https://substore.1812446.xyz/<TOKEN>/download/collection/El-Sub?target=Egern&udp=true&block-quic=true&fast-open=default&vmess-aead=false&skip-cert-verify=true&enabled=true&flexible-sni=false"
+      filter: '(?i)^(?!.*(?:群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|超时|收藏|福利|好友|失联|USE|USED|TOTAL|EXPIRE|EMAIL|PANEL|CHANNEL|AUTHOR|TRAFFIC|\d{4}-\d{2}-\d{2}|\d+G)).+$'
+      update_interval: 86400
+      block_quic: true
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
+
+  - auto_test:
+      name: 自动选择
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)^(?!.*(?:群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|版本|过期|已用|联系|邮箱|工单|通知|国内|地址|频道|说明|使用|提示|教程|更新|作者|超时|USE|USED|TOTAL|EXPIRE|EMAIL|PANEL|CHANNEL|AUTHOR|TRAFFIC|\d{4}-\d{2}-\d{2}|\d+G)).+$'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Auto.png
+
+  # Region latency groups, hidden but selectable by application groups.
+  - auto_test:
+      name: 香港
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇭🇰|香港|港|\b(?:HK|HKG|Hong(?:\s*Kong)?)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Hong_Kong.png
+  - auto_test:
+      name: 澳门
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇲🇴|澳门|\b(?:MO|Macao)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Macao.png
+  - auto_test:
+      name: 台湾
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇹🇼|台湾|台北|\b(?:TW|TWN|Tai|Taiwan)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png
+  - auto_test:
+      name: 日本
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇯🇵|日本|东京|大阪|\b(?:JP|JPN|Japan)(?:\d+)?\b'
+      interval: 60
+      tolerance: 50
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png
+  - auto_test:
+      name: 韩国
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇰🇷|韩国|韓|首尔|\b(?:KR|KOR|Korea)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Korea.png
+  - auto_test:
+      name: 美国
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇺🇸|美国|洛杉矶|圣何塞|硅谷|西雅图|芝加哥|达拉斯|纽约|\b(?:US|USA|United\s*States|America)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png
+  - auto_test:
+      name: 英国
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇬🇧|英国|伦敦|\b(?:UK|GB|United\s*Kingdom)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png
+  - auto_test:
+      name: 德国
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇩🇪|德国|法兰克福|\b(?:DE|Germany)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Germany.png
+  - auto_test:
+      name: 法国
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇫🇷|法国|巴黎|\b(?:FR|France)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/France.png
+  - auto_test:
+      name: 印度
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇮🇳|印度|孟买|\b(?:IN|India)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/India.png
+  - auto_test:
+      name: 新加坡
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇸🇬|新加坡|狮城|\b(?:SG|SGP|Singapore)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Singapore.png
+  - auto_test:
+      name: 印尼
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇮🇩|印尼|印度尼西亚|雅加达|\b(?:ID|Indonesia)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/indonesia.png
+  - auto_test:
+      name: 越南
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇻🇳|越南|\b(?:VN|Vietnam)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/vietnam.png
+  - auto_test:
+      name: 泰国
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇹🇭|泰国|曼谷|\b(?:TH|Thailand)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Thailand.png
+  - auto_test:
+      name: 澳洲
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇦🇺|澳大利亚|澳洲|悉尼|\b(?:AU|Australia)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Australia.png
+  - auto_test:
+      name: 巴西
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇧🇷|巴西|\b(?:BR|Brazil)(?:\d+)?\b'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Brazil.png
+  - auto_test:
+      name: 其他
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)^(?!.*(?:香港|澳门|台湾|日本|韩国|美国|英国|德国|法国|印度|新加坡|印尼|印度尼西亚|越南|泰国|澳大利亚|澳洲|巴西|\bHK\b|\bMO\b|\bTW\b|\bJP\b|\bKR\b|\bUS\b|\bUK\b|\bDE\b|\bFR\b|\bIN\b|\bSG\b|\bID\b|\bVN\b|\bTH\b|\bAU\b|\bBR\b)).+$'
+      interval: 60
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
+
+  # Manual region groups.
+  - select:
+      name: 香港手动选择
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇭🇰|香港|港|\b(?:HK|HKG|Hong(?:\s*Kong)?)(?:\d+)?\b'
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Hong_Kong.png
+  - select:
+      name: 台湾手动选择
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇹🇼|台湾|台北|\b(?:TW|TWN|Tai|Taiwan)(?:\d+)?\b'
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png
+  - select:
+      name: 日本手动选择
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇯🇵|日本|东京|大阪|\b(?:JP|JPN|Japan)(?:\d+)?\b'
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png
+  - select:
+      name: 韩国手动选择
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇰🇷|韩国|韓|首尔|\b(?:KR|KOR|Korea)(?:\d+)?\b'
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Korea.png
+  - select:
+      name: 新加坡手动选择
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇸🇬|新加坡|狮城|\b(?:SG|SGP|Singapore)(?:\d+)?\b'
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Singapore.png
+  - select:
+      name: 美国手动选择
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇺🇸|美国|洛杉矶|圣何塞|硅谷|西雅图|芝加哥|达拉斯|纽约|\b(?:US|USA|United\s*States|America)(?:\d+)?\b'
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png
+  - select:
+      name: 英国手动选择
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇬🇧|英国|伦敦|\b(?:UK|GB|United\s*Kingdom)(?:\d+)?\b'
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png
+  - select:
+      name: 游戏手动选择
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)游戏|🎮|\bGAME(?:\d+)?\b'
+      icon: https://testingcf.jsdelivr.net/gh/Orz-3/mini@master/Color/GAME.png
+  - select:
+      name: 全球手动选择
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)^(?!.*(?:群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|版本|过期|已用|联系|邮箱|工单|通知|国内|地址|频道|说明|使用|提示|教程|更新|作者|超时|USE|USED|TOTAL|EXPIRE|EMAIL|PANEL|CHANNEL|AUTHOR|TRAFFIC|\d{4}-\d{2}-\d{2}|\d+G)).+$'
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
+
+  - fallback:
+      name: 兜底后备策略
+      policies: [香港, 台湾, 日本, 韩国, 新加坡, 美国]
+      interval: 60
+      timeout: 2
+      icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/fallback.png
+
+  # Egern native chain: device -> 全球手动选择 -> selected US exit -> target.
+  - select:
+      name: T-Mobile
+      policies: [美国手动选择]
+      flatten: true
+      prev_hop: 全球手动选择
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Static.png
+
+  - select:
+      name: 手动选择
+      policies: [自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 韩国手动选择, 新加坡手动选择, 美国手动选择, 英国手动选择, 游戏手动选择, 全球手动选择, 香港, 澳门, 台湾, 日本, 韩国, 美国, 英国, 德国, 法国, 印度, 新加坡, 印尼, 越南, 泰国, 澳洲, 巴西, 其他, 全部节点, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png
+  - select:
+      name: GLOBAL
+      policies: [手动选择, 自动选择, 兜底后备策略, 全球手动选择, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
+
+  # Application groups, ordered by name to match the v3 profile.
+  - select:
+      name: Apple
+      policies: [DIRECT, 手动选择, 自动选择, 美国手动选择, 美国, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Apple.png
+  - select:
+      name: AppStore
+      policies: [DIRECT, 手动选择, 自动选择, 美国手动选择, 美国, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/App_Store.png
+  - select:
+      name: BiliBili
+      policies: [DIRECT, 香港手动选择, 香港, 台湾手动选择, 台湾, 手动选择, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/bilibili_4.png
+  - select:
+      name: Binance
+      policies: [日本手动选择, 日本, 新加坡手动选择, 新加坡, 香港手动选择, 香港, 台湾手动选择, 台湾, 手动选择, DIRECT, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/binance.png
+  - select:
+      name: Bybit
+      policies: [手动选择, 自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 新加坡手动选择, 美国手动选择, DIRECT, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png
+  - select:
+      name: Claude
+      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/claude.png
+  - select:
+      name: Cursor
+      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/cursor.png
+  - select:
+      name: Disney
+      policies: [手动选择, 自动选择, 新加坡手动选择, 新加坡, 美国手动选择, 美国, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Disney.png
+  - select:
+      name: Duolingo
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, DIRECT, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/duolingo.png
+  - select:
+      name: Emby
+      policies: [手动选择, 自动选择, 香港手动选择, 香港, 日本手动选择, 日本, 新加坡手动选择, 新加坡, 美国手动选择, 美国, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Emby.png
+  - select:
+      name: Facebook
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Facebook.png
+  - select:
+      name: Gemini
+      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/guaishouxiaoqi/icons@master/Color/Gemini.png
+  - select:
+      name: Github
+      policies: [手动选择, 自动选择, 香港手动选择, 香港, 日本手动选择, 日本, 美国手动选择, 美国, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/GitHub.png
+  - select:
+      name: Google
+      policies: [手动选择, 自动选择, 美国手动选择, 美国, 香港手动选择, 香港, 日本手动选择, 日本, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Google_Search.png
+  - select:
+      name: Grok
+      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, DIRECT, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/grok.png
+  - select:
+      name: Kraken
+      policies: [英国手动选择, 英国, 手动选择, 自动选择, 美国手动选择, 美国, DIRECT, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/kraken.png
+  - select:
+      name: Microsoft
+      policies: [手动选择, DIRECT, 自动选择, 美国手动选择, 美国, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Microsoft.png
+  - select:
+      name: Monzo
+      policies: [英国手动选择, 英国, 手动选择, 美国手动选择, 美国, DIRECT, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/monzo.png
+  - select:
+      name: Netflix
+      policies: [手动选择, 自动选择, 新加坡手动选择, 新加坡, 美国手动选择, 美国, 日本手动选择, 日本, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Netflix.png
+  - select:
+      name: OKX
+      policies: [美国手动选择, 美国, 日本手动选择, 日本, 新加坡手动选择, 新加坡, 香港手动选择, 香港, 台湾手动选择, 台湾, 手动选择, DIRECT, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/okx.png
+  - select:
+      name: OneDrive
+      policies: [手动选择, DIRECT, 自动选择, 美国手动选择, 美国, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/OneDrive.png
+  - select:
+      name: OpenAI
+      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ChatGPT.png
+  - select:
+      name: PayPal
+      policies: [美国手动选择, 美国, 英国手动选择, 英国, 手动选择, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/PayPal.png
+  - select:
+      name: Perplexity
+      policies: [美国手动选择, T-Mobile, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/perplexity.png
+  - select:
+      name: Revolut
+      policies: [英国手动选择, 英国, 美国手动选择, 美国, 新加坡手动选择, 新加坡, 手动选择, DIRECT, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/revolut.png
+  - select:
+      name: Speedtest
+      policies: [DIRECT, 手动选择, 自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 新加坡手动选择, 美国手动选择, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Speedtest.png
+  - select:
+      name: Spotify
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Spotify.png
+  - select:
+      name: Steam
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 香港手动选择, 香港, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Steam.png
+  - select:
+      name: Telegram
+      policies: [手动选择, 自动选择, 香港手动选择, 香港, 新加坡手动选择, 新加坡, 美国手动选择, 美国, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Telegram.png
+  - select:
+      name: TikTok
+      policies: [美国手动选择, 美国, 日本手动选择, 日本, 新加坡手动选择, 新加坡, 手动选择, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/TikTok.png
+  - select:
+      name: Twitter
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Twitter.png
+  - select:
+      name: Wise
+      policies: [DIRECT, 美国手动选择, 美国, 英国手动选择, 英国, 手动选择, REJECT]
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/wise.png
+  - select:
+      name: YouTube
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, 日本手动选择, 日本, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/YouTube.png
+
+  - select:
+      name: 漏网之鱼
+      policies: [手动选择, 自动选择, 兜底后备策略, 全球手动选择, 美国手动选择, 美国, 日本手动选择, 日本, 香港手动选择, 香港, DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Final.png
+  - select:
+      name: 直连
+      policies: [DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Direct.png
+
+rules:
+  # Existing v3 reject rules remain the highest priority.
+  - domain_suffix: { match: account.listary.com, policy: REJECT }
+  - domain_suffix: { match: auth.listary.com, policy: REJECT }
+  - domain_suffix: { match: api.getfiddler.com, policy: REJECT }
+  - protocol: { match: stun, policy: REJECT }
+
+  # Force overseas encrypted DNS through the selected final proxy.
+  - ip_cidr: { match: 1.1.1.1/32, policy: 漏网之鱼, no_resolve: true }
+  - ip_cidr: { match: 1.0.0.1/32, policy: 漏网之鱼, no_resolve: true }
+  - ip_cidr: { match: 8.8.8.8/32, policy: 漏网之鱼, no_resolve: true }
+  - ip_cidr: { match: 8.8.4.4/32, policy: 漏网之鱼, no_resolve: true }
+  - domain_suffix: { match: dns.alidns.com, policy: DIRECT }
+  - domain_suffix: { match: doh.pub, policy: DIRECT }
+
+  - rule_set:
+      name: Hijacking
+      match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Hijacking/Hijacking.list
+      policy: REJECT
+      update_interval: 86400
+  - rule_set:
+      name: Lan
+      match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Lan/Lan.list
+      policy: DIRECT
+      update_interval: 86400
+
+  # Existing v3 custom rules.
+  - domain_suffix: { match: portal101.cn, policy: DIRECT }
+  - domain_suffix: { match: javasec.org, policy: DIRECT }
+  - domain_suffix: { match: deepseek.com, policy: DIRECT }
+  - domain_suffix: { match: grok.com, policy: Grok }
+  - domain_suffix: { match: x.ai, policy: Grok }
+
+  - rule_set:
+      name: Speedtest
+      match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Speedtest/Speedtest.list
+      policy: Speedtest
+      update_interval: 86400
+  - domain_suffix: { match: oca.nflxvideo.net, policy: Speedtest }
+
+  - rule_set:
+      name: Perplexity
+      match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/perplexity.list
+      policy: Perplexity
+      update_interval: 86400
+  - rule_set:
+      name: Cursor
+      match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/cursor.list
+      policy: Cursor
+      update_interval: 86400
+  - rule_set:
+      name: Duolingo
+      match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/duolingo.list
+      policy: Duolingo
+      update_interval: 86400
+  - rule_set:
+      name: Kraken
+      match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/kraken.list
+      policy: Kraken
+      update_interval: 86400
+  - rule_set:
+      name: Wise
+      match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/wise.list
+      policy: Wise
+      update_interval: 86400
+  - rule_set:
+      name: OKX
+      match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/okx.list
+      policy: OKX
+      update_interval: 86400
+  - rule_set:
+      name: PayPal
+      match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/PayPal/PayPal.list
+      policy: PayPal
+      update_interval: 86400
+  - rule_set:
+      name: Binance
+      match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/binance.list
+      policy: Binance
+      update_interval: 86400
+  - domain_suffix: { match: monzo.com, policy: Monzo }
+  - domain_suffix: { match: monzo.statuspage.io, policy: Monzo }
+  - domain_suffix: { match: ws-eu.pusher.com, policy: Monzo }
+  - domain_keyword: { match: monzo, policy: Monzo }
+  - domain_suffix: { match: revolut.com, policy: Revolut }
+  - domain_suffix: { match: aqueduct.revolutlabs.com, policy: Revolut }
+  - domain_keyword: { match: revolut, policy: Revolut }
+  - rule_set:
+      name: iFast
+      match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/ifast.list
+      policy: DIRECT
+      update_interval: 86400
+
+  # Cloudbet and Stake retain the existing Japan default.
+  - domain_suffix: { match: cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: cldbt.cloud, policy: 日本 }
+  - domain_suffix: { match: sports-api.cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: api.cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: cdn.cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: media.cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: docs.cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: affiliates.cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: play-cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: share.cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: a.cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: int.cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: ws.cloudbet.com, policy: 日本 }
+  - domain_suffix: { match: wss.cloudbet.com, policy: 日本 }
+  - domain_keyword: { match: cloudbet, policy: 日本 }
+  - domain_suffix: { match: stake.com, policy: 日本 }
+  - domain_suffix: { match: stake.bet, policy: 日本 }
+  - domain_suffix: { match: stake.games, policy: 日本 }
+  - domain_suffix: { match: stake.ac, policy: 日本 }
+  - domain_suffix: { match: stake.pet, policy: 日本 }
+  - domain_suffix: { match: api.stake.com, policy: 日本 }
+  - domain_suffix: { match: sports.stake.com, policy: 日本 }
+  - domain_suffix: { match: cdn.stake.com, policy: 日本 }
+  - domain_suffix: { match: assets.stake.com, policy: 日本 }
+  - domain_suffix: { match: img.stake.com, policy: 日本 }
+  - domain_suffix: { match: ws.stake.com, policy: 日本 }
+  - domain_suffix: { match: wss.stake.com, policy: 日本 }
+  - domain_suffix: { match: payment.stake.com, policy: 日本 }
+  - domain_suffix: { match: stake.bet.br, policy: 日本 }
+  - domain_suffix: { match: stake.com.co, policy: 日本 }
+  - domain_suffix: { match: stake.mx, policy: 日本 }
+  - domain_keyword: { match: deposit.stake, policy: 日本 }
+  - domain_keyword: { match: withdraw.stake, policy: 日本 }
+  - domain_keyword: { match: stake, policy: 日本 }
+
+  # Additional supplied Loon rules, routed through the equivalent selectable groups.
+  - domain_suffix: { match: kraken.onl, policy: Kraken }
+  - domain_suffix: { match: kraken.com, policy: Kraken }
+  - domain_suffix: { match: transferwise.com, policy: Wise }
+  - domain_suffix: { match: wise.com, policy: Wise }
+  - domain_suffix: { match: metrics.duolingo.com, policy: Duolingo }
+  - domain_suffix: { match: analytics.vpc.duolingo.com, policy: Duolingo }
+  - domain_suffix: { match: ads-api.duolingo.com, policy: Duolingo }
+  - domain_suffix: { match: duolingo.cn, policy: Duolingo }
+  - domain_suffix: { match: duolingo.com, policy: Duolingo }
+  - domain_suffix: { match: zsajvw.vip, policy: 香港手动选择 }
+  - domain_suffix: { match: crt1u5.vip, policy: 香港手动选择 }
+  - domain_suffix: { match: ifastgp.com, policy: DIRECT }
+  - domain_suffix: { match: fundsupermart.com, policy: DIRECT }
+  - domain_suffix: { match: ifastcorp.com, policy: DIRECT }
+  - domain_suffix: { match: ifastgb.com, policy: DIRECT }
+  - domain_suffix: { match: fsmone.com, policy: DIRECT }
+  - domain_suffix: { match: ifastnetwork.com, policy: DIRECT }
+  - domain_suffix: { match: ifasttv.com, policy: DIRECT }
+  - domain_suffix: { match: fsmone.com.hk, policy: DIRECT }
+  - domain_suffix: { match: fsmone.com.my, policy: DIRECT }
+  - domain_suffix: { match: ifastcapital.com.my, policy: DIRECT }
+  - domain_suffix: { match: ifastfinancial.com.hk, policy: DIRECT }
+  - domain_suffix: { match: ifastfinancial.co.in, policy: DIRECT }
+  - domain_suffix: { match: ifastgp.com.hk, policy: DIRECT }
+  - domain_suffix: { match: ifastps.com.cn, policy: DIRECT }
+
+  # Standard application rules from the existing v3 profile.
+  - rule_set: { name: Apple, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Apple/Apple.list, policy: Apple, update_interval: 86400 }
+  - rule_set: { name: AppStore, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/AppStore/AppStore.list, policy: AppStore, update_interval: 86400 }
+  - rule_set: { name: BiliBili, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/BiliBili/BiliBili.list, policy: BiliBili, update_interval: 86400 }
+  - rule_set: { name: Bybit, match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/bybit.list, policy: Bybit, update_interval: 86400 }
+  - rule_set: { name: Claude, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Claude/Claude.list, policy: Claude, update_interval: 86400 }
+  - rule_set: { name: Disney, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Disney/Disney.list, policy: Disney, update_interval: 86400 }
+  - rule_set: { name: Emby, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Emby/Emby.list, policy: Emby, update_interval: 86400 }
+  - rule_set: { name: Facebook, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Facebook/Facebook.list, policy: Facebook, update_interval: 86400 }
+  - rule_set: { name: Gemini, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Gemini/Gemini.list, policy: Gemini, update_interval: 86400 }
+  - rule_set: { name: Github, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/GitHub/GitHub.list, policy: Github, update_interval: 86400 }
+  - rule_set: { name: Google, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Google/Google.list, policy: Google, update_interval: 86400 }
+  - rule_set: { name: Microsoft, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Microsoft/Microsoft.list, policy: Microsoft, update_interval: 86400 }
+  - rule_set: { name: Netflix, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Netflix/Netflix.list, policy: Netflix, update_interval: 86400 }
+  - rule_set: { name: OpenAI, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/OpenAI/OpenAI.list, policy: OpenAI, update_interval: 86400 }
+  - rule_set: { name: OneDrive, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/OneDrive/OneDrive.list, policy: OneDrive, update_interval: 86400 }
+  - rule_set: { name: Spotify, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Spotify/Spotify.list, policy: Spotify, update_interval: 86400 }
+  - rule_set: { name: Steam, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Steam/Steam.list, policy: Steam, update_interval: 86400 }
+  - rule_set: { name: Telegram, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Telegram/Telegram.list, policy: Telegram, update_interval: 86400 }
+  - rule_set: { name: TikTok, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/TikTok/TikTok.list, policy: TikTok, update_interval: 86400 }
+  - rule_set: { name: Twitter, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Twitter/Twitter.list, policy: Twitter, update_interval: 86400 }
+  - rule_set: { name: YouTube, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/YouTube/YouTube.list, policy: YouTube, update_interval: 86400 }
+
+  # CN rules must remain after application rules and before GeoIP/final.
+  - rule_set:
+      name: China
+      match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/China/China.list
+      policy: DIRECT
+      update_interval: 86400
+  - geoip:
+      match: CN
+      policy: DIRECT
+      no_resolve: true
+  - default:
+      policy: 漏网之鱼
+
+default_subscription_group: 全部节点
+default_proxy_group: 手动选择
+
+# Keep only native Egern modules here. Loon .lpx/.plugin files should be
+# converted with Script Hub before enabling them in Egern.
+modules:
+  - name: Sub-Store
+    url: https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/Egern.yaml
+    update_interval: 86400
+    enabled: true
+  - name: Script Hub
+    url: https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/refs/heads/main/modules/script-hub.beta.egern.yaml
+    update_interval: 86400
+    enabled: false
