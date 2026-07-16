@@ -721,16 +721,16 @@ rules:
   - rule_set: { name: Twitter, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Twitter/Twitter.list, policy: Twitter, update_interval: 86400 }
   - rule_set: { name: YouTube, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/YouTube/YouTube.list, policy: YouTube, update_interval: 86400 }
 
-  # CN rules must remain after application rules and before GeoIP/final.
+  # Mirror the DNS CN domain set here so domestic resolution and routing agree.
+  # Keep these rules after application rules and before GeoIP/final.
   - rule_set:
       name: China
-      match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/China/China.list
+      match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/cn.list
       policy: DIRECT
       update_interval: 86400
   - geoip:
       match: CN
       policy: DIRECT
-      no_resolve: true
   - default:
       policy: 漏网之鱼
 

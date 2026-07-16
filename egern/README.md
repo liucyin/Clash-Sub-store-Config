@@ -20,6 +20,10 @@ Domestic domains use domestic encrypted DNS. Other domains use overseas DoH,
 and the DoH server IPs are routed through `漏网之鱼`. Proxy server hostnames use
 direct domestic DNS to avoid a DNS-to-proxy dependency loop.
 
+The routing-side `China` rule uses the same MetaCubeX `cn.list` as DNS
+forwarding. `GEOIP CN` remains a resolving fallback for domestic domains that
+are not yet covered by the domain set.
+
 Egern does not bind a DNS upstream to each application policy group like Mihomo
 does. Therefore application DNS cannot dynamically follow every selected group;
 the profile instead uses one selectable overseas DNS egress via `漏网之鱼`.
