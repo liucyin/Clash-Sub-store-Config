@@ -305,7 +305,195 @@ policy_groups:
       hidden: true
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
 
-  # Manual region groups.
+  - select:
+      name: 手动选择
+      policies: [自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 韩国手动选择, 新加坡手动选择, 美国手动选择, 英国手动选择, 全球手动选择, 香港, 澳门, 台湾, 日本, 韩国, 美国, 英国, 德国, 法国, 印度, 新加坡, 印尼, 越南, 泰国, 澳洲, 巴西, 其他, 全部节点, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png
+  - select:
+      name: GLOBAL
+      policies: [手动选择, 自动选择, 全球手动选择, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
+
+  # Application groups, ordered by name to match the v3 profile.
+  - select:
+      name: Apple
+      policies: [DIRECT, 手动选择, 自动选择, 美国手动选择, 美国, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Apple.png
+  - select:
+      name: AppStore
+      policies: [DIRECT, 手动选择, 自动选择, 美国手动选择, 美国, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/App_Store.png
+  - select:
+      name: BiliBili
+      policies: [DIRECT, 香港手动选择, 香港, 台湾手动选择, 台湾, 手动选择, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/bilibili_4.png
+  - select:
+      name: Binance
+      policies: [日本手动选择, 日本, 新加坡手动选择, 新加坡, 香港手动选择, 香港, 台湾手动选择, 台湾, 手动选择, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/binance.png
+  - select:
+      name: Bybit
+      policies: [手动选择, 自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 新加坡手动选择, 美国手动选择, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png
+  - select:
+      name: Claude
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/claude.png
+  - select:
+      name: Cursor
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/cursor.png
+  - select:
+      name: Disney
+      policies: [手动选择, 自动选择, 新加坡手动选择, 新加坡, 美国手动选择, 美国, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Disney.png
+  - select:
+      name: Duolingo
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/duolingo.png
+  - select:
+      name: Emby
+      policies: [手动选择, 自动选择, 香港手动选择, 香港, 日本手动选择, 日本, 新加坡手动选择, 新加坡, 美国手动选择, 美国, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Emby.png
+  - select:
+      name: Facebook
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Facebook.png
+  - select:
+      name: Gemini
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/guaishouxiaoqi/icons@master/Color/Gemini.png
+  - select:
+      name: Github
+      policies: [手动选择, 自动选择, 香港手动选择, 香港, 日本手动选择, 日本, 美国手动选择, 美国, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/GitHub.png
+  - select:
+      name: Google
+      policies: [手动选择, 自动选择, 美国手动选择, 美国, 香港手动选择, 香港, 日本手动选择, 日本, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Google_Search.png
+  - select:
+      name: Grok
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/grok.png
+  - select:
+      name: Kraken
+      policies: [英国手动选择, 英国, 手动选择, 自动选择, 美国手动选择, 美国, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/kraken.png
+  - select:
+      name: Microsoft
+      policies: [手动选择, DIRECT, 自动选择, 美国手动选择, 美国, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Microsoft.png
+  - select:
+      name: Monzo
+      policies: [英国手动选择, 英国, 手动选择, 美国手动选择, 美国, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/monzo.png
+  - select:
+      name: Netflix
+      policies: [手动选择, 自动选择, 新加坡手动选择, 新加坡, 美国手动选择, 美国, 日本手动选择, 日本, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Netflix.png
+  - select:
+      name: OKX
+      policies: [美国手动选择, 美国, 日本手动选择, 日本, 新加坡手动选择, 新加坡, 香港手动选择, 香港, 台湾手动选择, 台湾, 手动选择, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/okx.png
+  - select:
+      name: OneDrive
+      policies: [手动选择, DIRECT, 自动选择, 美国手动选择, 美国, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/OneDrive.png
+  - select:
+      name: OpenAI
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ChatGPT.png
+  - select:
+      name: PayPal
+      policies: [美国手动选择, 美国, 英国手动选择, 英国, 手动选择, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/PayPal.png
+  - select:
+      name: Perplexity
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/perplexity.png
+  - select:
+      name: Revolut
+      policies: [英国手动选择, 英国, 美国手动选择, 美国, 新加坡手动选择, 新加坡, 手动选择, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/revolut.png
+  - select:
+      name: Speedtest
+      policies: [DIRECT, 手动选择, 自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 新加坡手动选择, 美国手动选择, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Speedtest.png
+  - select:
+      name: Spotify
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Spotify.png
+  - select:
+      name: Steam
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 香港手动选择, 香港, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Steam.png
+  - select:
+      name: Telegram
+      policies: [手动选择, 自动选择, 香港手动选择, 香港, 新加坡手动选择, 新加坡, 美国手动选择, 美国, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Telegram.png
+  - select:
+      name: TikTok
+      policies: [美国手动选择, 美国, 日本手动选择, 日本, 新加坡手动选择, 新加坡, 手动选择, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/TikTok.png
+  - select:
+      name: Twitter
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Twitter.png
+  - select:
+      name: Wise
+      policies: [DIRECT, 美国手动选择, 美国, 英国手动选择, 英国, 手动选择, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/wise.png
+  - select:
+      name: YouTube
+      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, 日本手动选择, 日本, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/YouTube.png
+
+  - select:
+      name: 漏网之鱼
+      policies: [手动选择, 自动选择, 全球手动选择, 美国手动选择, 美国, 日本手动选择, 日本, 香港手动选择, 香港, DIRECT, REJECT]
+      flatten: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Final.png
+  - select:
+      name: 直连
+      policies: [DIRECT, REJECT]
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Direct.png
+
+  # Manual region groups are intentionally placed at the end of policy_groups.
   - select:
       name: 香港手动选择
       policies: [全部节点]
@@ -349,176 +537,11 @@ policy_groups:
       filter: '(?i)🇬🇧|英国|伦敦|\b(?:UK|GB|United\s*Kingdom)(?:\d+)?\b'
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png
   - select:
-      name: 游戏手动选择
-      policies: [全部节点]
-      flatten: true
-      filter: '(?i)游戏|🎮|\bGAME(?:\d+)?\b'
-      icon: https://testingcf.jsdelivr.net/gh/Orz-3/mini@master/Color/GAME.png
-  - select:
       name: 全球手动选择
       policies: [全部节点]
       flatten: true
       filter: '(?i)^(?!.*(?:群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|版本|过期|已用|联系|邮箱|工单|通知|国内|地址|频道|说明|使用|提示|教程|更新|作者|超时|USE|USED|TOTAL|EXPIRE|EMAIL|PANEL|CHANNEL|AUTHOR|TRAFFIC|\d{4}-\d{2}-\d{2}|\d+G)).+$'
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
-
-  - fallback:
-      name: 兜底后备策略
-      policies: [香港, 台湾, 日本, 韩国, 新加坡, 美国]
-      interval: 60
-      timeout: 2
-      icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/fallback.png
-
-  - select:
-      name: 手动选择
-      policies: [自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 韩国手动选择, 新加坡手动选择, 美国手动选择, 英国手动选择, 游戏手动选择, 全球手动选择, 香港, 澳门, 台湾, 日本, 韩国, 美国, 英国, 德国, 法国, 印度, 新加坡, 印尼, 越南, 泰国, 澳洲, 巴西, 其他, 全部节点, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png
-  - select:
-      name: GLOBAL
-      policies: [手动选择, 自动选择, 兜底后备策略, 全球手动选择, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
-
-  # Application groups, ordered by name to match the v3 profile.
-  - select:
-      name: Apple
-      policies: [DIRECT, 手动选择, 自动选择, 美国手动选择, 美国, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Apple.png
-  - select:
-      name: AppStore
-      policies: [DIRECT, 手动选择, 自动选择, 美国手动选择, 美国, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/App_Store.png
-  - select:
-      name: BiliBili
-      policies: [DIRECT, 香港手动选择, 香港, 台湾手动选择, 台湾, 手动选择, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/bilibili_4.png
-  - select:
-      name: Binance
-      policies: [日本手动选择, 日本, 新加坡手动选择, 新加坡, 香港手动选择, 香港, 台湾手动选择, 台湾, 手动选择, DIRECT, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/binance.png
-  - select:
-      name: Bybit
-      policies: [手动选择, 自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 新加坡手动选择, 美国手动选择, DIRECT, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png
-  - select:
-      name: Claude
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/claude.png
-  - select:
-      name: Cursor
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/cursor.png
-  - select:
-      name: Disney
-      policies: [手动选择, 自动选择, 新加坡手动选择, 新加坡, 美国手动选择, 美国, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Disney.png
-  - select:
-      name: Duolingo
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, DIRECT, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/duolingo.png
-  - select:
-      name: Emby
-      policies: [手动选择, 自动选择, 香港手动选择, 香港, 日本手动选择, 日本, 新加坡手动选择, 新加坡, 美国手动选择, 美国, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Emby.png
-  - select:
-      name: Facebook
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Facebook.png
-  - select:
-      name: Gemini
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/guaishouxiaoqi/icons@master/Color/Gemini.png
-  - select:
-      name: Github
-      policies: [手动选择, 自动选择, 香港手动选择, 香港, 日本手动选择, 日本, 美国手动选择, 美国, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/GitHub.png
-  - select:
-      name: Google
-      policies: [手动选择, 自动选择, 美国手动选择, 美国, 香港手动选择, 香港, 日本手动选择, 日本, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Google_Search.png
-  - select:
-      name: Grok
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, DIRECT, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/grok.png
-  - select:
-      name: Kraken
-      policies: [英国手动选择, 英国, 手动选择, 自动选择, 美国手动选择, 美国, DIRECT, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/kraken.png
-  - select:
-      name: Microsoft
-      policies: [手动选择, DIRECT, 自动选择, 美国手动选择, 美国, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Microsoft.png
-  - select:
-      name: Monzo
-      policies: [英国手动选择, 英国, 手动选择, 美国手动选择, 美国, DIRECT, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/monzo.png
-  - select:
-      name: Netflix
-      policies: [手动选择, 自动选择, 新加坡手动选择, 新加坡, 美国手动选择, 美国, 日本手动选择, 日本, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Netflix.png
-  - select:
-      name: OKX
-      policies: [美国手动选择, 美国, 日本手动选择, 日本, 新加坡手动选择, 新加坡, 香港手动选择, 香港, 台湾手动选择, 台湾, 手动选择, DIRECT, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/okx.png
-  - select:
-      name: OneDrive
-      policies: [手动选择, DIRECT, 自动选择, 美国手动选择, 美国, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/OneDrive.png
-  - select:
-      name: OpenAI
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ChatGPT.png
-  - select:
-      name: PayPal
-      policies: [美国手动选择, 美国, 英国手动选择, 英国, 手动选择, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/PayPal.png
-  - select:
-      name: Perplexity
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 新加坡手动选择, 新加坡, DIRECT, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/perplexity.png
-  - select:
-      name: Revolut
-      policies: [英国手动选择, 英国, 美国手动选择, 美国, 新加坡手动选择, 新加坡, 手动选择, DIRECT, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/revolut.png
-  - select:
-      name: Speedtest
-      policies: [DIRECT, 手动选择, 自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 新加坡手动选择, 美国手动选择, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Speedtest.png
-  - select:
-      name: Spotify
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Spotify.png
-  - select:
-      name: Steam
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, 日本手动选择, 日本, 香港手动选择, 香港, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Steam.png
-  - select:
-      name: Telegram
-      policies: [手动选择, 自动选择, 香港手动选择, 香港, 新加坡手动选择, 新加坡, 美国手动选择, 美国, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Telegram.png
-  - select:
-      name: TikTok
-      policies: [美国手动选择, 美国, 日本手动选择, 日本, 新加坡手动选择, 新加坡, 手动选择, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/TikTok.png
-  - select:
-      name: Twitter
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Twitter.png
-  - select:
-      name: Wise
-      policies: [DIRECT, 美国手动选择, 美国, 英国手动选择, 英国, 手动选择, REJECT]
-      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/wise.png
-  - select:
-      name: YouTube
-      policies: [美国手动选择, 美国, 手动选择, 自动选择, 香港手动选择, 香港, 日本手动选择, 日本, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/YouTube.png
-
-  - select:
-      name: 漏网之鱼
-      policies: [手动选择, 自动选择, 兜底后备策略, 全球手动选择, 美国手动选择, 美国, 日本手动选择, 日本, 香港手动选择, 香港, DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Final.png
-  - select:
-      name: 直连
-      policies: [DIRECT, REJECT]
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Direct.png
 
 rules:
   # Existing v3 reject rules remain the highest priority.
