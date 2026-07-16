@@ -307,8 +307,7 @@ policy_groups:
 
   - select:
       name: 手动选择
-      policies: [自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 韩国手动选择, 新加坡手动选择, 美国手动选择, 英国手动选择, 全球手动选择, 香港, 澳门, 台湾, 日本, 韩国, 美国, 英国, 德国, 法国, 印度, 新加坡, 印尼, 越南, 泰国, 澳洲, 巴西, 其他, 全部节点, DIRECT, REJECT]
-      flatten: true
+      policies: [自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 韩国手动选择, 新加坡手动选择, 美国手动选择, 英国手动选择, 香港, 澳门, 台湾, 日本, 韩国, 美国, 英国, 德国, 法国, 印度, 新加坡, 印尼, 越南, 泰国, 澳洲, 巴西, 其他, 全部节点, DIRECT, REJECT]
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png
   - select:
       name: GLOBAL
@@ -538,7 +537,7 @@ policy_groups:
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png
   - select:
       name: 全球手动选择
-      policies: [全部节点]
+      policies: [手动选择, 全部节点]
       flatten: true
       filter: '(?i)^(?!.*(?:群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|版本|过期|已用|联系|邮箱|工单|通知|国内|地址|频道|说明|使用|提示|教程|更新|作者|超时|USE|USED|TOTAL|EXPIRE|EMAIL|PANEL|CHANNEL|AUTHOR|TRAFFIC|\d{4}-\d{2}-\d{2}|\d+G)).+$'
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
