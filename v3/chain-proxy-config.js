@@ -523,7 +523,7 @@ const baseConfig = {
       name: "bybit.eu",
       type: "select",
       "disable-udp": false,
-      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png",
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.eu.png",
       "include-all": true,
       proxies: [
         "英国手动选择",
