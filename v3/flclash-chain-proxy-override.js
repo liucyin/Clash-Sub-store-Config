@@ -30,6 +30,7 @@ const allGroupDefinitions = [
   { name: "BiliBili", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/bilibili_4.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Speedtest", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Speedtest.png", "include-all": true, proxies: ["DIRECT", "手动选择", "自动选择", "香港手动选择", "台湾手动选择", "日本手动选择", "新加坡手动选择", "美国手动选择", "REJECT"] },
   { name: "Bybit", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
+  { name: "bybit.eu", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png", "include-all": true, proxies: ["英国手动选择", "英国", "德国", "法国", "手动选择", "自动选择", "DIRECT", "REJECT"] },
   { name: "Wise", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/wise.png", "include-all": true, proxies: ["DIRECT", "美国手动选择", "美国", "英国", "手动选择", "REJECT"] },
   { name: "OKX", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/okx.png", "include-all": true, proxies: ["美国手动选择", "美国", "日本手动选择", "日本", "新加坡手动选择", "新加坡", "香港手动选择", "香港", "台湾手动选择", "台湾", "手动选择", "DIRECT", "REJECT"] },
   { name: "PayPal", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/PayPal.png", "include-all": true, proxies: ["美国手动选择", "美国", "英国手动选择", "英国", "手动选择", "DIRECT", "REJECT"] },
@@ -155,6 +156,8 @@ const defaultRules = [
   "RULE-SET,monzo,Monzo",
   "RULE-SET,revolut,Revolut",
   "RULE-SET,ifast,直连",
+  "DOMAIN-SUFFIX,bybit.eu,bybit.eu",
+  "DOMAIN-SUFFIX,krak.app,英国手动选择",
   "DOMAIN-SUFFIX,cloudbet.com,日本",
   "DOMAIN-SUFFIX,cldbt.cloud,日本",
   "DOMAIN-SUFFIX,sports-api.cloudbet.com,日本",
@@ -221,7 +224,7 @@ const defaultRules = [
 // ========================================
 
 const orderedApplicationGroups = [
-  "Apple", "AppStore", "BiliBili", "Binance", "Bybit", "Claude", "Cursor",
+  "Apple", "AppStore", "BiliBili", "Binance", "Bybit", "bybit.eu", "Claude", "Cursor",
   "Disney", "Duolingo", "Emby", "Facebook", "Gemini", "Github", "Google", "Grok",
   "Kraken", "Microsoft", "Monzo", "Netflix", "OKX", "OneDrive", "OpenAI",
   "PayPal", "Perplexity", "Revolut", "Speedtest", "Spotify", "Steam",
@@ -319,7 +322,7 @@ function main(config) {
   });
 
   // 5. 将所有策略组的 proxies 加上链式代理选项
-  var policyGroups = ["手动选择", "GLOBAL", "Apple", "AppStore", "BiliBili", "Bybit",
+  var policyGroups = ["手动选择", "GLOBAL", "Apple", "AppStore", "BiliBili", "Bybit", "bybit.eu",
     "Claude", "Cursor", "Disney", "Emby", "Facebook", "Gemini", "Grok", "Kraken", "Perplexity",
     "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam",
     "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"];
@@ -437,6 +440,10 @@ function main(config) {
   nameserverPolicy['rule-set:Bybit'] = [
     'https://1.1.1.1/dns-query#Bybit',
     'https://dns.google/dns-query#Bybit'
+  ];
+  nameserverPolicy['+.bybit.eu'] = [
+    'https://1.1.1.1/dns-query#bybit.eu',
+    'https://dns.google/dns-query#bybit.eu'
   ];
   nameserverPolicy['rule-set:kraken'] = [
     'https://1.1.1.1/dns-query#Kraken',

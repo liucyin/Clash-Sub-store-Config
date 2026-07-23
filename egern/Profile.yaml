@@ -1,5 +1,5 @@
-# Egern profile converted from the v3 Mihomo rules and the supplied Loon profile.
-# Replace <TOKEN> in the external subscription URL, or edit "全部节点" in Egern.
+# Egern profile converted from the supplied AyuGram profile.
+# Live subscription URLs and per-device MITM certificates are intentionally omitted.
 
 ipv6: false
 http_port: 7222
@@ -114,8 +114,7 @@ policy_groups:
   - external:
       name: 全部节点
       type: select
-      urls:
-        - "https://substore.1812446.xyz/<TOKEN>/download/collection/El-Sub?target=Egern&udp=true&block-quic=true&fast-open=default&vmess-aead=false&skip-cert-verify=true&enabled=true&flexible-sni=false"
+      urls: []
       filter: '(?i)^(?!.*(?:群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|超时|收藏|福利|好友|失联|USE|USED|TOTAL|EXPIRE|EMAIL|PANEL|CHANNEL|AUTHOR|TRAFFIC|\d{4}-\d{2}-\d{2}|\d+G)).+$'
       update_interval: 86400
       block_quic: true
@@ -339,6 +338,11 @@ policy_groups:
   - select:
       name: Bybit
       policies: [手动选择, 自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 新加坡手动选择, 美国手动选择, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png
+  - select:
+      name: bybit.eu
+      policies: [英国手动选择, 英国, 德国, 法国, 手动选择, 自动选择, DIRECT, REJECT]
       flatten: true
       icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png
   - select:
@@ -622,6 +626,8 @@ rules:
       match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/binance.list
       policy: Binance
       update_interval: 86400
+  - domain_suffix: { match: bybit.eu, policy: bybit.eu }
+  - domain_suffix: { match: krak.app, policy: 英国手动选择 }
   - domain_suffix: { match: monzo.com, policy: Monzo }
   - domain_suffix: { match: monzo.statuspage.io, policy: Monzo }
   - domain_suffix: { match: ws-eu.pusher.com, policy: Monzo }
@@ -738,6 +744,30 @@ default_subscription_group: 全部节点
 default_proxy_group: 手动选择
 
 modules:
+  - url: https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.lpx
+    compat_arguments:
+      logLevel: info
+    enabled: true
+  - url: https://raw.githubusercontent.com/mekos2772/ios-location-spoofer/refs/heads/main/ios-location-spoofer.lnplugin
+    compat_arguments:
+      enabled: 'true'
+      debug: 'false'
+      configHost: https://iosloc.1812446.xyz
+      configToken: <CONFIG_TOKEN>
+    enabled: false
+  - url: https://kelee.one/Tool/Loon/Lpx/BlockAdvertisers.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/Zhibo8_remove_ads.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/WexinMiniPrograms_Remove_ads.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/Weixin_external_links_unlock.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/Weixin_Official_Accounts_remove_ads.lpx
+    enabled: true
+  - name: 解锁vip
+    url: https://raw.githubusercontent.com/chxm1023/Script_X/refs/heads/main/Collections.sgmodule
+    enabled: true
   - url: https://kelee.one/Tool/Loon/Lpx/Amap_remove_ads.lpx
     enabled: true
   - url: https://kelee.one/Tool/Loon/Lpx/Douyu_remove_ads.lpx
@@ -750,6 +780,8 @@ modules:
     enabled: true
   - url: https://kelee.one/Tool/Loon/Lpx/RedPaper_remove_ads.lpx
     enabled: true
+  - url: https://yfamilys.com/plugin/adultraplus.plugin
+    enabled: true
   - url: https://github.com/fmz200/wool_scripts/raw/main/Loon/plugin/blockAds.plugin
     enabled: true
   - name: 可莉去广告
@@ -757,6 +789,12 @@ modules:
     enabled: true
   - name: bili去广
     url: https://kelee.one/Tool/Loon/Lpx/Bilibili_remove_ads.lpx
+    compat_arguments:
+      displayUpList: show
+      purifyComment: 'true'
+      optimizeRequest: 'true'
+      sponsorBlock: 'true'
+      logLevel: off
     enabled: true
   - name: 禁用ios更新
     url: https://yfamilys.com/plugin/DisableUpdate.plugin
@@ -764,8 +802,6 @@ modules:
   - url: https://kelee.one/Tool/Loon/Lpx/QQ_Redirect.lpx
     enabled: true
   - url: https://kelee.one/Tool/Loon/Lpx/Block_HTTPDNS.lpx
-    enabled: true
-  - url: https://kelee.one/Tool/Loon/Lpx/BlockAdvertisers.lpx
     enabled: true
   - url: https://kelee.one/Tool/Loon/Lpx/QuickSearch.lpx
     enabled: false

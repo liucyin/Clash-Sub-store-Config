@@ -164,6 +164,10 @@ const baseConfig = {
         "https://1.1.1.1/dns-query#Bybit",
         "https://dns.google/dns-query#Bybit"
       ],
+      "+.bybit.eu": [
+        "https://1.1.1.1/dns-query#bybit.eu",
+        "https://dns.google/dns-query#bybit.eu"
+      ],
       "rule-set:kraken": [
         "https://1.1.1.1/dns-query#Kraken",
         "https://dns.google/dns-query#Kraken"
@@ -536,6 +540,24 @@ const baseConfig = {
         "澳洲",
         "巴西",
         "其他",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
+      name: "bybit.eu",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/bybit.png",
+      "include-all": true,
+      proxies: [
+        "英国手动选择",
+        "英国",
+        "德国",
+        "法国",
+        "手动选择",
+        "自动选择",
         "DIRECT",
         "REJECT"
       ]
@@ -2076,6 +2098,8 @@ const baseConfig = {
     "RULE-SET,binance,Binance",
     "RULE-SET,monzo,Monzo",
     "RULE-SET,revolut,Revolut",
+    "DOMAIN-SUFFIX,bybit.eu,bybit.eu",
+    "DOMAIN-SUFFIX,krak.app,英国手动选择",
 
     // iFast 域名规则
     "RULE-SET,ifast,直连",
@@ -2160,7 +2184,7 @@ const baseConfig = {
 // ========================================
 
 const orderedApplicationGroups = [
-  "Apple", "AppStore", "BiliBili", "Binance", "Bybit", "Claude", "Cursor",
+  "Apple", "AppStore", "BiliBili", "Binance", "Bybit", "bybit.eu", "Claude", "Cursor",
   "Disney", "Duolingo", "Emby", "Facebook", "Gemini", "Github", "Google", "Grok",
   "Kraken", "Microsoft", "Monzo", "Netflix", "OKX", "OneDrive", "OpenAI",
   "PayPal", "Perplexity", "Revolut", "Speedtest", "Spotify", "Steam",
