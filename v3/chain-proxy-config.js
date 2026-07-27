@@ -163,6 +163,10 @@ const baseConfig = {
         "https://1.1.1.1/dns-query#bybit.eu",
         "https://dns.google/dns-query#bybit.eu"
       ],
+      "rule-set:UK-Wifi-Calling": [
+        "https://1.1.1.1/dns-query#UK-Wifi-Calling",
+        "https://dns.google/dns-query#UK-Wifi-Calling"
+      ],
       "rule-set:kraken": [
         "https://1.1.1.1/dns-query#Kraken",
         "https://dns.google/dns-query#Kraken"
@@ -530,6 +534,22 @@ const baseConfig = {
         "英国",
         "德国",
         "法国",
+        "手动选择",
+        "自动选择",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
+      name: "UK-Wifi-Calling",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/Uk-wifi-calling.png",
+      "include-all": true,
+      proxies: [
+        "英国手动选择",
+        "英国",
         "手动选择",
         "自动选择",
         "DIRECT",
@@ -2022,6 +2042,14 @@ const baseConfig = {
       proxy: "漏网之鱼",
       url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/perplexity.yaml"
     },
+    "UK-Wifi-Calling": {
+      type: "http",
+      behavior: "classical",
+      interval: 3600,
+      format: "text",
+      proxy: "漏网之鱼",
+      url: "https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list"
+    },
     ifast: {
       type: "http",
       behavior: "classical",
@@ -2077,6 +2105,7 @@ const baseConfig = {
     "RULE-SET,revolut,Revolut",
     "DOMAIN-SUFFIX,bybit.eu,bybit.eu",
     "DOMAIN-SUFFIX,krak.app,英国手动选择",
+    "RULE-SET,UK-Wifi-Calling,UK-Wifi-Calling",
 
     // iFast 域名规则
     "RULE-SET,ifast,直连",
@@ -2161,7 +2190,7 @@ const orderedApplicationGroups = [
   "Disney", "Duolingo", "Emby", "Facebook", "Gemini", "Github", "Google", "Grok",
   "Kraken", "Microsoft", "Monzo", "Netflix", "OKX", "OneDrive", "OpenAI",
   "PayPal", "Perplexity", "Revolut", "Speedtest", "Spotify", "Steam",
-  "Telegram", "TikTok", "Twitter", "Wise", "YouTube"
+  "Telegram", "TikTok", "Twitter", "UK-Wifi-Calling", "Wise", "YouTube"
 ];
 
 function orderApplicationProxyGroups(proxyGroups) {

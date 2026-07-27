@@ -58,6 +58,7 @@ const allGroupDefinitions = [
   { name: "TikTok", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/TikTok.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Telegram", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Telegram.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "Twitter", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Twitter.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
+  { name: "UK-Wifi-Calling", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/Uk-wifi-calling.png", "include-all": true, proxies: ["英国手动选择", "英国", "手动选择", "自动选择", "DIRECT", "REJECT"] },
   { name: "YouTube", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/YouTube.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "漏网之鱼", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Final.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "直连", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Direct.png", proxies: ["DIRECT", "REJECT"] },
@@ -126,6 +127,7 @@ const defaultRuleProviders = {
   monzo: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://cdn.jsdelivr.net/gh/Accademia/Additional_Rule_For_Clash@latest/VirtualFinance/Monzo.yaml" },
   revolut: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "DIRECT", url: "https://cdn.jsdelivr.net/gh/Accademia/Additional_Rule_For_Clash@latest/VirtualFinance/Revolut.yaml" },
   perplexity: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "漏网之鱼", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/perplexity.yaml" },
+  "UK-Wifi-Calling": { type: "http", behavior: "classical", interval: 3600, format: "text", proxy: "漏网之鱼", url: "https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list" },
   ifast: { type: "http", behavior: "classical", interval: 3600, format: "yaml", proxy: "漏网之鱼", url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/classical/ifast.yaml" }
 };
 
@@ -158,6 +160,7 @@ const defaultRules = [
   "RULE-SET,ifast,直连",
   "DOMAIN-SUFFIX,bybit.eu,bybit.eu",
   "DOMAIN-SUFFIX,krak.app,英国手动选择",
+  "RULE-SET,UK-Wifi-Calling,UK-Wifi-Calling",
   "DOMAIN-SUFFIX,cloudbet.com,日本",
   "DOMAIN-SUFFIX,cldbt.cloud,日本",
   "DOMAIN-SUFFIX,sports-api.cloudbet.com,日本",
@@ -228,7 +231,7 @@ const orderedApplicationGroups = [
   "Disney", "Duolingo", "Emby", "Facebook", "Gemini", "Github", "Google", "Grok",
   "Kraken", "Microsoft", "Monzo", "Netflix", "OKX", "OneDrive", "OpenAI",
   "PayPal", "Perplexity", "Revolut", "Speedtest", "Spotify", "Steam",
-  "Telegram", "TikTok", "Twitter", "Wise", "YouTube"
+  "Telegram", "TikTok", "Twitter", "UK-Wifi-Calling", "Wise", "YouTube"
 ];
 
 function orderApplicationProxyGroups(proxyGroups) {
@@ -325,7 +328,7 @@ function main(config) {
   var policyGroups = ["手动选择", "GLOBAL", "Apple", "AppStore", "BiliBili", "Bybit", "bybit.eu",
     "Claude", "Cursor", "Disney", "Emby", "Facebook", "Gemini", "Grok", "Kraken", "Perplexity",
     "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam",
-    "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"];
+    "Spotify", "TikTok", "Telegram", "Twitter", "UK-Wifi-Calling", "YouTube", "漏网之鱼"];
   var chainGroupAvailable = proxyGroups.some(function(g) { return g.name === chainProxyGroupName; });
 
   proxyGroups.forEach(function(g) {
@@ -472,6 +475,10 @@ function main(config) {
   nameserverPolicy['rule-set:revolut'] = [
     'https://1.1.1.1/dns-query#Revolut',
     'https://dns.google/dns-query#Revolut'
+  ];
+  nameserverPolicy['rule-set:UK-Wifi-Calling'] = [
+    'https://1.1.1.1/dns-query#UK-Wifi-Calling',
+    'https://dns.google/dns-query#UK-Wifi-Calling'
   ];
   nameserverPolicy['+.grok.com,+.x.ai'] = [
     'https://1.1.1.1/dns-query#Grok',

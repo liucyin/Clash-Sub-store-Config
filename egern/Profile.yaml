@@ -476,6 +476,11 @@ policy_groups:
       flatten: true
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Twitter.png
   - select:
+      name: UK-Wifi-Calling
+      policies: [英国手动选择, 英国, 手动选择, 自动选择, DIRECT, REJECT]
+      flatten: true
+      icon: https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/Uk-wifi-calling.png
+  - select:
       name: Wise
       policies: [DIRECT, 美国手动选择, 美国, 英国手动选择, 英国, 手动选择, REJECT]
       flatten: true
@@ -635,6 +640,11 @@ rules:
   - domain_suffix: { match: revolut.com, policy: Revolut }
   - domain_suffix: { match: aqueduct.revolutlabs.com, policy: Revolut }
   - domain_keyword: { match: revolut, policy: Revolut }
+  - rule_set:
+      name: UK-Wifi-Calling
+      match: https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list
+      policy: UK-Wifi-Calling
+      update_interval: 86400
   - rule_set:
       name: iFast
       match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/ifast.list
