@@ -2068,6 +2068,7 @@ const baseConfig = {
   // 路由规则
   rules: [
     // 拒绝规则 - 最高优先级
+    "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
     "DOMAIN-SUFFIX,account.listary.com,REJECT",
     "DOMAIN-SUFFIX,auth.listary.com,REJECT",
     "DOMAIN-SUFFIX,api.getfiddler.com,REJECT",

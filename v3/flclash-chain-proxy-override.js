@@ -136,6 +136,7 @@ const defaultRuleProviders = {
 // ========================================
 
 const defaultRules = [
+  "AND,((NETWORK,UDP),(DST-PORT,443)),REJECT",
   "DOMAIN-SUFFIX,account.listary.com,REJECT",
   "DOMAIN-SUFFIX,auth.listary.com,REJECT",
   "DOMAIN-SUFFIX,api.getfiddler.com,REJECT",
