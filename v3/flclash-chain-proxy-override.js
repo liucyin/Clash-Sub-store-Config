@@ -22,9 +22,9 @@ const dialerProxyGroupName = "🔗 链式中转";
 // ========================================
 
 const allGroupDefinitions = [
-  { name: "手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
-  { name: "自动选择", type: "url-test", interval: 60, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Auto.png" },
-  { name: "GLOBAL", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
+  { name: "手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png", "include-all": true, proxies: ["自动选择", "DIRECT", "REJECT"] },
+  { name: "自动选择", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Auto.png" },
+  { name: "GLOBAL", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png", "include-all": true, proxies: ["手动选择", "自动选择", "DIRECT", "REJECT"] },
   { name: "Apple", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Apple.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "AppStore", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/App_Store.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "BiliBili", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/bilibili_4.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
@@ -60,25 +60,25 @@ const allGroupDefinitions = [
   { name: "Twitter", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Twitter.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
   { name: "UK-Wifi-Calling", type: "select", "disable-udp": false, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/Uk-wifi-calling.png", "include-all": true, proxies: ["英国手动选择", "英国", "手动选择", "自动选择", "DIRECT", "REJECT"] },
   { name: "YouTube", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/YouTube.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
-  { name: "漏网之鱼", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Final.png", "include-all": true, proxies: ["DIRECT", "REJECT"] },
+  { name: "漏网之鱼", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Final.png", "include-all": true, proxies: ["手动选择", "自动选择", "DIRECT", "REJECT"] },
   { name: "直连", type: "select", "disable-udp": false, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Direct.png", proxies: ["DIRECT", "REJECT"] },
-  { name: "香港", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Hong_Kong.png", filter: "🇭🇰|香港|港|HK|hongkong|hong kong" },
-  { name: "澳门", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Macao.png", filter: "🇲🇴|澳门|门|MO|macao" },
-  { name: "台湾", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png", filter: "🇹🇼|台湾|台|TW|taiwan|taipei" },
-  { name: "日本", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png", filter: "🇯🇵|日本|JP|japan|tokyo|osaka" },
-  { name: "韩国", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Korea.png", filter: "🇰🇷|韩国|韩|KR|korea|seoul" },
-  { name: "美国", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png", filter: "🇺🇸|美国|美|US|united states|america|los angeles|san jose|silicon valley" },
-  { name: "英国", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png", filter: "🇬🇧|英国|英|UK|united kingdom|london" },
-  { name: "德国", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Germany.png", filter: "🇩🇪|德国|德|DE|germany|frankfurt" },
-  { name: "法国", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/France.png", filter: "🇫🇷|法国|法|FR|france|paris" },
-  { name: "印度", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/India.png", filter: "🇮🇳|印度|IN|india|mumbai" },
-  { name: "新加坡", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Singapore.png", filter: "🇸🇬|新加坡|新|SG|singapore" },
-  { name: "印尼", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/indonesia.png", filter: "🇮🇩|印尼|印度尼西亚|ID|indonesia|jakarta" },
-  { name: "越南", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/vietnam.png", filter: "🇻🇳|越南|VN|vietnam" },
-  { name: "泰国", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Thailand.png", filter: "🇹🇭|泰国|TH|thailand|bangkok" },
-  { name: "澳洲", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Australia.png", filter: "🇦🇺|澳大利亚|AU|australia|sydney" },
-  { name: "巴西", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Brazil.png", filter: "🇧🇷|巴西|brazil" },
-  { name: "其他", type: "url-test", interval: 30, tolerance: 80, lazy: false, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 1500, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png", filter: "(?i)^(?!.*(香港|台湾|日本|韩国|新加坡|美国|英国|德国|法国|印度|泰国|越南|印尼|澳大利亚|巴西|港|台|日|韩|新|美|英|德|法|印|泰|越|尼|澳|巴|hk|tw|jp|kr|sg|us|uk|de|fr|in|th|vn|id|au|br)).*" },
+  { name: "香港", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Hong_Kong.png", filter: "🇭🇰|香港|港|HK|hongkong|hong kong" },
+  { name: "澳门", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Macao.png", filter: "🇲🇴|澳门|门|MO|macao" },
+  { name: "台湾", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png", filter: "🇹🇼|台湾|台|TW|taiwan|taipei" },
+  { name: "日本", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png", filter: "🇯🇵|日本|JP|japan|tokyo|osaka" },
+  { name: "韩国", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Korea.png", filter: "🇰🇷|韩国|韩|KR|korea|seoul" },
+  { name: "美国", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png", filter: "🇺🇸|美国|美|US|united states|america|los angeles|san jose|silicon valley" },
+  { name: "英国", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png", filter: "🇬🇧|英国|英|UK|united kingdom|london" },
+  { name: "德国", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Germany.png", filter: "🇩🇪|德国|德|DE|germany|frankfurt" },
+  { name: "法国", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/France.png", filter: "🇫🇷|法国|法|FR|france|paris" },
+  { name: "印度", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/India.png", filter: "🇮🇳|印度|IN|india|mumbai" },
+  { name: "新加坡", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Singapore.png", filter: "🇸🇬|新加坡|新|SG|singapore" },
+  { name: "印尼", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/indonesia.png", filter: "🇮🇩|印尼|印度尼西亚|ID|indonesia|jakarta" },
+  { name: "越南", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/vietnam.png", filter: "🇻🇳|越南|VN|vietnam" },
+  { name: "泰国", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Thailand.png", filter: "🇹🇭|泰国|TH|thailand|bangkok" },
+  { name: "澳洲", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Australia.png", filter: "🇦🇺|澳大利亚|AU|australia|sydney" },
+  { name: "巴西", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Brazil.png", filter: "🇧🇷|巴西|brazil" },
+  { name: "其他", type: "url-test", interval: 300, tolerance: 80, lazy: true, url: "https://www.gstatic.com/generate_204", "disable-udp": false, timeout: 5000, "max-failed-times": 2, hidden: true, "include-all": true, icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png", "exclude-filter": "(?i)(香港|台湾|日本|韩国|新加坡|美国|英国|德国|法国|印度|泰国|越南|印尼|澳大利亚|巴西|港|台|日|韩|新|美|英|德|法|印|泰|越|尼|澳|巴|hk|tw|jp|kr|sg|us|uk|de|fr|in|th|vn|id|au|br)" },
   { name: "香港手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Hong_Kong.png", "include-all": true, "exclude-filter": "🔗", filter: "🇭🇰|香港|港|HK|hongkong|hong kong", proxies: ["DIRECT", "REJECT"] },
   { name: "台湾手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png", "include-all": true, "exclude-filter": "🔗", filter: "🇹🇼|台湾|台|TW|taiwan|taipei", proxies: ["DIRECT", "REJECT"] },
   { name: "日本手动选择", type: "select", icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png", "include-all": true, "exclude-filter": "🔗", filter: "🇯🇵|日本|日|JP|japan|tokyo", proxies: ["DIRECT", "REJECT"] },
@@ -174,7 +174,6 @@ const defaultRules = [
   "DOMAIN-SUFFIX,int.cloudbet.com,日本",
   "DOMAIN-SUFFIX,ws.cloudbet.com,日本",
   "DOMAIN-SUFFIX,wss.cloudbet.com,日本",
-  "DOMAIN-KEYWORD,cloudbet,日本",
   "DOMAIN-SUFFIX,stake.com,日本",
   "DOMAIN-SUFFIX,stake.bet,日本",
   "DOMAIN-SUFFIX,stake.games,日本",
@@ -193,12 +192,13 @@ const defaultRules = [
   "DOMAIN-SUFFIX,stake.bet.br,日本",
   "DOMAIN-SUFFIX,stake.com.co,日本",
   "DOMAIN-SUFFIX,stake.mx,日本",
-  "DOMAIN-KEYWORD,stake,日本",
-  "PROCESS-NAME,prl_naptd,漏网之鱼",
   "RULE-SET,Lan,直连,no-resolve",
   "RULE-SET,Microsoft,Microsoft",
   "RULE-SET,Bybit,Bybit",
   "RULE-SET,China,直连,no-resolve",
+  // 宽泛的关键词兜底 - 必须排在 China 之后，否则会误伤含 stake/cloudbet 的国内域名
+  "DOMAIN-KEYWORD,cloudbet,日本",
+  "DOMAIN-KEYWORD,stake,日本",
   "RULE-SET,Telegram,Telegram",
   "RULE-SET,Facebook,Facebook",
   "RULE-SET,Gemini,Gemini",
@@ -318,23 +318,35 @@ function main(config) {
   allGroupDefinitions.forEach(function(def) {
     if (existingNames.indexOf(def.name) === -1) {
       var newGroup = JSON.parse(JSON.stringify(def));
-      if (newGroup['include-all']) { newGroup['exclude-filter'] = '🔗'; }
+      // 追加而非覆盖，否则 其他/地区手动选择 自带的 exclude-filter 会被丢掉
+      if (newGroup['include-all']) {
+        newGroup['exclude-filter'] = newGroup['exclude-filter'] ? newGroup['exclude-filter'] + '|🔗' : '🔗';
+      }
       newGroup.hidden = (newGroup.name === "自动选择");
       proxyGroups.push(newGroup);
     }
   });
 
   // 5. 将所有策略组的 proxies 加上链式代理选项
-  var policyGroups = ["手动选择", "GLOBAL", "Apple", "AppStore", "BiliBili", "Bybit", "bybit.eu",
+  // 排在首位 = 默认选中链式代理
+  var chainDefaultGroups = ["Apple", "AppStore", "BiliBili", "Bybit", "bybit.eu",
     "Claude", "Cursor", "Disney", "Emby", "Facebook", "Gemini", "Grok", "Kraken", "Perplexity",
     "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam",
-    "Spotify", "TikTok", "Telegram", "Twitter", "UK-Wifi-Calling", "YouTube", "漏网之鱼"];
+    "Spotify", "TikTok", "Telegram", "Twitter", "UK-Wifi-Calling", "YouTube"];
+  // 兜底/全局组只作为可选项（插到第二位），默认仍走单跳，
+  // 否则 MATCH 兜底流量和 dns.nameserver 的 #漏网之鱼 都会默认走双跳
+  var chainOptionalGroups = ["手动选择", "GLOBAL", "漏网之鱼"];
   var chainGroupAvailable = proxyGroups.some(function(g) { return g.name === chainProxyGroupName; });
 
   proxyGroups.forEach(function(g) {
-    if (chainGroupAvailable && policyGroups.indexOf(g.name) !== -1) {
-      if (g.proxies && g.proxies.indexOf(chainProxyGroupName) === -1) {
+    if (!chainGroupAvailable || !g.proxies) return;
+    if (chainDefaultGroups.indexOf(g.name) !== -1) {
+      if (g.proxies.indexOf(chainProxyGroupName) === -1) {
         g.proxies.unshift(chainProxyGroupName);
+      }
+    } else if (chainOptionalGroups.indexOf(g.name) !== -1) {
+      if (g.proxies.indexOf(chainProxyGroupName) === -1) {
+        g.proxies.splice(g.proxies.length ? 1 : 0, 0, chainProxyGroupName);
       }
     }
   });
@@ -370,6 +382,13 @@ function main(config) {
   config.tun.enable = true;
   config.tun['strict-route'] = true;
   config.tun['dns-hijack'] = config.tun['dns-hijack'] || ['any:53', 'tcp://any:53'];
+  // 1500 在 PPPoE(1492) 或 UDP 承载的节点上会造成分片/PMTU 黑洞：
+  // 小包(ping)正常 0 丢包，大包(网页/下载)被丢 —— 表现为「0 丢包但很卡」
+  config.tun.mtu = 1400;
+  // 规则里已无有效的 PROCESS-NAME 规则，strict 会让每条新连接都查进程表
+  config['find-process-mode'] = 'off';
+  // 保持 false，否则空闲连接被 NAT 静默回收，再次使用时需等重传超时
+  config['disable-keep-alive'] = false;
   config.dns = config.dns || {};
   config.dns.enable = true;
   config.dns.listen = '127.0.0.1:1053';

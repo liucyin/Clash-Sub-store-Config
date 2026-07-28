@@ -62,7 +62,8 @@ const baseConfig = {
   "bind-address": "127.0.0.1",
   "log-level": "error",
   "unified-delay": true,
-  "find-process-mode": "strict",
+  // 规则里已无有效的 PROCESS-NAME 规则，strict 会让每条新连接都查进程表（Windows 上开销明显）
+  "find-process-mode": "off",
   listeners: [
     { name: "fp-1", type: "mixed", listen: "127.0.0.1", port: 7911, proxy: "指纹浏览器-1-7911" },
     { name: "fp-2", type: "mixed", listen: "127.0.0.1", port: 7912, proxy: "指纹浏览器-2-7912" },
@@ -78,7 +79,8 @@ const baseConfig = {
   "tcp-concurrent": true,
   "keep-alive-interval": 15,
   "keep-alive-idle": 15,
-  "disable-keep-alive": true,
+  // 保持 false，否则上面两行失效，空闲连接会被 NAT 静默回收，再次使用时需等重传超时
+  "disable-keep-alive": false,
 
   // DNS 配置（防泄露优化版 - 参考 lvbibir/mihomo.yaml）
   dns: {
@@ -214,7 +216,7 @@ const baseConfig = {
   "geodata-mode": true,
   "geo-auto-update": true,
   "geo-update-interval": 24,
-  "geodata-loader": "memconservative",
+  "geodata-loader": "standard",
   "geox-url": {
     geoip: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat",
     geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat",
@@ -252,7 +254,9 @@ const baseConfig = {
       "tcp://any:53"
     ],
     "route-exclude-address": [],
-    mtu: 1500
+    // 1500 在 PPPoE(1492) 或 UDP 承载的节点上会造成分片/PMTU 黑洞：
+    // 小包(ping)正常 0 丢包，大包(网页/下载)被丢 —— 表现为「0 丢包但很卡」
+    mtu: 1400
   },
 
   // 嗅探配置
@@ -345,12 +349,12 @@ const baseConfig = {
     {
       name: "自动选择",
       type: "url-test",
-      interval: 60,
+      interval: 300,
       tolerance: 80,
       lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1460,12 +1464,12 @@ const baseConfig = {
     {
       name: "香港",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1476,12 +1480,12 @@ const baseConfig = {
     {
       name: "澳门",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1492,12 +1496,12 @@ const baseConfig = {
     {
       name: "台湾",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1508,12 +1512,12 @@ const baseConfig = {
     {
       name: "日本",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1524,12 +1528,12 @@ const baseConfig = {
     {
       name: "韩国",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1540,12 +1544,12 @@ const baseConfig = {
     {
       name: "美国",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1556,12 +1560,12 @@ const baseConfig = {
     {
       name: "英国",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1572,12 +1576,12 @@ const baseConfig = {
     {
       name: "德国",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1588,12 +1592,12 @@ const baseConfig = {
     {
       name: "法国",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1604,12 +1608,12 @@ const baseConfig = {
     {
       name: "印度",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1620,12 +1624,12 @@ const baseConfig = {
     {
       name: "新加坡",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1636,12 +1640,12 @@ const baseConfig = {
     {
       name: "印尼",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1652,12 +1656,12 @@ const baseConfig = {
     {
       name: "越南",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1668,12 +1672,12 @@ const baseConfig = {
     {
       name: "泰国",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1684,12 +1688,12 @@ const baseConfig = {
     {
       name: "澳洲",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1700,12 +1704,12 @@ const baseConfig = {
     {
       name: "巴西",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
@@ -1716,17 +1720,18 @@ const baseConfig = {
     {
       name: "其他",
       type: "url-test",
-      interval: 30,
+      interval: 300,
       tolerance: 80,
-      lazy: false,
+      lazy: true,
       url: "https://www.gstatic.com/generate_204",
       "disable-udp": false,
-      timeout: 1500,
+      timeout: 5000,
       "max-failed-times": 2,
       hidden: true,
       "include-all": true,
       icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png",
-      filter: "(?i)^(?!.*(香港|台湾|日本|韩国|新加坡|美国|英国|德国|法国|印度|泰国|越南|印尼|澳大利亚|巴西|港|台|日|韩|新|美|英|德|法|印|泰|越|尼|澳|巴|hk|tw|jp|kr|sg|us|uk|de|fr|in|th|vn|id|au|br)).*"
+      // 原先用 (?!...) 负向先行断言，Go 的 RE2 不支持该语法；改用 exclude-filter 表达同样的意图
+      "exclude-filter": "(?i)(香港|台湾|日本|韩国|新加坡|美国|英国|德国|法国|印度|泰国|越南|印尼|澳大利亚|巴西|港|台|日|韩|新|美|英|德|法|印|泰|越|尼|澳|巴|hk|tw|jp|kr|sg|us|uk|de|fr|in|th|vn|id|au|br)"
     },
 
     // 地区手动选择分组 - 手动选择对应地区节点
@@ -2147,7 +2152,6 @@ const baseConfig = {
     "DOMAIN-SUFFIX,int.cloudbet.com,日本",
     "DOMAIN-SUFFIX,ws.cloudbet.com,日本",
     "DOMAIN-SUFFIX,wss.cloudbet.com,日本",
-    "DOMAIN-KEYWORD,cloudbet,日本",
 
     // Stake.com 域名规则 - 默认走日本
     "DOMAIN-SUFFIX,stake.com,日本",
@@ -2168,20 +2172,21 @@ const baseConfig = {
     "DOMAIN-SUFFIX,stake.bet.br,日本",
     "DOMAIN-SUFFIX,stake.com.co,日本",
     "DOMAIN-SUFFIX,stake.mx,日本",
-    "DOMAIN-KEYWORD,stake,日本",
 
     // Grok 域名规则
     "DOMAIN-SUFFIX,grok.com,Grok",
     "DOMAIN-SUFFIX,x.ai,Grok",
-
-    // 进程规则
-    "PROCESS-NAME,prl_naptd,漏网之鱼",
 
     // 规则集匹配
     "RULE-SET,Lan,直连,no-resolve",
     "RULE-SET,Microsoft,Microsoft",
     "RULE-SET,Bybit,Bybit",
     "RULE-SET,China,直连,no-resolve",
+
+    // 宽泛的关键词兜底 - 必须排在 China 之后，否则会误伤含 stake/cloudbet 的国内域名
+    "DOMAIN-KEYWORD,cloudbet,日本",
+    "DOMAIN-KEYWORD,stake,日本",
+
     "RULE-SET,Telegram,Telegram",
     "RULE-SET,Facebook,Facebook",
     "RULE-SET,Gemini,Gemini",
@@ -2349,14 +2354,29 @@ function main(config, profileName) {
     }
   }
 
-  // 6. 修改应用分组，将 AI 服务默认指向链式代理
+  // 6. 修改应用分组，加入链式代理选项
   if (hasHomeProxies) {
-    const aiGroups = ["指纹浏览器-1-7911", "指纹浏览器-2-7912", "指纹浏览器-3-7913", "手动选择", "GLOBAL", "Apple", "AppStore", "BiliBili", "Claude", "Cursor", "Disney", "Emby", "Facebook", "Gemini", "Grok", "Perplexity", "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam", "Spotify", "TikTok", "Telegram", "Twitter", "YouTube", "漏网之鱼"]
-    aiGroups.forEach(groupName => {
+    // 链式代理排在首位 = 该组默认选中链式代理
+    // 指纹浏览器需要住宅出口，保持默认走链式
+    const chainDefaultGroups = ["指纹浏览器-1-7911", "指纹浏览器-2-7912", "指纹浏览器-3-7913", "Apple", "AppStore", "BiliBili", "Claude", "Cursor", "Disney", "Emby", "Facebook", "Gemini", "Grok", "Perplexity", "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam", "Spotify", "TikTok", "Telegram", "Twitter", "YouTube"]
+    // 兜底/全局组只把链式代理作为可选项（插到第二位），默认仍走单跳。
+    // 否则 MATCH 兜底的绝大部分流量、以及 dns.nameserver 的 #漏网之鱼 都会默认走「机场中转→家宽落地」双跳。
+    const chainOptionalGroups = ["手动选择", "GLOBAL", "漏网之鱼"]
+
+    chainDefaultGroups.forEach(groupName => {
       const group = proxyGroups.find(g => g.name === groupName);
       if (group && group.proxies) {
         group.proxies = [chainProxyGroupName, ...group.proxies.filter(p => p !== chainProxyGroupName)];
         console.log(`✅ ${groupName} 默认使用链式代理`);
+      }
+    });
+
+    chainOptionalGroups.forEach(groupName => {
+      const group = proxyGroups.find(g => g.name === groupName);
+      if (group && group.proxies) {
+        const rest = group.proxies.filter(p => p !== chainProxyGroupName);
+        group.proxies = rest.length ? [rest[0], chainProxyGroupName, ...rest.slice(1)] : [chainProxyGroupName];
+        console.log(`✅ ${groupName} 提供链式代理选项（非默认）`);
       }
     });
   }
