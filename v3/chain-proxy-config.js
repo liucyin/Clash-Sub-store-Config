@@ -165,6 +165,10 @@ const baseConfig = {
         "https://1.1.1.1/dns-query#bybit.eu",
         "https://dns.google/dns-query#bybit.eu"
       ],
+      "+.ether.fi": [
+        "https://1.1.1.1/dns-query#ether-fi",
+        "https://dns.google/dns-query#ether-fi"
+      ],
       "rule-set:UK-Wifi-Calling": [
         "https://1.1.1.1/dns-query#UK-Wifi-Calling",
         "https://dns.google/dns-query#UK-Wifi-Calling"
@@ -540,6 +544,37 @@ const baseConfig = {
         "法国",
         "手动选择",
         "自动选择",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
+      name: "ether-fi",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/ether-fi.png",
+      "include-all": true,
+      proxies: [
+        "手动选择",
+        "自动选择",
+        "香港",
+        "澳门",
+        "台湾",
+        "日本",
+        "韩国",
+        "美国",
+        "英国",
+        "德国",
+        "法国",
+        "印度",
+        "新加坡",
+        "印尼",
+        "越南",
+        "泰国",
+        "澳洲",
+        "巴西",
+        "其他",
         "DIRECT",
         "REJECT"
       ]
@@ -2109,6 +2144,7 @@ const baseConfig = {
     "RULE-SET,binance,Binance",
     "RULE-SET,monzo,Monzo",
     "RULE-SET,revolut,Revolut",
+    "DOMAIN-SUFFIX,ether.fi,ether-fi",
     "DOMAIN-SUFFIX,bybit.eu,bybit.eu",
     "DOMAIN-SUFFIX,krak.app,英国手动选择",
     "RULE-SET,UK-Wifi-Calling,UK-Wifi-Calling",
@@ -2192,7 +2228,7 @@ const baseConfig = {
 // ========================================
 
 const orderedApplicationGroups = [
-  "Apple", "AppStore", "BiliBili", "Binance", "Bybit", "bybit.eu", "Claude", "Cursor",
+  "Apple", "AppStore", "BiliBili", "Binance", "Bybit", "bybit.eu", "ether-fi", "Claude", "Cursor",
   "Disney", "Duolingo", "Emby", "Facebook", "Gemini", "Github", "Google", "Grok",
   "Kraken", "Microsoft", "Monzo", "Netflix", "OKX", "OneDrive", "OpenAI",
   "PayPal", "Perplexity", "Revolut", "Speedtest", "Spotify", "Steam",
