@@ -314,42 +314,28 @@ policy_groups:
       flatten: true
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
 
-  # Chain groups use the regional transit group as prev_hop and the landing group as the exit hop.
+  # Chain groups use a dedicated chain transit selector as prev_hop.
   - select:
-      name: 美国中转
+      name: 美国链式中转
       policies: [全部节点]
       flatten: true
-      filter: '(?i)^(?!.*(?:家宽|Home|住宅|Residential|IPLC|Hd|SC|DMIT|CORONA)).*(?:🇺🇸|美国|洛杉矶|圣何塞|硅谷|西雅图|芝加哥|达拉斯|纽约|\b(?:US|USA|United\s*States|America)(?:\d+)?\b).*$'
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png
-  - select:
-      name: 美国落地
-      policies: [全部节点]
-      flatten: true
-      filter: '(?i)^(?=.*(?:🇺🇸|美国|洛杉矶|圣何塞|硅谷|西雅图|芝加哥|达拉斯|纽约|\b(?:US|USA|United\s*States|America)(?:\d+)?\b))(?=.*(?:家宽|Home|住宅|Residential|IPLC|Hd|SC|DMIT|CORONA)).*$'
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png
-  - select:
-      name: 英国中转
-      policies: [全部节点]
-      flatten: true
-      filter: '(?i)^(?!.*(?:家宽|Home|住宅|Residential|IPLC|Hd|SC|DMIT|CORONA)).*(?:🇬🇧|英国|伦敦|\b(?:UK|GB|United\s*Kingdom)(?:\d+)?\b).*$'
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png
-  - select:
-      name: 英国落地
-      policies: [全部节点]
-      flatten: true
-      filter: '(?i)^(?=.*(?:🇬🇧|英国|伦敦|\b(?:UK|GB|United\s*Kingdom)(?:\d+)?\b))(?=.*(?:家宽|Home|住宅|Residential|IPLC|Hd|SC|DMIT|CORONA)).*$'
-      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png
   - select:
       name: 美国链式代理
-      policies: [美国落地]
+      policies: [全部节点]
       flatten: true
-      prev_hop: 美国中转
+      prev_hop: 美国链式中转
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png
   - select:
-      name: 英国链式代理
-      policies: [英国落地]
+      name: 英国链式中转
+      policies: [全部节点]
       flatten: true
-      prev_hop: 英国中转
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png
+  - select:
+      name: 英国链式代理
+      policies: [全部节点]
+      flatten: true
+      prev_hop: 英国链式中转
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png
 
   # Application groups, ordered by name to match the v3 profile.
