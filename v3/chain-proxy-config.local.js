@@ -16,6 +16,15 @@ const chainProxyGroupName = "🏠 链式代理";
 // 链式代理中转节点选择组名称  
 const dialerProxyGroupName = "🔗 链式中转";
 
+// 本项目专用中转入口。最终代理池由 Turb 自己在 791x 后继续连接，
+// 这里仅提供独立的快速国际中转，不保存 Turb 代理池凭据。
+// turb 项目可以把任意一个或全部入口填入 CHAIN_PROXY_POOL。
+const projectChainListeners = [
+  { port: 7911, listener: "turb-relay-7911", transit: "Turb中转-7911" },
+  { port: 7912, listener: "turb-relay-7912", transit: "Turb中转-7912" },
+  { port: 7913, listener: "turb-relay-7913", transit: "Turb中转-7913" }
+];
+
 // 是否添加链式代理到手动选择组（true=可以手动切换，false=仅自动分流）
 const addToManualSelect = false;
 
@@ -64,11 +73,13 @@ const baseConfig = {
   "unified-delay": true,
   // 规则里已无有效的 PROCESS-NAME 规则，strict 会让每条新连接都查进程表（Windows 上开销明显）
   "find-process-mode": "off",
-  listeners: [
-    { name: "fp-1", type: "mixed", listen: "127.0.0.1", port: 7911, proxy: "指纹浏览器-1-7911" },
-    { name: "fp-2", type: "mixed", listen: "127.0.0.1", port: 7912, proxy: "指纹浏览器-2-7912" },
-    { name: "fp-3", type: "mixed", listen: "127.0.0.1", port: 7913, proxy: "指纹浏览器-3-7913" }
-  ],
+  listeners: projectChainListeners.map(item => ({
+    name: item.listener,
+    type: "mixed",
+    listen: "127.0.0.1",
+    port: item.port,
+    proxy: item.transit
+  })),
 
   // 规则选择缓存
   profile: {
@@ -2337,6 +2348,7 @@ function main(config, profileName) {
     // 将克隆的链式家宽节点添加到 proxies 列表
     proxies.push(...chainHomeProxies);
     console.log(`✅ 已创建 ${chainHomeProxies.length} 个链式落地节点`);
+
   } else {
     console.warn("⚠️ 未找到家宽节点，将不创建链式落地节点。");
   }
@@ -2375,6 +2387,33 @@ function main(config, profileName) {
   } else {
     console.log("ℹ️ 未检测到家宽节点，跳过链式代理组创建");
   }
+
+  // Turb 专用中转与上面的家宽链式逻辑完全独立。
+  const projectNames = new Set(projectChainListeners.map(item => item.transit));
+  for (let i = proxyGroups.length - 1; i >= 0; i--) {
+    if (projectNames.has(proxyGroups[i]?.name)) proxyGroups.splice(i, 1);
+  }
+  const relayNames = proxies
+    .filter(proxy => proxy?.name && !proxy['dialer-proxy'])
+    .map(proxy => proxy.name);
+  projectChainListeners.slice().reverse().forEach(item => {
+    proxyGroups.unshift({
+      name: item.transit,
+      type: 'select',
+      icon: 'https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png',
+      proxies: relayNames
+    });
+  });
+  config.listeners = projectChainListeners.map(item => ({
+    name: item.listener,
+    type: 'mixed',
+    listen: '127.0.0.1',
+    port: item.port,
+    proxy: item.transit
+  }));
+  projectChainListeners.forEach(item => {
+    console.log(`✅ Turb → 127.0.0.1:${item.port} → ${item.transit} → Turb最终代理池`);
+  });
 
   // 5. 将链式代理添加到手动选择组（可选）
   if (addToManualSelect && hasHomeProxies) {
