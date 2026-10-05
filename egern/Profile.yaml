@@ -587,19 +587,41 @@ policy_groups:
 
 rules:
   # Existing v3 reject rules remain the highest priority.
-  - domain_suffix: { match: account.listary.com, policy: REJECT }
-  - domain_suffix: { match: auth.listary.com, policy: REJECT }
-  - domain_suffix: { match: api.getfiddler.com, policy: REJECT }
-  - protocol: { match: stun, policy: REJECT }
-
+  - domain_suffix:
+      match: account.listary.com
+      policy: REJECT
+  - domain_suffix:
+      match: auth.listary.com
+      policy: REJECT
+  - domain_suffix:
+      match: api.getfiddler.com
+      policy: REJECT
+  - protocol:
+      match: stun
+      policy: REJECT
   # Force overseas encrypted DNS through the selected final proxy.
-  - ip_cidr: { match: 1.1.1.1/32, policy: 漏网之鱼, no_resolve: true }
-  - ip_cidr: { match: 1.0.0.1/32, policy: 漏网之鱼, no_resolve: true }
-  - ip_cidr: { match: 8.8.8.8/32, policy: 漏网之鱼, no_resolve: true }
-  - ip_cidr: { match: 8.8.4.4/32, policy: 漏网之鱼, no_resolve: true }
-  - domain_suffix: { match: dns.alidns.com, policy: DIRECT }
-  - domain_suffix: { match: doh.pub, policy: DIRECT }
-
+  - ip_cidr:
+      match: 1.1.1.1/32
+      policy: 漏网之鱼
+      no_resolve: true
+  - ip_cidr:
+      match: 1.0.0.1/32
+      policy: 漏网之鱼
+      no_resolve: true
+  - ip_cidr:
+      match: 8.8.8.8/32
+      policy: 漏网之鱼
+      no_resolve: true
+  - ip_cidr:
+      match: 8.8.4.4/32
+      policy: 漏网之鱼
+      no_resolve: true
+  - domain_suffix:
+      match: dns.alidns.com
+      policy: DIRECT
+  - domain_suffix:
+      match: doh.pub
+      policy: DIRECT
   - rule_set:
       name: Hijacking
       match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Hijacking/Hijacking.list
@@ -612,19 +634,29 @@ rules:
       update_interval: 86400
 
   # Existing v3 custom rules.
-  - domain_suffix: { match: portal101.cn, policy: DIRECT }
-  - domain_suffix: { match: javasec.org, policy: DIRECT }
-  - domain_suffix: { match: deepseek.com, policy: DIRECT }
-  - domain_suffix: { match: grok.com, policy: Grok }
-  - domain_suffix: { match: x.ai, policy: Grok }
-
+  - domain_suffix:
+      match: portal101.cn
+      policy: DIRECT
+  - domain_suffix:
+      match: javasec.org
+      policy: DIRECT
+  - domain_suffix:
+      match: deepseek.com
+      policy: DIRECT
+  - domain_suffix:
+      match: grok.com
+      policy: Grok
+  - domain_suffix:
+      match: x.ai
+      policy: Grok
   - rule_set:
       name: Speedtest
       match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Speedtest/Speedtest.list
       policy: Speedtest
       update_interval: 86400
-  - domain_suffix: { match: oca.nflxvideo.net, policy: Speedtest }
-
+  - domain_suffix:
+      match: oca.nflxvideo.net
+      policy: Speedtest
   - rule_set:
       name: Perplexity
       match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/perplexity.list
@@ -665,21 +697,51 @@ rules:
       match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/binance.list
       policy: Binance
       update_interval: 86400
-  - domain_suffix: { match: ether.fi, policy: ether-fi }
-  - domain_suffix: { match: plasma-one.tech, policy: Plasma One }
-  - domain_suffix: { match: plasma.org, policy: Plasma One }
-  - domain_suffix: { match: plasma.to, policy: Plasma One }
-  - domain_suffix: { match: plasmascan.to, policy: Plasma One }
-  - domain_keyword: { match: plasma-one, policy: Plasma One }
-  - domain_suffix: { match: bybit.eu, policy: bybit.eu }
-  - domain_suffix: { match: krak.app, policy: 英国手动选择 }
-  - domain_suffix: { match: monzo.com, policy: Monzo }
-  - domain_suffix: { match: monzo.statuspage.io, policy: Monzo }
-  - domain_suffix: { match: ws-eu.pusher.com, policy: Monzo }
-  - domain_keyword: { match: monzo, policy: Monzo }
-  - domain_suffix: { match: revolut.com, policy: Revolut }
-  - domain_suffix: { match: aqueduct.revolutlabs.com, policy: Revolut }
-  - domain_keyword: { match: revolut, policy: Revolut }
+  - domain_suffix:
+      match: ether.fi
+      policy: ether-fi
+  - domain_suffix:
+      match: plasma-one.tech
+      policy: Plasma One
+  - domain_suffix:
+      match: plasma.org
+      policy: Plasma One
+  - domain_suffix:
+      match: plasma.to
+      policy: Plasma One
+  - domain_suffix:
+      match: plasmascan.to
+      policy: Plasma One
+  - domain_keyword:
+      match: plasma-one
+      policy: Plasma One
+  - domain_suffix:
+      match: bybit.eu
+      policy: bybit.eu
+  - domain_suffix:
+      match: krak.app
+      policy: 英国手动选择
+  - domain_suffix:
+      match: monzo.com
+      policy: Monzo
+  - domain_suffix:
+      match: monzo.statuspage.io
+      policy: Monzo
+  - domain_suffix:
+      match: ws-eu.pusher.com
+      policy: Monzo
+  - domain_keyword:
+      match: monzo
+      policy: Monzo
+  - domain_suffix:
+      match: revolut.com
+      policy: Revolut
+  - domain_suffix:
+      match: aqueduct.revolutlabs.com
+      policy: Revolut
+  - domain_keyword:
+      match: revolut
+      policy: Revolut
   - rule_set:
       name: UK-Wifi-Calling
       match: https://raw.githubusercontent.com/iniwex5/tools/refs/heads/main/rules/UK-wifi-call.list
@@ -692,66 +754,178 @@ rules:
       update_interval: 86400
 
   # Cloudbet defaults to Taiwan. Stake retains the existing Japan default.
-  - domain_suffix: { match: cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: cldbt.cloud, policy: 台湾 }
-  - domain_suffix: { match: sports-api.cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: api.cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: cdn.cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: media.cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: docs.cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: affiliates.cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: play-cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: share.cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: a.cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: int.cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: ws.cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: wss.cloudbet.com, policy: 台湾 }
-  - domain_suffix: { match: stake.com, policy: 日本 }
-  - domain_suffix: { match: stake.bet, policy: 日本 }
-  - domain_suffix: { match: stake.games, policy: 日本 }
-  - domain_suffix: { match: stake.ac, policy: 日本 }
-  - domain_suffix: { match: stake.pet, policy: 日本 }
-  - domain_suffix: { match: api.stake.com, policy: 日本 }
-  - domain_suffix: { match: sports.stake.com, policy: 日本 }
-  - domain_suffix: { match: cdn.stake.com, policy: 日本 }
-  - domain_suffix: { match: assets.stake.com, policy: 日本 }
-  - domain_suffix: { match: img.stake.com, policy: 日本 }
-  - domain_suffix: { match: ws.stake.com, policy: 日本 }
-  - domain_suffix: { match: wss.stake.com, policy: 日本 }
-  - domain_suffix: { match: payment.stake.com, policy: 日本 }
-  - domain_suffix: { match: stake.bet.br, policy: 日本 }
-  - domain_suffix: { match: stake.com.co, policy: 日本 }
-  - domain_suffix: { match: stake.mx, policy: 日本 }
-  - domain_keyword: { match: deposit.stake, policy: 日本 }
-  - domain_keyword: { match: withdraw.stake, policy: 日本 }
-
+  - domain_suffix:
+      match: cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: cldbt.cloud
+      policy: 台湾
+  - domain_suffix:
+      match: sports-api.cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: api.cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: cdn.cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: media.cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: docs.cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: affiliates.cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: play-cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: share.cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: a.cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: int.cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: ws.cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: wss.cloudbet.com
+      policy: 台湾
+  - domain_suffix:
+      match: stake.com
+      policy: 日本
+  - domain_suffix:
+      match: stake.bet
+      policy: 日本
+  - domain_suffix:
+      match: stake.games
+      policy: 日本
+  - domain_suffix:
+      match: stake.ac
+      policy: 日本
+  - domain_suffix:
+      match: stake.pet
+      policy: 日本
+  - domain_suffix:
+      match: api.stake.com
+      policy: 日本
+  - domain_suffix:
+      match: sports.stake.com
+      policy: 日本
+  - domain_suffix:
+      match: cdn.stake.com
+      policy: 日本
+  - domain_suffix:
+      match: assets.stake.com
+      policy: 日本
+  - domain_suffix:
+      match: img.stake.com
+      policy: 日本
+  - domain_suffix:
+      match: ws.stake.com
+      policy: 日本
+  - domain_suffix:
+      match: wss.stake.com
+      policy: 日本
+  - domain_suffix:
+      match: payment.stake.com
+      policy: 日本
+  - domain_suffix:
+      match: stake.bet.br
+      policy: 日本
+  - domain_suffix:
+      match: stake.com.co
+      policy: 日本
+  - domain_suffix:
+      match: stake.mx
+      policy: 日本
+  - domain_keyword:
+      match: deposit.stake
+      policy: 日本
+  - domain_keyword:
+      match: withdraw.stake
+      policy: 日本
   # Additional supplied Loon rules, routed through the equivalent selectable groups.
-  - domain_suffix: { match: kraken.onl, policy: Kraken }
-  - domain_suffix: { match: kraken.com, policy: Kraken }
-  - domain_suffix: { match: transferwise.com, policy: Wise }
-  - domain_suffix: { match: wise.com, policy: Wise }
-  - domain_suffix: { match: metrics.duolingo.com, policy: Duolingo }
-  - domain_suffix: { match: analytics.vpc.duolingo.com, policy: Duolingo }
-  - domain_suffix: { match: ads-api.duolingo.com, policy: Duolingo }
-  - domain_suffix: { match: duolingo.cn, policy: Duolingo }
-  - domain_suffix: { match: duolingo.com, policy: Duolingo }
-  - domain_suffix: { match: zsajvw.vip, policy: 香港手动选择 }
-  - domain_suffix: { match: crt1u5.vip, policy: 香港手动选择 }
-  - domain_suffix: { match: ifastgp.com, policy: DIRECT }
-  - domain_suffix: { match: fundsupermart.com, policy: DIRECT }
-  - domain_suffix: { match: ifastcorp.com, policy: DIRECT }
-  - domain_suffix: { match: ifastgb.com, policy: DIRECT }
-  - domain_suffix: { match: fsmone.com, policy: DIRECT }
-  - domain_suffix: { match: ifastnetwork.com, policy: DIRECT }
-  - domain_suffix: { match: ifasttv.com, policy: DIRECT }
-  - domain_suffix: { match: fsmone.com.hk, policy: DIRECT }
-  - domain_suffix: { match: fsmone.com.my, policy: DIRECT }
-  - domain_suffix: { match: ifastcapital.com.my, policy: DIRECT }
-  - domain_suffix: { match: ifastfinancial.com.hk, policy: DIRECT }
-  - domain_suffix: { match: ifastfinancial.co.in, policy: DIRECT }
-  - domain_suffix: { match: ifastgp.com.hk, policy: DIRECT }
-  - domain_suffix: { match: ifastps.com.cn, policy: DIRECT }
-
+  - domain_suffix:
+      match: kraken.onl
+      policy: Kraken
+  - domain_suffix:
+      match: kraken.com
+      policy: Kraken
+  - domain_suffix:
+      match: transferwise.com
+      policy: Wise
+  - domain_suffix:
+      match: wise.com
+      policy: Wise
+  - domain_suffix:
+      match: metrics.duolingo.com
+      policy: Duolingo
+  - domain_suffix:
+      match: analytics.vpc.duolingo.com
+      policy: Duolingo
+  - domain_suffix:
+      match: ads-api.duolingo.com
+      policy: Duolingo
+  - domain_suffix:
+      match: duolingo.cn
+      policy: Duolingo
+  - domain_suffix:
+      match: duolingo.com
+      policy: Duolingo
+  - domain_suffix:
+      match: zsajvw.vip
+      policy: 香港手动选择
+  - domain_suffix:
+      match: crt1u5.vip
+      policy: 香港手动选择
+  - domain_suffix:
+      match: ifastgp.com
+      policy: DIRECT
+  - domain_suffix:
+      match: fundsupermart.com
+      policy: DIRECT
+  - domain_suffix:
+      match: ifastcorp.com
+      policy: DIRECT
+  - domain_suffix:
+      match: ifastgb.com
+      policy: DIRECT
+  - domain_suffix:
+      match: fsmone.com
+      policy: DIRECT
+  - domain_suffix:
+      match: ifastnetwork.com
+      policy: DIRECT
+  - domain_suffix:
+      match: ifasttv.com
+      policy: DIRECT
+  - domain_suffix:
+      match: fsmone.com.hk
+      policy: DIRECT
+  - domain_suffix:
+      match: fsmone.com.my
+      policy: DIRECT
+  - domain_suffix:
+      match: ifastcapital.com.my
+      policy: DIRECT
+  - domain_suffix:
+      match: ifastfinancial.com.hk
+      policy: DIRECT
+  - domain_suffix:
+      match: ifastfinancial.co.in
+      policy: DIRECT
+  - domain_suffix:
+      match: ifastgp.com.hk
+      policy: DIRECT
+  - domain_suffix:
+      match: ifastps.com.cn
+      policy: DIRECT
   # Standard application rules from the existing v3 profile.
   - rule_set: { name: Apple, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Apple/Apple.list, policy: Apple, update_interval: 86400 }
   - rule_set: { name: AppStore, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/AppStore/AppStore.list, policy: AppStore, update_interval: 86400 }
@@ -785,9 +959,12 @@ rules:
 
   # Broad keyword fallbacks must sit after the China domain set, otherwise they
   # hijack domestic domains that merely contain "stake" or "cloudbet".
-  - domain_keyword: { match: cloudbet, policy: 台湾 }
-  - domain_keyword: { match: stake, policy: 日本 }
-
+  - domain_keyword:
+      match: cloudbet
+      policy: 台湾
+  - domain_keyword:
+      match: stake
+      policy: 日本
   - geoip:
       match: CN
       policy: DIRECT
