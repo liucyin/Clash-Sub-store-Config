@@ -169,6 +169,10 @@ const baseConfig = {
         "https://1.1.1.1/dns-query#ether-fi",
         "https://dns.google/dns-query#ether-fi"
       ],
+      "+.plasma-one.tech,+.plasma.org,+.plasma.to,+.plasmascan.to": [
+        "https://1.1.1.1/dns-query#Plasma One",
+        "https://dns.google/dns-query#Plasma One"
+      ],
       "rule-set:UK-Wifi-Calling": [
         "https://1.1.1.1/dns-query#UK-Wifi-Calling",
         "https://dns.google/dns-query#UK-Wifi-Calling"
@@ -554,6 +558,37 @@ const baseConfig = {
       type: "select",
       "disable-udp": false,
       icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/ether-fi.png",
+      "include-all": true,
+      proxies: [
+        "手动选择",
+        "自动选择",
+        "香港",
+        "澳门",
+        "台湾",
+        "日本",
+        "韩国",
+        "美国",
+        "英国",
+        "德国",
+        "法国",
+        "印度",
+        "新加坡",
+        "印尼",
+        "越南",
+        "泰国",
+        "澳洲",
+        "巴西",
+        "其他",
+        "DIRECT",
+        "REJECT"
+      ]
+    },
+
+    {
+      name: "Plasma One",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://cdn.jsdelivr.net/gh/liucyin/Clash-Sub-store-Config@main/icon/plasma.png",
       "include-all": true,
       proxies: [
         "手动选择",
@@ -2145,6 +2180,11 @@ const baseConfig = {
     "RULE-SET,monzo,Monzo",
     "RULE-SET,revolut,Revolut",
     "DOMAIN-SUFFIX,ether.fi,ether-fi",
+    "DOMAIN-SUFFIX,plasma-one.tech,Plasma One",
+    "DOMAIN-SUFFIX,plasma.org,Plasma One",
+    "DOMAIN-SUFFIX,plasma.to,Plasma One",
+    "DOMAIN-SUFFIX,plasmascan.to,Plasma One",
+    "DOMAIN-KEYWORD,plasma-one,Plasma One",
     "DOMAIN-SUFFIX,bybit.eu,bybit.eu",
     "DOMAIN-SUFFIX,krak.app,英国手动选择",
     "RULE-SET,UK-Wifi-Calling,UK-Wifi-Calling",
@@ -2231,7 +2271,7 @@ const orderedApplicationGroups = [
   "Apple", "AppStore", "BiliBili", "Binance", "Bybit", "bybit.eu", "ether-fi", "Claude", "Cursor",
   "Disney", "Duolingo", "Emby", "Facebook", "Gemini", "Github", "Google", "Grok",
   "Kraken", "Microsoft", "Monzo", "Netflix", "OKX", "OneDrive", "OpenAI",
-  "PayPal", "Perplexity", "Revolut", "Speedtest", "Spotify", "Steam",
+  "PayPal", "Perplexity", "Plasma One", "Revolut", "Speedtest", "Spotify", "Steam",
   "Telegram", "TikTok", "Twitter", "UK-Wifi-Calling", "Wise", "YouTube"
 ];
 
