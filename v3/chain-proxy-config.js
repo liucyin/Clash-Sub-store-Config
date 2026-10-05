@@ -2152,20 +2152,20 @@ const baseConfig = {
     // iFast 域名规则
     "RULE-SET,ifast,直连",
 
-    // Cloudbet 域名规则 - 默认走日本
-    "DOMAIN-SUFFIX,cloudbet.com,日本",
-    "DOMAIN-SUFFIX,cldbt.cloud,日本",
-    "DOMAIN-SUFFIX,sports-api.cloudbet.com,日本",
-    "DOMAIN-SUFFIX,api.cloudbet.com,日本",
-    "DOMAIN-SUFFIX,cdn.cloudbet.com,日本",
-    "DOMAIN-SUFFIX,media.cloudbet.com,日本",
-    "DOMAIN-SUFFIX,affiliates.cloudbet.com,日本",
-    "DOMAIN-SUFFIX,play-cloudbet.com,日本",
-    "DOMAIN-SUFFIX,share.cloudbet.com,日本",
-    "DOMAIN-SUFFIX,a.cloudbet.com,日本",
-    "DOMAIN-SUFFIX,int.cloudbet.com,日本",
-    "DOMAIN-SUFFIX,ws.cloudbet.com,日本",
-    "DOMAIN-SUFFIX,wss.cloudbet.com,日本",
+    // Cloudbet 域名规则 - 默认走台湾
+    "DOMAIN-SUFFIX,cloudbet.com,台湾",
+    "DOMAIN-SUFFIX,cldbt.cloud,台湾",
+    "DOMAIN-SUFFIX,sports-api.cloudbet.com,台湾",
+    "DOMAIN-SUFFIX,api.cloudbet.com,台湾",
+    "DOMAIN-SUFFIX,cdn.cloudbet.com,台湾",
+    "DOMAIN-SUFFIX,media.cloudbet.com,台湾",
+    "DOMAIN-SUFFIX,affiliates.cloudbet.com,台湾",
+    "DOMAIN-SUFFIX,play-cloudbet.com,台湾",
+    "DOMAIN-SUFFIX,share.cloudbet.com,台湾",
+    "DOMAIN-SUFFIX,a.cloudbet.com,台湾",
+    "DOMAIN-SUFFIX,int.cloudbet.com,台湾",
+    "DOMAIN-SUFFIX,ws.cloudbet.com,台湾",
+    "DOMAIN-SUFFIX,wss.cloudbet.com,台湾",
 
     // Stake.com 域名规则 - 默认走日本
     "DOMAIN-SUFFIX,stake.com,日本",
@@ -2194,7 +2194,7 @@ const baseConfig = {
     "RULE-SET,China,直连,no-resolve",
 
     // 宽泛的关键词兜底 - 必须排在 China 之后，否则会误伤含 stake/cloudbet 的国内域名
-    "DOMAIN-KEYWORD,cloudbet,日本",
+    "DOMAIN-KEYWORD,cloudbet,台湾",
     "DOMAIN-KEYWORD,stake,日本",
 
     "RULE-SET,Telegram,Telegram",

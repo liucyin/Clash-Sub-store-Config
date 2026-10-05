@@ -681,21 +681,21 @@ rules:
       policy: DIRECT
       update_interval: 86400
 
-  # Cloudbet and Stake retain the existing Japan default.
-  - domain_suffix: { match: cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: cldbt.cloud, policy: 日本 }
-  - domain_suffix: { match: sports-api.cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: api.cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: cdn.cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: media.cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: docs.cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: affiliates.cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: play-cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: share.cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: a.cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: int.cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: ws.cloudbet.com, policy: 日本 }
-  - domain_suffix: { match: wss.cloudbet.com, policy: 日本 }
+  # Cloudbet defaults to Taiwan. Stake retains the existing Japan default.
+  - domain_suffix: { match: cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: cldbt.cloud, policy: 台湾 }
+  - domain_suffix: { match: sports-api.cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: api.cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: cdn.cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: media.cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: docs.cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: affiliates.cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: play-cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: share.cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: a.cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: int.cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: ws.cloudbet.com, policy: 台湾 }
+  - domain_suffix: { match: wss.cloudbet.com, policy: 台湾 }
   - domain_suffix: { match: stake.com, policy: 日本 }
   - domain_suffix: { match: stake.bet, policy: 日本 }
   - domain_suffix: { match: stake.games, policy: 日本 }
@@ -775,7 +775,7 @@ rules:
 
   # Broad keyword fallbacks must sit after the China domain set, otherwise they
   # hijack domestic domains that merely contain "stake" or "cloudbet".
-  - domain_keyword: { match: cloudbet, policy: 日本 }
+  - domain_keyword: { match: cloudbet, policy: 台湾 }
   - domain_keyword: { match: stake, policy: 日本 }
 
   - geoip:
