@@ -340,13 +340,8 @@ function main(config) {
     }
   });
 
-  // DNS 只能选择真实代理节点；覆盖同名继承组并去重，禁止 DIRECT 或递归策略组兜底。
+  // 移除上版生成的独立 DNS 组；解析恢复跟随漏网之鱼及各业务组。
   proxyGroups = proxyGroups.filter(function(group) { return group.name !== "DNS"; });
-  proxyGroups.push({
-    name: "DNS", type: "select", hidden: true,
-    "include-all": true, "exclude-type": "Direct|Reject|RejectDrop|Compatible|Pass",
-    "exclude-filter": "🔗", "empty-fallback": "REJECT"
-  });
 
   // 5. 将所有策略组的 proxies 加上链式代理选项
   // 排在首位 = 默认选中链式代理
@@ -354,7 +349,7 @@ function main(config) {
     "Claude", "Cursor", "Disney", "Emby", "Facebook", "Gemini", "Grok", "Kraken", "Perplexity",
     "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam",
     "Spotify", "TikTok", "Telegram", "Twitter", "UK-Wifi-Calling", "YouTube"];
-  // 兜底/全局组只作为可选项（插到第二位），默认仍走单跳；DNS 使用独立纯代理组。
+  // 兜底/全局组只作为可选项（插到第二位），避免默认国外 DNS 无意增加一跳。
   var chainOptionalGroups = ["手动选择", "GLOBAL", "漏网之鱼"];
   var chainGroupAvailable = proxyGroups.some(function(g) { return g.name === chainProxyGroupName; });
 
@@ -447,8 +442,8 @@ function main(config) {
     'https://223.6.6.6/dns-query#DIRECT'
   ];
   var overseasNameservers = [
-    'https://1.1.1.1/dns-query#DNS',
-    'https://8.8.8.8/dns-query#DNS'
+    'https://1.1.1.1/dns-query#漏网之鱼',
+    'https://8.8.8.8/dns-query#漏网之鱼'
   ];
   config.dns['default-nameserver'] = domesticNameservers.slice();
   config.dns.nameserver = overseasNameservers.slice();
@@ -456,7 +451,7 @@ function main(config) {
   config.dns['direct-nameserver'] = domesticNameservers.slice();
   config.dns['direct-nameserver-follow-policy'] = true;
   // 有意重建继承策略，避免订阅中的明文、任意直连解析、ECS 或跳过证书校验选项。
-  // 海外及各服务统一由默认 #DNS 解析，不再使用可能选中 DIRECT 的业务组。
+  // 默认国外 DNS 跟随漏网之鱼；指定业务通过下方策略跟随各自出口。
   ['fallback', 'fallback-filter', 'proxy-server-nameserver-policy',
     'ecs', 'ecs-override', 'client-subnet', 'skip-cert-verify', 'insecure'].forEach(function(key) {
     delete config.dns[key];
@@ -464,6 +459,82 @@ function main(config) {
   var nameserverPolicy = {};
   nameserverPolicy[manifestDomain] = domesticNameservers.slice();
   nameserverPolicy['geosite:cn'] = domesticNameservers.slice();
+  nameserverPolicy["rule-set:OpenAI"] = [
+    "https://1.1.1.1/dns-query#OpenAI",
+    "https://8.8.8.8/dns-query#OpenAI"
+  ];
+  nameserverPolicy["rule-set:Claude"] = [
+    "https://1.1.1.1/dns-query#Claude",
+    "https://8.8.8.8/dns-query#Claude"
+  ];
+  nameserverPolicy["rule-set:Facebook"] = [
+    "https://1.1.1.1/dns-query#Facebook",
+    "https://8.8.8.8/dns-query#Facebook"
+  ];
+  nameserverPolicy["rule-set:Gemini"] = [
+    "https://1.1.1.1/dns-query#Gemini",
+    "https://8.8.8.8/dns-query#Gemini"
+  ];
+  nameserverPolicy["geosite:ookla-speedtest"] = [
+    "https://1.1.1.1/dns-query#Speedtest",
+    "https://8.8.8.8/dns-query#Speedtest"
+  ];
+  nameserverPolicy["rule-set:Speedtest"] = [
+    "https://1.1.1.1/dns-query#Speedtest",
+    "https://8.8.8.8/dns-query#Speedtest"
+  ];
+  nameserverPolicy["+.oca.nflxvideo.net"] = [
+    "https://1.1.1.1/dns-query#Speedtest",
+    "https://8.8.8.8/dns-query#Speedtest"
+  ];
+  nameserverPolicy["rule-set:Bybit"] = [
+    "https://1.1.1.1/dns-query#Bybit",
+    "https://8.8.8.8/dns-query#Bybit"
+  ];
+  nameserverPolicy["+.bybit.eu"] = [
+    "https://1.1.1.1/dns-query#bybit.eu",
+    "https://8.8.8.8/dns-query#bybit.eu"
+  ];
+  nameserverPolicy["+.plasma-one.tech,+.plasma.org,+.plasma.to,+.plasmascan.to"] = [
+    "https://1.1.1.1/dns-query#Plasma One",
+    "https://8.8.8.8/dns-query#Plasma One"
+  ];
+  nameserverPolicy["rule-set:kraken"] = [
+    "https://1.1.1.1/dns-query#Kraken",
+    "https://8.8.8.8/dns-query#Kraken"
+  ];
+  nameserverPolicy["rule-set:wise"] = [
+    "https://1.1.1.1/dns-query#Wise",
+    "https://8.8.8.8/dns-query#Wise"
+  ];
+  nameserverPolicy["rule-set:okx"] = [
+    "https://1.1.1.1/dns-query#OKX",
+    "https://8.8.8.8/dns-query#OKX"
+  ];
+  nameserverPolicy["rule-set:paypal"] = [
+    "https://1.1.1.1/dns-query#PayPal",
+    "https://8.8.8.8/dns-query#PayPal"
+  ];
+  nameserverPolicy["rule-set:binance"] = [
+    "https://1.1.1.1/dns-query#Binance",
+    "https://8.8.8.8/dns-query#Binance"
+  ];
+  nameserverPolicy["rule-set:monzo"] = [
+    "https://1.1.1.1/dns-query#Monzo",
+    "https://8.8.8.8/dns-query#Monzo"
+  ];
+  nameserverPolicy["rule-set:revolut"] = [
+    "https://1.1.1.1/dns-query#Revolut",
+    "https://8.8.8.8/dns-query#Revolut"
+  ];
+  nameserverPolicy["rule-set:UK-Wifi-Calling"] = [
+    "https://1.1.1.1/dns-query#UK-Wifi-Calling",
+    "https://8.8.8.8/dns-query#UK-Wifi-Calling"
+  ];
+  nameserverPolicy["+.grok.com,+.x.ai"] = [
+    "https://1.1.1.1/dns-query#Grok",
+    "https://8.8.8.8/dns-query#Grok"
+  ];
   // 仅明确的 LAN/local 后缀允许系统解析；它们可能使用明文局域网 DNS。
   // 不使用 geosite:private，避免把公共域名或业务域名送入系统解析器。
   nameserverPolicy['+.lan'] = ['system://'];

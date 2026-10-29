@@ -77,7 +77,7 @@ const baseConfig = {
   // 保持 false，否则上面两行失效，空闲连接会被 NAT 静默回收，再次使用时需等重传超时
   "disable-keep-alive": false,
 
-  // 公网 DNS 仅用校验证书的 DoH；国外查询走独立 DNS 组，失败不回退直连。
+  // 公网 DNS 使用校验证书的 DoH；默认跟随漏网之鱼，指定业务跟随对应策略组。
   dns: {
     enable: true,
     listen: "127.0.0.1:1053",
@@ -106,8 +106,8 @@ const baseConfig = {
       "https://223.6.6.6/dns-query"
     ],
     nameserver: [
-      "https://1.1.1.1/dns-query#DNS",
-      "https://8.8.8.8/dns-query#DNS"
+      "https://1.1.1.1/dns-query#漏网之鱼",
+      "https://8.8.8.8/dns-query#漏网之鱼"
     ],
     // 节点自身域名必须直连解析，避免建立代理前先依赖代理的循环。
     "proxy-server-nameserver": [
@@ -127,6 +127,86 @@ const baseConfig = {
       "geosite:cn": [
         "https://223.5.5.5/dns-query#DIRECT",
         "https://223.6.6.6/dns-query#DIRECT"
+      ],
+      "rule-set:OpenAI": [
+        "https://1.1.1.1/dns-query#OpenAI",
+        "https://8.8.8.8/dns-query#OpenAI"
+      ],
+      "rule-set:Claude": [
+        "https://1.1.1.1/dns-query#Claude",
+        "https://8.8.8.8/dns-query#Claude"
+      ],
+      "rule-set:Facebook": [
+        "https://1.1.1.1/dns-query#Facebook",
+        "https://8.8.8.8/dns-query#Facebook"
+      ],
+      "rule-set:Gemini": [
+        "https://1.1.1.1/dns-query#Gemini",
+        "https://8.8.8.8/dns-query#Gemini"
+      ],
+      "geosite:ookla-speedtest": [
+        "https://1.1.1.1/dns-query#Speedtest",
+        "https://8.8.8.8/dns-query#Speedtest"
+      ],
+      "rule-set:Speedtest": [
+        "https://1.1.1.1/dns-query#Speedtest",
+        "https://8.8.8.8/dns-query#Speedtest"
+      ],
+      "+.oca.nflxvideo.net": [
+        "https://1.1.1.1/dns-query#Speedtest",
+        "https://8.8.8.8/dns-query#Speedtest"
+      ],
+      "rule-set:Bybit": [
+        "https://1.1.1.1/dns-query#Bybit",
+        "https://8.8.8.8/dns-query#Bybit"
+      ],
+      "+.bybit.eu": [
+        "https://1.1.1.1/dns-query#bybit.eu",
+        "https://8.8.8.8/dns-query#bybit.eu"
+      ],
+      "+.ether.fi": [
+        "https://1.1.1.1/dns-query#ether-fi",
+        "https://8.8.8.8/dns-query#ether-fi"
+      ],
+      "+.plasma-one.tech,+.plasma.org,+.plasma.to,+.plasmascan.to": [
+        "https://1.1.1.1/dns-query#Plasma One",
+        "https://8.8.8.8/dns-query#Plasma One"
+      ],
+      "rule-set:UK-Wifi-Calling": [
+        "https://1.1.1.1/dns-query#UK-Wifi-Calling",
+        "https://8.8.8.8/dns-query#UK-Wifi-Calling"
+      ],
+      "rule-set:kraken": [
+        "https://1.1.1.1/dns-query#Kraken",
+        "https://8.8.8.8/dns-query#Kraken"
+      ],
+      "rule-set:wise": [
+        "https://1.1.1.1/dns-query#Wise",
+        "https://8.8.8.8/dns-query#Wise"
+      ],
+      "rule-set:okx": [
+        "https://1.1.1.1/dns-query#OKX",
+        "https://8.8.8.8/dns-query#OKX"
+      ],
+      "rule-set:paypal": [
+        "https://1.1.1.1/dns-query#PayPal",
+        "https://8.8.8.8/dns-query#PayPal"
+      ],
+      "rule-set:binance": [
+        "https://1.1.1.1/dns-query#Binance",
+        "https://8.8.8.8/dns-query#Binance"
+      ],
+      "rule-set:monzo": [
+        "https://1.1.1.1/dns-query#Monzo",
+        "https://8.8.8.8/dns-query#Monzo"
+      ],
+      "rule-set:revolut": [
+        "https://1.1.1.1/dns-query#Revolut",
+        "https://8.8.8.8/dns-query#Revolut"
+      ],
+      "+.grok.com,+.x.ai": [
+        "https://1.1.1.1/dns-query#Grok",
+        "https://8.8.8.8/dns-query#Grok"
       ],
       // 仅局域网命名允许系统解析；不把整个 private 集合交给 system。
       "+.lan,+.local,+.home.arpa": ["system://"]
@@ -208,16 +288,6 @@ const baseConfig = {
 
   // 代理组配置
   "proxy-groups": [
-    // 只含节点，不引用可切到 DIRECT 的业务组；空订阅拒绝而非隐式直连。
-    {
-      name: "DNS",
-      type: "select",
-      hidden: true,
-      "include-all": true,
-      "exclude-type": "Direct|Reject|RejectDrop|Compatible|Pass",
-      "exclude-filter": "🔗",
-      "empty-fallback": "REJECT"
-    },
     // 手动选择 - 引用所有订阅节点
     {
       name: "手动选择",
@@ -2225,8 +2295,8 @@ function main(config, profileName) {
   config['proxy-providers'] = subscription['proxy-providers'] || {};
   const groupsByName = new Map(config['proxy-groups'].map(group => [group.name, group]));
   (subscription['proxy-groups'] || []).forEach(group => groupsByName.set(group.name, group));
-  // DNS 不引用业务组，也不继承订阅中可能含 DIRECT 的同名组。
-  groupsByName.set('DNS', JSON.parse(JSON.stringify(baseConfig['proxy-groups'][0])));
+  // 移除上版生成的独立 DNS 组；解析恢复跟随漏网之鱼及各业务组。
+  groupsByName.delete('DNS');
   config['proxy-groups'] = [...groupsByName.values()];
   config['rule-providers'] = {
     ...config['rule-providers'],
@@ -2349,7 +2419,7 @@ function main(config, profileName) {
     // 链式代理排在首位 = 该组默认选中链式代理
     const chainDefaultGroups = ["Apple", "AppStore", "BiliBili", "Claude", "Cursor", "Disney", "Emby", "Facebook", "Gemini", "Grok", "Perplexity", "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam", "Spotify", "TikTok", "Telegram", "Twitter", "YouTube"]
     // 兜底/全局组只把链式代理作为可选项（插到第二位），默认仍走单跳。
-    // DNS 已独立使用纯代理组，业务兜底流量不必默认增加一跳。
+    // 默认国外 DNS 跟随漏网之鱼，保持该组默认单跳，避免无意增加解析延迟。
     const chainOptionalGroups = ["手动选择", "GLOBAL", "漏网之鱼"]
 
     chainDefaultGroups.forEach(groupName => {

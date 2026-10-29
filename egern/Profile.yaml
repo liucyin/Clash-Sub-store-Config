@@ -60,7 +60,7 @@ real_ip_domains:
   - manifest.opensteamtool.com
 
 # Domestic queries use direct encrypted DNS. Default overseas queries use the
-# proxy-only DNS policy; native proxy DNS is separately forced direct below.
+# selected 漏网之鱼 policy; native proxy DNS is separately forced direct below.
 dns:
   bootstrap:
     # Egern only supports direct plaintext UDP bootstrap; IP-literal DoH below
@@ -126,13 +126,6 @@ policy_groups:
       block_quic: true
       hidden: true
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
-
-  # Only subscription nodes and rejection; never inherit a DIRECT-capable group.
-  - select:
-      name: DNS
-      policies: [全部节点, REJECT]
-      flatten: true
-      hidden: true
 
   - auto_test:
       name: 自动选择
@@ -612,14 +605,14 @@ rules:
   - protocol:
       match: stun
       policy: REJECT
-  # Force default overseas encrypted DNS through a proxy-only policy.
+  # Default overseas encrypted DNS follows the selected 漏网之鱼 policy.
   - ip_cidr:
       match: 1.1.1.1/32
-      policy: DNS
+      policy: 漏网之鱼
       no_resolve: true
   - ip_cidr:
       match: 8.8.8.8/32
-      policy: DNS
+      policy: 漏网之鱼
       no_resolve: true
   - rule_set:
       name: Hijacking

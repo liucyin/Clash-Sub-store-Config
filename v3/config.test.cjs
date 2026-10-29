@@ -37,16 +37,6 @@ function route(rules, domain) {
   }
 }
 
-function dnsCandidates(config) {
-  const group = config['proxy-groups'].find(item => item.name === 'DNS');
-  const providers = Object.values(config['proxy-providers'] || {})
-    .flatMap(provider => provider.payload || []);
-  const excludedTypes = new Set(group['exclude-type'].split('|').map(type => type.toLowerCase()));
-  const excludedNames = new RegExp(group['exclude-filter']);
-  const candidates = [...(config.proxies || []), ...providers]
-    .filter(proxy => !excludedTypes.has(proxy.type.toLowerCase()) && !excludedNames.test(proxy.name));
-  return { group, candidates };
-}
 
 for (const file of scripts) {
   test(`${file}: manifest exception is exact and custom rule precedence survives early MATCH`, () => {
@@ -75,25 +65,32 @@ for (const file of scripts) {
       output.rules.indexOf(`DOMAIN,${manifest},DIRECT`));
   });
 
-  test(`${file}: provider-only subscriptions keep usable DNS nodes, empty ones reject`, () => {
+  test(`${file}: provider-only and regenerated subscriptions keep resolver policies reachable`, () => {
     const generate = load(file);
-    const provider = { type: 'inline', payload: [node('provider-node')] };
-    const input = {
-      'proxy-providers': { Only: provider },
-      'proxy-groups': [{ name: 'DNS', type: 'select', proxies: ['DIRECT'] }]
-    };
-    const output = generate(input);
-    assert.deepEqual(output['proxy-providers'].Only.payload, provider.payload);
-    const { group, candidates } = dnsCandidates(output);
-    assert.deepEqual(candidates.map(proxy => proxy.name), ['provider-node']);
-    assert.equal(group.proxies, undefined);
-    assert.equal(group['empty-fallback'], 'REJECT');
-    const empty = dnsCandidates(generate({}));
-    assert.deepEqual(empty.candidates, []);
-    assert.equal(empty.group['empty-fallback'], 'REJECT');
+    for (const input of [
+      {},
+      { 'proxy-providers': { Only: { type: 'inline', payload: [node('provider-node')] } } },
+      { proxies: [node()], 'proxy-groups': [{ name: 'DNS', type: 'select', proxies: ['DIRECT'] }] }
+    ]) {
+      const first = generate(input);
+      const output = generate(first);
+      const known = new Set(['DIRECT', 'REJECT', ...(output.proxies || []).map(proxy => proxy.name),
+        ...output['proxy-groups'].map(group => group.name)]);
+      const resolvers = [
+        ...output.dns.nameserver,
+        ...output.dns['proxy-server-nameserver'],
+        ...output.dns['direct-nameserver'],
+        ...Object.values(output.dns['nameserver-policy']).flat()
+      ];
+      for (const resolver of resolvers) {
+        const policy = decodeURIComponent(new URL(resolver).hash.slice(1));
+        if (policy) assert.ok(known.has(policy), `Unresolved DNS policy: ${policy}`);
+      }
+      assert.equal(output['proxy-groups'].some(group => group.name === 'DNS'), false);
+    }
   });
 
-  test(`${file}: inherited resolver fallback cannot bypass DNS policy`, () => {
+  test(`${file}: final and service DNS policies survive hostile inheritance without changing manifest`, () => {
     const generate = load(file);
     const output = generate({
       proxies: [node(), { name: 'bypass', type: 'direct' }],
@@ -110,9 +107,42 @@ for (const file of scripts) {
     assert.equal(output.dns['nameserver-policy']['+.example.org'], undefined);
     for (const resolver of output.dns.nameserver) {
       assert.equal(new URL(resolver).protocol, 'https:');
-      assert.equal(new URL(resolver).hash, '#DNS');
+      assert.equal(decodeURIComponent(new URL(resolver).hash), '#漏网之鱼');
     }
-    assert.deepEqual(dnsCandidates(output).candidates.map(proxy => proxy.name), ['HK-node']);
+    const servicePolicies = {
+      'rule-set:OpenAI': 'OpenAI',
+      'rule-set:Claude': 'Claude',
+      'rule-set:Facebook': 'Facebook',
+      'rule-set:Gemini': 'Gemini',
+      'geosite:ookla-speedtest': 'Speedtest',
+      'rule-set:Speedtest': 'Speedtest',
+      '+.oca.nflxvideo.net': 'Speedtest',
+      'rule-set:Bybit': 'Bybit',
+      '+.bybit.eu': 'bybit.eu',
+      '+.plasma-one.tech,+.plasma.org,+.plasma.to,+.plasmascan.to': 'Plasma One',
+      'rule-set:UK-Wifi-Calling': 'UK-Wifi-Calling',
+      'rule-set:kraken': 'Kraken',
+      'rule-set:wise': 'Wise',
+      'rule-set:okx': 'OKX',
+      'rule-set:paypal': 'PayPal',
+      'rule-set:binance': 'Binance',
+      'rule-set:monzo': 'Monzo',
+      'rule-set:revolut': 'Revolut',
+      '+.grok.com,+.x.ai': 'Grok'
+    };
+    if (file !== 'flclash-chain-proxy-override.js') servicePolicies['+.ether.fi'] = 'ether-fi';
+    for (const [match, policy] of Object.entries(servicePolicies)) {
+      const servers = output.dns['nameserver-policy'][match];
+      assert.ok(servers, `Missing service DNS policy: ${match}`);
+      assert.deepEqual([...new Set(servers.map(server =>
+        decodeURIComponent(new URL(server).hash.slice(1))))], [policy]);
+    }
+    assert.ok(output.dns['fake-ip-filter'].includes(manifest));
+    assert.deepEqual(output.dns['nameserver-policy'][manifest], [
+      'https://223.5.5.5/dns-query#DIRECT',
+      'https://223.6.6.6/dns-query#DIRECT'
+    ]);
+    assert.equal(route(output.rules, manifest), 'DIRECT');
     assert.ok(output.tun['dns-hijack'].includes('any:53'));
     assert.ok(output.tun['dns-hijack'].includes('tcp://any:53'));
     assert.ok(!(output.tun['route-exclude-address'] || []).includes('0.0.0.0/0'));

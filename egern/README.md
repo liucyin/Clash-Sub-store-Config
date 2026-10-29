@@ -2,8 +2,8 @@
 
 `Profile.yaml` uses Egern's native YAML syntax and keeps the v3 routing rules at
 higher priority than the additional Loon rules. This is split DNS, not an
-anonymity profile. A working private node subscription is required for overseas
-default DNS; the public template deliberately contains no subscription credentials.
+anonymity profile. Overseas default DNS follows the selected `漏网之鱼` policy;
+the public template deliberately contains no subscription credentials.
 
 ## Setup
 
@@ -15,11 +15,10 @@ default DNS; the public template deliberately contains no subscription credentia
    credentials out of commits, screenshots and public copies.
 3. Keep `target=Egern` in the Sub-Store URL; a Loon subscription is not a valid
    Egern proxy source. Refresh `全部节点` and confirm it contains actual proxies.
-4. Select a working node for `DNS`. It is hidden in the normal policy list;
-   edit the group in Egern or temporarily unhide it if needed. Its flattened
-   choices are nodes from `全部节点`, followed by `REJECT`, never a `DIRECT`-capable
-   application group. With no subscription nodes, `REJECT` is the only choice.
-   After adding nodes, change a persisted `REJECT` selection to a working node.
+4. Choose the desired egress in `漏网之鱼`: a node proxies default overseas DNS,
+   `DIRECT` sends it directly, and `REJECT` rejects it. There is no separate
+   hidden `DNS` group. Unlike v3, this native Egern profile does not provide
+   per-application DNS egress selection.
 5. Activate the edited profile and check the routes and DNS behavior on the iOS
    device as described below. Importing the template alone does not supply nodes.
 
@@ -31,7 +30,7 @@ Egern's compatible module importer; unrelated groups and modules are unchanged.
 | Resolution path | Upstream | Connection policy |
 | --- | --- | --- |
 | Default DNS: domestic domains and exact `manifest.opensteamtool.com` | `https://223.5.5.5/dns-query`, `https://223.6.6.6/dns-query` | Explicit `DIRECT` rules for these resolver IPs |
-| Default DNS: other public domains | `https://1.1.1.1/dns-query`, `https://8.8.8.8/dns-query` | Separate proxy-only `DNS` policy |
+| Default DNS: other public domains | `https://1.1.1.1/dns-query`, `https://8.8.8.8/dns-query` | Current selection in `漏网之鱼` |
 | Native proxy DNS: proxy destination names and proxy server hostnames | Domestic IP-literal DoH above | Always direct, enforced by Egern itself |
 | Local names and private IPv4 reverse lookups | System DNS | Explicit local-only forwarding exceptions |
 
@@ -56,17 +55,18 @@ China/final rules. A matching deny still wins. This is not a suffix allowlist
 for `opensteamtool.com` or `lua.tools`, and does not add exceptions for
 `manifest.steam.run` or `gmrc.wudrm.com` or change antivirus settings.
 
-Overseas resolver IP routes now select `DNS`, not `漏网之鱼`, so selecting
-`DIRECT` in the latter cannot directly change default overseas DNS egress.
-Only the two configured overseas resolver addresses are routed specially;
-unused resolver-IP routes and obsolete resolver-hostname direct rules were
-removed. DNS does not dynamically follow each application policy group.
+Overseas resolver IP routes again select `漏网之鱼`, restoring the original
+Egern egress choice without removing the exact manifest exceptions. Selecting
+`DIRECT` in `漏网之鱼` now also makes default overseas DNS direct. Only the two
+configured overseas resolver addresses are routed specially. Egern DNS does not
+dynamically follow each application policy group.
 
 ## Privacy and capture boundaries
 
 - Encryption protects DNS transport, not anonymity: domestic resolvers see your
   direct source address and queried names; overseas default-DNS resolvers see
-  the selected proxy egress. Providers, proxies and destination services retain
+  either the proxy egress or the direct address selected by `漏网之鱼`.
+  Providers, proxies and destination services retain
   their own visibility. No `public_ip_lookup_url` is set: Egern documents that
   enabling it adds the device's public IP as EDNS Client Subnet (ECS) to upstream
   queries. Keep it unset rather than copying it from the full example.
@@ -74,7 +74,7 @@ removed. DNS does not dynamically follow each application policy group.
   forces **every native proxy-DNS query**, including proxied destination names,
   through this list directly and skips Forward rules. Those queries are now
   encrypted, but remain visible to domestic resolvers; the default-DNS split
-  policy and `DNS` proxy group cannot override that native path.
+  policy and `漏网之鱼` selection cannot override that native path.
 - Egern bootstrap supports **plaintext direct UDP only**. Explicit bootstrap
   IPs remain because an absent or invalid list falls back to system DNS.
   IP-literal DoH and the final public Forward catchall avoid routine upstream-
@@ -98,8 +98,8 @@ selection, capture behavior, TLS handshakes and packet-level runtime verificatio
 were **not performed** here. Before relying on the profile, on the device check:
 
 1. The profile imports without unknown-key errors and `全部节点` has real nodes.
-2. Default overseas DNS uses `DNS` even when `漏网之鱼` is `DIRECT`; with `DNS`
-   selected as `REJECT`, it fails rather than changing to direct DNS.
+2. Default overseas DNS follows `漏网之鱼`: node selection proxies it, `DIRECT`
+   sends it directly, and `REJECT` rejects it without changing manifest DNS.
 3. Domestic/default-manifest queries use the domestic encrypted upstreams, and
    the exact manifest route is `DIRECT` unless an earlier deny applies.
 4. Router-side capture distinguishes expected local/UDP-bootstrap traffic from
@@ -108,12 +108,12 @@ were **not performed** here. Before relying on the profile, on the device check:
 
 Before deployment, preserve/export your current **device** profile separately;
 git cannot restore private device subscription settings. The tracked pre-change
-configuration is available at commit `150f3ad`. From the repository root, review
+configuration before this DNS-policy restoration is available at commit `62af4a9`. From the repository root, review
 only these files with `git diff -- egern/Profile.yaml egern/README.md`.
 To roll back the repository changes, after saving any newer local edits, run:
 
 ```console
-git restore --source=150f3ad -- egern/Profile.yaml egern/README.md
+git restore --source=62af4a9 -- egern/Profile.yaml egern/README.md
 ```
 
 Then reimport the restored local `egern/Profile.yaml` or restore the exported
