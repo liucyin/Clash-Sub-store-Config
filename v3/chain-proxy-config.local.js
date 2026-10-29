@@ -93,141 +93,59 @@ const baseConfig = {
   // 保持 false，否则上面两行失效，空闲连接会被 NAT 静默回收，再次使用时需等重传超时
   "disable-keep-alive": false,
 
-  // DNS 配置（防泄露优化版 - 参考 lvbibir/mihomo.yaml）
+  // 公网 DNS 仅用校验证书的 DoH；国外查询走独立 DNS 组，失败不回退直连。
   dns: {
     enable: true,
     listen: "127.0.0.1:1053",
     ipv6: false,
     "prefer-h3": false,
-    "respect-rules": true, // 尊重分流规则，DNS 查询也会遵循代理规则
+    "respect-rules": true,
     "use-hosts": true,
     "use-system-hosts": false,
-    "cache-algorithm": "arc", // 使用 ARC 缓存算法，性能更好
+    "cache-algorithm": "arc",
     "enhanced-mode": "fake-ip",
     "fake-ip-range": "198.18.0.1/16",
     "fake-ip-filter-mode": "blacklist",
     "fake-ip-filter": [
-      // 本地主机/设备
       "+.lan",
       "+.local",
-      // Windows网络检测
+      "+.home.arpa",
       "+.msftconnecttest.com",
       "+.msftncsi.com",
-      // QQ/微信快速登录
       "localhost.ptlogin2.qq.com",
       "localhost.sec.qq.com",
-      "localhost.work.weixin.qq.com"
+      "localhost.work.weixin.qq.com",
+      "manifest.opensteamtool.com"
     ],
     "default-nameserver": [
-      "tls://223.5.5.5:853",
-      "https://223.5.5.5/dns-query"
+      "https://223.5.5.5/dns-query",
+      "https://223.6.6.6/dns-query"
     ],
-    // 国外 DNS 默认跟随漏网之鱼策略组
     nameserver: [
-      "https://1.1.1.1/dns-query#漏网之鱼", // Cloudflare
-      "https://dns.google/dns-query#漏网之鱼" // Google
+      "https://1.1.1.1/dns-query#DNS",
+      "https://8.8.8.8/dns-query#DNS"
     ],
-    // 代理服务器节点解析使用国内 DNS（避免污染）
+    // 节点自身域名必须直连解析，避免建立代理前先依赖代理的循环。
     "proxy-server-nameserver": [
       "https://223.5.5.5/dns-query#DIRECT",
-      "https://doh.pub/dns-query#DIRECT"
+      "https://223.6.6.6/dns-query#DIRECT"
     ],
-    // 直连流量使用国内 DNS
     "direct-nameserver": [
-      "https://doh.pub/dns-query#DIRECT",
       "https://223.5.5.5/dns-query#DIRECT",
-      "https://dns.alidns.com/dns-query#DIRECT"
+      "https://223.6.6.6/dns-query#DIRECT"
     ],
     "direct-nameserver-follow-policy": true,
-    // DNS 与业务策略组联动，切换策略组时 DNS 出口同步切换
     "nameserver-policy": {
+      "manifest.opensteamtool.com": [
+        "https://223.5.5.5/dns-query#DIRECT",
+        "https://223.6.6.6/dns-query#DIRECT"
+      ],
       "geosite:cn": [
         "https://223.5.5.5/dns-query#DIRECT",
-        "https://doh.pub/dns-query#DIRECT"
+        "https://223.6.6.6/dns-query#DIRECT"
       ],
-      "rule-set:OpenAI": [
-        "https://1.1.1.1/dns-query#OpenAI",
-        "https://dns.google/dns-query#OpenAI"
-      ],
-      "rule-set:Claude": [
-        "https://1.1.1.1/dns-query#Claude",
-        "https://dns.google/dns-query#Claude"
-      ],
-      "rule-set:Facebook": [
-        "https://1.1.1.1/dns-query#Facebook",
-        "https://dns.google/dns-query#Facebook"
-      ],
-      "rule-set:Gemini": [
-        "https://1.1.1.1/dns-query#Gemini",
-        "https://dns.google/dns-query#Gemini"
-      ],
-      "geosite:ookla-speedtest": [
-        "https://1.1.1.1/dns-query#Speedtest",
-        "https://dns.google/dns-query#Speedtest"
-      ],
-      "rule-set:Speedtest": [
-        "https://1.1.1.1/dns-query#Speedtest",
-        "https://dns.google/dns-query#Speedtest"
-      ],
-      "+.oca.nflxvideo.net": [
-        "https://1.1.1.1/dns-query#Speedtest",
-        "https://dns.google/dns-query#Speedtest"
-      ],
-      "rule-set:Bybit": [
-        "https://1.1.1.1/dns-query#Bybit",
-        "https://dns.google/dns-query#Bybit"
-      ],
-      "+.bybit.eu": [
-        "https://1.1.1.1/dns-query#bybit.eu",
-        "https://dns.google/dns-query#bybit.eu"
-      ],
-      "+.ether.fi": [
-        "https://1.1.1.1/dns-query#ether-fi",
-        "https://dns.google/dns-query#ether-fi"
-      ],
-      "+.plasma-one.tech,+.plasma.org,+.plasma.to,+.plasmascan.to": [
-        "https://1.1.1.1/dns-query#Plasma One",
-        "https://dns.google/dns-query#Plasma One"
-      ],
-      "rule-set:UK-Wifi-Calling": [
-        "https://1.1.1.1/dns-query#UK-Wifi-Calling",
-        "https://dns.google/dns-query#UK-Wifi-Calling"
-      ],
-      "rule-set:kraken": [
-        "https://1.1.1.1/dns-query#Kraken",
-        "https://dns.google/dns-query#Kraken"
-      ],
-      "rule-set:wise": [
-        "https://1.1.1.1/dns-query#Wise",
-        "https://dns.google/dns-query#Wise"
-      ],
-      "rule-set:okx": [
-        "https://1.1.1.1/dns-query#OKX",
-        "https://dns.google/dns-query#OKX"
-      ],
-      "rule-set:paypal": [
-        "https://1.1.1.1/dns-query#PayPal",
-        "https://dns.google/dns-query#PayPal"
-      ],
-      "rule-set:binance": [
-        "https://1.1.1.1/dns-query#Binance",
-        "https://dns.google/dns-query#Binance"
-      ],
-      "rule-set:monzo": [
-        "https://1.1.1.1/dns-query#Monzo",
-        "https://dns.google/dns-query#Monzo"
-      ],
-      "rule-set:revolut": [
-        "https://1.1.1.1/dns-query#Revolut",
-        "https://dns.google/dns-query#Revolut"
-      ],
-      "+.grok.com,+.x.ai": [
-        "https://1.1.1.1/dns-query#Grok",
-        "https://dns.google/dns-query#Grok"
-      ],
-      "geosite:private": [
-        "system://"
-      ]
+      // 仅局域网命名允许系统解析；不把整个 private 集合交给 system。
+      "+.lan,+.local,+.home.arpa": ["system://"]
     }
   },
 
@@ -241,14 +159,6 @@ const baseConfig = {
     geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat",
     mmdb: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb",
     asn: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb"
-  },
-
-  // 主机名映射 - 强制 DoH 域名走指定 IP，避免 DNS 解析死循环
-  hosts: {
-    "dns.alidns.com": ["223.5.5.5", "223.6.6.6"],
-    "doh.pub": ["1.12.12.12", "120.53.53.53"],
-    "dns.google": ["8.8.8.8", "8.8.4.4"],
-    "cloudflare-dns.com": ["1.1.1.1", "1.0.0.1"]
   },
 
   // 时间同步
@@ -266,6 +176,7 @@ const baseConfig = {
     stack: "mixed",
     "strict-route": true,
     "auto-route": true,
+    "dns-mode": "hijack",
     "auto-redirect": false,
     "auto-detect-interface": true,
     "dns-hijack": [
@@ -313,6 +224,16 @@ const baseConfig = {
 
   // 代理组配置
   "proxy-groups": [
+    // 只含节点，不引用可切到 DIRECT 的业务组；空订阅拒绝而非隐式直连。
+    {
+      name: "DNS",
+      type: "select",
+      hidden: true,
+      "include-all": true,
+      "exclude-type": "Direct|Reject|RejectDrop|Compatible|Pass",
+      "exclude-filter": "🔗",
+      "empty-fallback": "REJECT"
+    },
     {
       name: "指纹浏览器-1-7911",
       type: "select",
@@ -2180,6 +2101,9 @@ const baseConfig = {
     "DOMAIN-SUFFIX,auth.listary.com,REJECT",
     "DOMAIN-SUFFIX,api.getfiddler.com,REJECT",
 
+    // 仅清单主站直连；不为安全软件报警的备用站点做放行。
+    "DOMAIN,manifest.opensteamtool.com,DIRECT",
+
     // 自定义规则 - 优先级最高
     "DOMAIN-SUFFIX,portal101.cn,直连",
     "DOMAIN-SUFFIX,javasec.org,直连",
@@ -2330,20 +2254,35 @@ function orderApplicationProxyGroups(proxyGroups) {
 function main(config, profileName) {
   console.log("🚀 开始处理链式代理配置...");
 
-  // 如果传入了外部配置，使用外部配置；否则使用内置基础配置
-  if (!config || !config.proxies || config.proxies.length === 0) {
-    console.log("📋 使用内置基础配置");
-    config = JSON.parse(JSON.stringify(baseConfig)); // 深拷贝基础配置
-  } else {
-    console.log("📋 使用外部订阅配置");
-    // 合并基础配置（除了 proxies 和 proxy-groups）
-    const mergedConfig = JSON.parse(JSON.stringify(baseConfig));
-    mergedConfig.proxies = config.proxies || [];
-    mergedConfig['proxy-groups'] = config['proxy-groups'] || baseConfig['proxy-groups'];
-    mergedConfig['rule-providers'] = config['rule-providers'] || baseConfig['rule-providers'];
-    mergedConfig.rules = config.rules || baseConfig.rules;
-    config = mergedConfig;
+  // 订阅可只提供 proxy-providers；深拷贝避免覆写原订阅或污染下一次调用。
+  const subscription = JSON.parse(JSON.stringify(config || {}));
+  config = JSON.parse(JSON.stringify(baseConfig));
+  config.proxies = (subscription.proxies || []).filter(proxy =>
+    !(proxy.name?.startsWith('🔗 ') && proxy['dialer-proxy'] === dialerProxyGroupName)
+  );
+  config['proxy-providers'] = subscription['proxy-providers'] || {};
+  const groupsByName = new Map(config['proxy-groups'].map(group => [group.name, group]));
+  (subscription['proxy-groups'] || []).forEach(group => groupsByName.set(group.name, group));
+  // DNS 不引用业务组，也不继承订阅中可能含 DIRECT 的同名组。
+  groupsByName.set('DNS', JSON.parse(JSON.stringify(baseConfig['proxy-groups'][0])));
+  config['proxy-groups'] = [...groupsByName.values()];
+  config['rule-providers'] = {
+    ...config['rule-providers'],
+    ...subscription['rule-providers']
+  };
+  const incomingRules = subscription.rules?.length ? subscription.rules : config.rules;
+  const isTerminal = rule => /^(MATCH|FINAL),/i.test(rule);
+  const finalRule = incomingRules.find(isTerminal) || 'MATCH,漏网之鱼';
+  const manifestRule = 'DOMAIN,manifest.opensteamtool.com,DIRECT';
+  const denyRules = [...baseConfig.rules.slice(0, 4), 'RULE-SET,Hijacking,REJECT'];
+  for (const rule of incomingRules) {
+    if (isTerminal(rule) || !/,REJECT(?:-DROP|Drop)?(?:,no-resolve)?$/i.test(rule)) break;
+    if (!denyRules.includes(rule)) denyRules.push(rule);
   }
+  const prefix = [...denyRules, manifestRule];
+  config.rules = [...prefix, ...incomingRules.filter(rule =>
+    !isTerminal(rule) && !prefix.includes(rule)
+  ), finalRule.replace(/^FINAL,/i, 'MATCH,')];
 
   Object.values(config['rule-providers'] || {}).forEach(provider => {
     if (provider?.url?.includes('raw.githubusercontent.com')) {
@@ -2417,9 +2356,11 @@ function main(config, profileName) {
       proxies: chainHomeProxies.map(p => p.name)
     };
 
-    // 添加到代理组列表最前面（使用 unshift）
-    proxyGroups.unshift(chainGroup);      // 🏠 链式代理 放在最前
-    proxyGroups.unshift(dialerGroup);     // 🔗 链式中转 放在最前
+    // 替换本脚本的已有分组，重复覆写不生成重名组。
+    const retainedGroups = proxyGroups.filter(group =>
+      group.name !== chainProxyGroupName && group.name !== dialerProxyGroupName
+    );
+    proxyGroups.splice(0, proxyGroups.length, dialerGroup, chainGroup, ...retainedGroups);
 
     console.log("✅ 已创建链式代理组（已移至最前）:");
     console.log(`   - ${dialerProxyGroupName} (中转节点选择，包含所有节点)`);
@@ -2441,7 +2382,9 @@ function main(config, profileName) {
       name: item.transit,
       type: 'select',
       icon: 'https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png',
-      proxies: relayNames
+      proxies: relayNames.length || Object.keys(config['proxy-providers']).length ? relayNames : ['REJECT'],
+      use: Object.keys(config['proxy-providers']),
+      "empty-fallback": "REJECT"
     });
   });
   config.listeners = projectChainListeners.map(item => ({
@@ -2476,7 +2419,7 @@ function main(config, profileName) {
     // 指纹浏览器需要住宅出口，保持默认走链式
     const chainDefaultGroups = ["指纹浏览器-1-7911", "指纹浏览器-2-7912", "指纹浏览器-3-7913", "Apple", "AppStore", "BiliBili", "Claude", "Cursor", "Disney", "Emby", "Facebook", "Gemini", "Grok", "Perplexity", "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam", "Spotify", "TikTok", "Telegram", "Twitter", "YouTube"]
     // 兜底/全局组只把链式代理作为可选项（插到第二位），默认仍走单跳。
-    // 否则 MATCH 兜底的绝大部分流量、以及 dns.nameserver 的 #漏网之鱼 都会默认走「机场中转→家宽落地」双跳。
+    // DNS 已独立使用纯代理组，业务兜底流量不必默认增加一跳。
     const chainOptionalGroups = ["手动选择", "GLOBAL", "漏网之鱼"]
 
     chainDefaultGroups.forEach(groupName => {
@@ -2508,7 +2451,7 @@ function main(config, profileName) {
       // 为其他组添加排除规则，只排除克隆的链式节点
       if (group.filter || group['include-all']) {
         if (group['exclude-filter']) {
-          group['exclude-filter'] += '|🔗';
+          if (!group['exclude-filter'].split('|').includes('🔗')) group['exclude-filter'] += '|🔗';
         } else {
           group['exclude-filter'] = '🔗';
         }

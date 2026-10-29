@@ -16,6 +16,8 @@ const homeProxyFilter = "家宽|Home|住宅|Residential|IPLC|Hd|SC|DMIT|CORONA";
 // 链式代理组名称（必须与 chain-proxy-config.js 保持一致）
 const chainProxyGroupName = "🏠 链式代理";
 const dialerProxyGroupName = "🔗 链式中转";
+const manifestDomain = "manifest.opensteamtool.com";
+const manifestRule = "DOMAIN," + manifestDomain + ",DIRECT";
 
 // ========================================
 // 策略组定义（使用 include-all 直接引入节点）
@@ -142,6 +144,7 @@ const defaultRules = [
   "DOMAIN-SUFFIX,account.listary.com,REJECT",
   "DOMAIN-SUFFIX,auth.listary.com,REJECT",
   "DOMAIN-SUFFIX,api.getfiddler.com,REJECT",
+  manifestRule,
   "DOMAIN-SUFFIX,portal101.cn,直连",
   "DOMAIN-SUFFIX,javasec.org,直连",
   "DOMAIN-SUFFIX,deepseek.com,直连",
@@ -261,6 +264,7 @@ function orderApplicationProxyGroups(proxyGroups) {
 
 function main(config) {
   console.log("🚀 FlClash 链式代理覆写开始...");
+  config = config || {};
 
   config['allow-lan'] = false;
   config['bind-address'] = '127.0.0.1';
@@ -336,14 +340,21 @@ function main(config) {
     }
   });
 
+  // DNS 只能选择真实代理节点；覆盖同名继承组并去重，禁止 DIRECT 或递归策略组兜底。
+  proxyGroups = proxyGroups.filter(function(group) { return group.name !== "DNS"; });
+  proxyGroups.push({
+    name: "DNS", type: "select", hidden: true,
+    "include-all": true, "exclude-type": "Direct|Reject|RejectDrop|Compatible|Pass",
+    "exclude-filter": "🔗", "empty-fallback": "REJECT"
+  });
+
   // 5. 将所有策略组的 proxies 加上链式代理选项
   // 排在首位 = 默认选中链式代理
   var chainDefaultGroups = ["Apple", "AppStore", "BiliBili", "Bybit", "bybit.eu",
     "Claude", "Cursor", "Disney", "Emby", "Facebook", "Gemini", "Grok", "Kraken", "Perplexity",
     "Github", "Google", "Microsoft", "Netflix", "OpenAI", "OneDrive", "Steam",
     "Spotify", "TikTok", "Telegram", "Twitter", "UK-Wifi-Calling", "YouTube"];
-  // 兜底/全局组只作为可选项（插到第二位），默认仍走单跳，
-  // 否则 MATCH 兜底流量和 dns.nameserver 的 #漏网之鱼 都会默认走双跳
+  // 兜底/全局组只作为可选项（插到第二位），默认仍走单跳；DNS 使用独立纯代理组。
   var chainOptionalGroups = ["手动选择", "GLOBAL", "漏网之鱼"];
   var chainGroupAvailable = proxyGroups.some(function(g) { return g.name === chainProxyGroupName; });
 
@@ -386,11 +397,24 @@ function main(config) {
   config.sniffer['skip-domain'] = config.sniffer['skip-domain'] || ['+.oray.com', 'Mijia Cloud', '+.push.apple.com'];
 
   // 8. 强制 DNS/TUN 防泄露设置
-  if (typeof config.ipv6 !== 'undefined') { config.ipv6 = false; }
+  config.ipv6 = false;
   config.tun = config.tun || {};
   config.tun.enable = true;
+  config.tun['auto-route'] = true;
+  config.tun['auto-detect-interface'] = true;
+  config.tun['dns-mode'] = 'hijack';
   config.tun['strict-route'] = true;
-  config.tun['dns-hijack'] = config.tun['dns-hijack'] || ['any:53', 'tcp://any:53'];
+  // 显式的接口/网段绕过会让公网 DNS 离开 TUN；安全覆写不继承这些例外。
+  ['route-address', 'route-exclude-address', 'route-address-set', 'route-exclude-address-set',
+    'include-interface', 'exclude-interface', 'include-uid', 'include-uid-range',
+    'exclude-uid', 'exclude-uid-range', 'include-package', 'exclude-package',
+    'inet4-route-address', 'inet6-route-address', 'inet4-route-exclude-address',
+    'inet6-route-exclude-address'].forEach(function(key) { delete config.tun[key]; });
+  var dnsHijack = Array.isArray(config.tun['dns-hijack']) ? config.tun['dns-hijack'].slice() : [];
+  ['any:53', 'tcp://any:53'].forEach(function(rule) {
+    if (dnsHijack.indexOf(rule) === -1) dnsHijack.push(rule);
+  });
+  config.tun['dns-hijack'] = dnsHijack;
   // 1500 在 PPPoE(1492) 或 UDP 承载的节点上会造成分片/PMTU 黑洞：
   // 小包(ping)正常 0 丢包，大包(网页/下载)被丢 —— 表现为「0 丢包但很卡」
   config.tun.mtu = 1400;
@@ -406,135 +430,52 @@ function main(config) {
   config.dns['use-system-hosts'] = false;
   config.dns['fake-ip-range'] = config.dns['fake-ip-range'] || '198.18.0.1/16';
   config.dns['fake-ip-filter-mode'] = 'blacklist';
-  config.dns['fake-ip-filter'] = config.dns['fake-ip-filter'] || [
-    '+.lan',
-    '+.local',
-    '+.msftconnecttest.com',
-    '+.msftncsi.com',
-    'localhost.ptlogin2.qq.com',
-    'localhost.sec.qq.com',
-    'localhost.work.weixin.qq.com'
-  ];
-  config.dns['respect-rules'] = true;
-  config.dns['enhanced-mode'] = config.dns['enhanced-mode'] || 'fake-ip';
-  config.dns['default-nameserver'] = [
-    'tls://223.5.5.5:853',
-    'https://223.5.5.5/dns-query'
-  ];
-  config.dns.nameserver = [
-    'https://1.1.1.1/dns-query#漏网之鱼',
-    'https://dns.google/dns-query#漏网之鱼'
-  ];
-  config.dns['proxy-server-nameserver'] = [
-    'https://223.5.5.5/dns-query#DIRECT',
-    'https://doh.pub/dns-query#DIRECT'
-  ];
-  config.dns['direct-nameserver'] = [
-    'https://doh.pub/dns-query#DIRECT',
-    'https://223.5.5.5/dns-query#DIRECT',
-    'https://dns.alidns.com/dns-query#DIRECT'
-  ];
-  config.dns['direct-nameserver-follow-policy'] = true;
-  var nameserverPolicy = config.dns['nameserver-policy'] || {};
-  nameserverPolicy['geosite:cn'] = [
-    'https://223.5.5.5/dns-query#DIRECT',
-    'https://doh.pub/dns-query#DIRECT'
-  ];
-  nameserverPolicy['rule-set:OpenAI'] = [
-    'https://1.1.1.1/dns-query#OpenAI',
-    'https://dns.google/dns-query#OpenAI'
-  ];
-  nameserverPolicy['rule-set:Claude'] = [
-    'https://1.1.1.1/dns-query#Claude',
-    'https://dns.google/dns-query#Claude'
-  ];
-  nameserverPolicy['rule-set:Facebook'] = [
-    'https://1.1.1.1/dns-query#Facebook',
-    'https://dns.google/dns-query#Facebook'
-  ];
-  nameserverPolicy['rule-set:Gemini'] = [
-    'https://1.1.1.1/dns-query#Gemini',
-    'https://dns.google/dns-query#Gemini'
-  ];
-  nameserverPolicy['geosite:ookla-speedtest'] = [
-    'https://1.1.1.1/dns-query#Speedtest',
-    'https://dns.google/dns-query#Speedtest'
-  ];
-  nameserverPolicy['rule-set:Speedtest'] = [
-    'https://1.1.1.1/dns-query#Speedtest',
-    'https://dns.google/dns-query#Speedtest'
-  ];
-  nameserverPolicy['+.oca.nflxvideo.net'] = [
-    'https://1.1.1.1/dns-query#Speedtest',
-    'https://dns.google/dns-query#Speedtest'
-  ];
-  nameserverPolicy['rule-set:Bybit'] = [
-    'https://1.1.1.1/dns-query#Bybit',
-    'https://dns.google/dns-query#Bybit'
-  ];
-  nameserverPolicy['+.bybit.eu'] = [
-    'https://1.1.1.1/dns-query#bybit.eu',
-    'https://dns.google/dns-query#bybit.eu'
-  ];
-  nameserverPolicy['+.plasma-one.tech,+.plasma.org,+.plasma.to,+.plasmascan.to'] = [
-    'https://1.1.1.1/dns-query#Plasma One',
-    'https://dns.google/dns-query#Plasma One'
-  ];
-  nameserverPolicy['rule-set:kraken'] = [
-    'https://1.1.1.1/dns-query#Kraken',
-    'https://dns.google/dns-query#Kraken'
-  ];
-  nameserverPolicy['rule-set:wise'] = [
-    'https://1.1.1.1/dns-query#Wise',
-    'https://dns.google/dns-query#Wise'
-  ];
-  nameserverPolicy['rule-set:okx'] = [
-    'https://1.1.1.1/dns-query#OKX',
-    'https://dns.google/dns-query#OKX'
-  ];
-  nameserverPolicy['rule-set:paypal'] = [
-    'https://1.1.1.1/dns-query#PayPal',
-    'https://dns.google/dns-query#PayPal'
-  ];
-  nameserverPolicy['rule-set:binance'] = [
-    'https://1.1.1.1/dns-query#Binance',
-    'https://dns.google/dns-query#Binance'
-  ];
-  nameserverPolicy['rule-set:monzo'] = [
-    'https://1.1.1.1/dns-query#Monzo',
-    'https://dns.google/dns-query#Monzo'
-  ];
-  nameserverPolicy['rule-set:revolut'] = [
-    'https://1.1.1.1/dns-query#Revolut',
-    'https://dns.google/dns-query#Revolut'
-  ];
-  nameserverPolicy['rule-set:UK-Wifi-Calling'] = [
-    'https://1.1.1.1/dns-query#UK-Wifi-Calling',
-    'https://dns.google/dns-query#UK-Wifi-Calling'
-  ];
-  nameserverPolicy['+.grok.com,+.x.ai'] = [
-    'https://1.1.1.1/dns-query#Grok',
-    'https://dns.google/dns-query#Grok'
-  ];
-  nameserverPolicy['geosite:private'] = ['system://'];
-  config.dns['nameserver-policy'] = nameserverPolicy;
-
-  config.hosts = config.hosts || {};
-  var dnsHosts = {
-    "dns.alidns.com": ["223.5.5.5", "223.6.6.6"],
-    "doh.pub": ["1.12.12.12", "120.53.53.53"],
-    "dns.google": ["8.8.8.8", "8.8.4.4"],
-    "cloudflare-dns.com": ["1.1.1.1", "1.0.0.1"]
-  };
-  Object.keys(dnsHosts).forEach(function(host) {
-    if (!config.hosts[host]) { config.hosts[host] = dnsHosts[host]; }
+  var fakeIpFilter = Array.isArray(config.dns['fake-ip-filter']) ? config.dns['fake-ip-filter'].slice() : [];
+  [
+    '+.lan', '+.local', '+.home.arpa', '+.msftconnecttest.com', '+.msftncsi.com',
+    'localhost.ptlogin2.qq.com', 'localhost.sec.qq.com', 'localhost.work.weixin.qq.com',
+    manifestDomain
+  ].forEach(function(domain) {
+    if (fakeIpFilter.indexOf(domain) === -1) fakeIpFilter.push(domain);
   });
+  config.dns['fake-ip-filter'] = fakeIpFilter;
+  config.dns['respect-rules'] = true;
+  config.dns['prefer-h3'] = false;
+  config.dns['enhanced-mode'] = 'fake-ip';
+  var domesticNameservers = [
+    'https://223.5.5.5/dns-query#DIRECT',
+    'https://223.6.6.6/dns-query#DIRECT'
+  ];
+  var overseasNameservers = [
+    'https://1.1.1.1/dns-query#DNS',
+    'https://8.8.8.8/dns-query#DNS'
+  ];
+  config.dns['default-nameserver'] = domesticNameservers.slice();
+  config.dns.nameserver = overseasNameservers.slice();
+  config.dns['proxy-server-nameserver'] = domesticNameservers.slice();
+  config.dns['direct-nameserver'] = domesticNameservers.slice();
+  config.dns['direct-nameserver-follow-policy'] = true;
+  // 有意重建继承策略，避免订阅中的明文、任意直连解析、ECS 或跳过证书校验选项。
+  // 海外及各服务统一由默认 #DNS 解析，不再使用可能选中 DIRECT 的业务组。
+  ['fallback', 'fallback-filter', 'proxy-server-nameserver-policy',
+    'ecs', 'ecs-override', 'client-subnet', 'skip-cert-verify', 'insecure'].forEach(function(key) {
+    delete config.dns[key];
+  });
+  var nameserverPolicy = {};
+  nameserverPolicy[manifestDomain] = domesticNameservers.slice();
+  nameserverPolicy['geosite:cn'] = domesticNameservers.slice();
+  // 仅明确的 LAN/local 后缀允许系统解析；它们可能使用明文局域网 DNS。
+  // 不使用 geosite:private，避免把公共域名或业务域名送入系统解析器。
+  nameserverPolicy['+.lan'] = ['system://'];
+  nameserverPolicy['+.local'] = ['system://'];
+  nameserverPolicy['+.home.arpa'] = ['system://'];
+  config.dns['nameserver-policy'] = nameserverPolicy;
 
   // 9. 补全 rule-providers
   var currentProviders = config['rule-providers'] || {};
   Object.keys(defaultRuleProviders).forEach(function(key) {
     if (!currentProviders[key]) {
-      currentProviders[key] = defaultRuleProviders[key];
+      currentProviders[key] = JSON.parse(JSON.stringify(defaultRuleProviders[key]));
     }
   });
   Object.keys(currentProviders).forEach(function(key) {
@@ -545,18 +486,31 @@ function main(config) {
   });
   config['rule-providers'] = currentProviders;
 
-  // 10. 补全路由规则
-  var currentRules = config.rules || [];
-  if (currentRules.length < 5) {
-    config.rules = defaultRules;
-  } else {
-    defaultRules.forEach(function(rule) {
-      if (currentRules.indexOf(rule) === -1) {
-        currentRules.push(rule);
-      }
-    });
-    config.rules = currentRules;
+  // 10. 保留自定义规则相对顺序；显式拒绝优先，精确 manifest 规则先于泛匹配。
+  // 先移除所有终结规则，再补全默认规则，最后只恢复首个原有 MATCH/FINAL。
+  var currentRules = Array.isArray(config.rules) ? config.rules : [];
+  var safetyRules = defaultRules.filter(function(rule) {
+    return /,REJECT(?:-DROP|Drop)?(?:,no-resolve)?$/i.test(rule);
+  });
+  for (var i = 0; i < currentRules.length; i++) {
+    var leadingRule = currentRules[i];
+    if (!/,REJECT(?:-DROP|Drop)?(?:,no-resolve)?$/i.test(leadingRule) || /^(MATCH|FINAL),/i.test(leadingRule)) break;
+    if (safetyRules.indexOf(leadingRule) === -1) safetyRules.push(leadingRule);
   }
+  var routingRules = [];
+  var seenRules = Object.create(null);
+  var finalRule;
+  currentRules.concat(defaultRules).forEach(function(rule) {
+    if (typeof rule !== 'string') return;
+    if (/^\s*(?:MATCH|FINAL)\s*,/i.test(rule)) {
+      if (!finalRule) finalRule = rule;
+      return;
+    }
+    if (rule === manifestRule || seenRules[rule]) return;
+    seenRules[rule] = true;
+    if (safetyRules.indexOf(rule) === -1) routingRules.push(rule);
+  });
+  config.rules = safetyRules.concat([manifestRule], routingRules, [(finalRule || 'MATCH,漏网之鱼').replace(/^\s*FINAL\s*,/i, 'MATCH,')]);
 
   console.log("🎉 FlClash 链式代理覆写完成！代理组: " + proxyGroups.length);
 

@@ -1,0 +1,112 @@
+# v3：链式代理、清单路由与 DNS 加固
+
+## 生效前先读
+
+这些文件是配置源码；推送仓库不会自动修改正在运行的 Sparkle、FlClash、Sub-Store 或系统网络，也不会修改杀软白名单、系统 hosts、网卡 DNS 或防火墙。
+
+**这是分流 DNS，不是“所有 DNS 都隐藏本机 IP”的匿名方案。** 国外公网查询改走独立、隐藏的纯代理 `DNS` 组；国内域名和直连目标仍允许使用直连的加密 DNS。DNS 不再跟随各业务策略组切换，这能避免业务组误选 `DIRECT` 时连带直连国外解析，但可能让 DNS/CDN 地理定位与业务出口不同。
+
+如果订阅没有可用节点，国外解析会失败，不会偷偷改用直连 DNS。`DNS` 默认选择组内第一个节点；该节点失效时应改选可用节点。隐藏策略组可通过控制 API 或临时取消 `hidden` 后选择。
+
+## 使用哪个脚本
+
+| 文件 | 用途 |
+| --- | --- |
+| `chain-proxy-config.js` | 通用 Mihomo/Sub-Store 配置生成器 |
+| `chain-proxy-config.local.js` | 本机版本，保留 `127.0.0.1:7911–7913` 的 Turb 中转入口 |
+| `flclash-chain-proxy-override.js` | FlClash 独立覆写；补全缺失组、规则集和路由 |
+| `config.test.cjs` | 使用 Node 内置测试运行器检查规则顺序、DNS 隔离、空订阅和重复生成 |
+
+三个脚本保持独立使用，不新增运行时模块依赖。`.bak-20260806-project-listeners` 是历史备份，不作为当前入口，也未随本次改动更新。
+
+### 部署到客户端
+
+1. 导出当前客户端配置并保留私有订阅信息。
+2. Sparkle 如果加载远程 GitHub 覆写，在客户端刷新覆写脚本并重新生成配置；若使用本地覆写，重新加载修改后的文件。不要只改生成的 `data/work/config.yaml`，该文件可能被重载覆盖。
+3. FlClash 使用修改后的独立覆写脚本；Sub-Store 更新实际引用的脚本后重新生成配置。
+4. 检查实际生成配置：存在纯代理 `DNS` 组、两个默认 DoH 带 `#DNS`、TUN 开启且捕获 UDP/TCP 53。客户端若覆盖 TUN/DNS 设置，最终配置和实际状态优先于脚本。
+5. 确认当前内核支持 `dns-mode: hijack`、`exclude-type` 和 `empty-fallback`；本机验证内核是 Mihomo Meta v1.19.31。不要假定旧版 Clash 内核支持这些字段。
+
+## DNS 的具体出口
+
+| 查询类别 | 上游 | 传输与出口 |
+| --- | --- | --- |
+| 国外公网名称 | `1.1.1.1`、`8.8.8.8` | HTTPS DoH，经纯代理 `DNS` 组 |
+| `geosite:cn` 和精确清单主站 | `223.5.5.5`、`223.6.6.6` | HTTPS DoH，显式 `DIRECT` |
+| 其他直连目标、代理节点自身的域名 | 同上 | HTTPS DoH，显式 `DIRECT`，避免代理启动依赖环 |
+| `.lan`、`.local`、`.home.arpa` | 系统 DNS | 有意保留的局域网命名例外，可能明文 |
+| 加密解析器的启动解析 | IP 字面量 HTTPS DoH | 不需要先用明文 DNS 解析 DoH 服务器域名 |
+
+- 公网上游均使用 IP 字面量 HTTPS，不跳过证书校验，不注入公网 IP/ECS，不继承订阅中的明文 `fallback` 或可覆盖节点解析的 `proxy-server-nameserver-policy`。
+- `DNS` 组不引用业务策略组，不允许 `Direct/Reject/RejectDrop/Compatible/Pass` 类型节点参与选择；克隆的 `🔗` 链式节点被排除。空组的 fallback 为 `REJECT`，不使用内核默认的 `COMPATIBLE`。
+- 删除了原先过宽的 `geosite:private → system://`，只留下明确的 LAN 后缀例外。
+- `tun.enable`、`auto-route`、`auto-detect-interface`、`strict-route` 与 `dns-mode: hijack` 开启，同时捕获 `any:53` 和 `tcp://any:53`。FlClash 不再保留继承的公网路由/接口/应用绕过例外；依赖分应用或分网段绕过 VPN 的配置需要重新评估。
+- 顶层 `ipv6: false` 和 DNS `ipv6: false` 保留；内核 DNS 对 AAAA 返回空答案。这不等于关闭 Windows 网卡 IPv6，也不能保证任意应用的字面量 IPv6 或外部 VPN 不绕行。
+
+### 不能承诺的部分
+
+加密 DNS 仍向解析器披露查询名称。直连 DoH 解析器知道本机公网 IP，代理 DoH 的解析器通常看到所选节点出口；代理运营方、目标网站和客户端本身仍有各自可见性。
+
+脚本无法完全约束任意应用自带 DoH/DoT、系统服务、其他 VPN、网卡局域网 DNS、进程/设备级旁路、TUN 未运行或客户端覆盖配置。Windows 的 `strict-route` 能缓解多宿主 DNS，但不等于已对整台电脑完成抓包验证。浏览器安全 DNS、Android 私人 DNS、Apple 私密中继等应在实际设备上单独检查；不通过关闭杀软来排错。
+
+## 清单主站与安全软件
+
+仅添加精确域名 `manifest.opensteamtool.com`：Real-IP 例外、国内 DoH 策略与 `DOMAIN,...,DIRECT` 路由。它排在显式拒绝/Hijacking 规则之后、泛用规则之前。没有把整个 `opensteamtool.com`、`lua.tools` 或杀软报警的 `manifest.steam.run`、HTTP `gmrc.wudrm.com` 加入直连白名单，也没有固定 Cloudflare CDN IP。
+
+Fake-IP 返回 `198.18.x.x` 是正常的内部映射，本身不是 DNS 泄露或连接失败的证据。`ping` 是否成功也不能代替 HTTPS/API 测试。单个 HTTP 403/502 不能单独证明是代理出口、杀软还是服务器的问题；安全软件检测详情仍需独立核对。
+
+本机隔离实例已确认精确域名规则命中 `DIRECT`，且 DNS 能得到真实 A 记录。但该次 HTTPS 请求仍返回 Cloudflare 403，因此本次改动**不代表清单下载故障已经解决**。测试运行在现有主机网络下，未关闭正在运行的 Sparkle TUN，更不能把它当作已验证的无代理物理出口。
+
+## 修复的问题与证据
+
+| 观察到的问题 | 修复 |
+| --- | --- |
+| FlClash 继承 `dns-hijack: []` 后不捕获 DNS、顶层 IPv6 缺省时未赋值、缺少 `auto-route` | 强制安全值并合并 UDP/TCP 捕获项 |
+| FlClash 继承明文 fallback、任意 system 解析和 `prefer-h3`，且未隔离可直连业务组 | 重建公网解析路径、独立纯代理 DNS、清除不安全继承 |
+| 已有 `MATCH` 后继续追加默认规则，新增规则不可达 | 删除中间终结规则，保留首个终结策略并放在末尾，按顺序保留普通自定义规则 |
+| 主生成器丢失只有 `proxy-providers` 的订阅 | 保留 provider，合并所需组和规则集 |
+| 重复执行主生成器会复制链式节点/组，默认数组/对象可能跨次共享 | 过滤本脚本旧克隆，替换自有链式组，深拷贝默认与订阅对象 |
+| 本地版本无节点/只有 provider 时 Turb 中转组无法通过内核解析 | 引入 provider，空节点时显式 `REJECT`，保留 7911–7913 端口 |
+
+## 验证结果与复现
+
+在仓库根目录运行：
+
+```console
+node --test v3/config.test.cjs
+```
+
+本次执行 13 个回归测试，通过规则顺序、精确域名边界、无节点拒绝、provider-only、危险继承覆盖、重复调用和本地监听入口检查。
+
+另执行了 Mihomo v1.19.31 原生 `-t`：3 个脚本各生成空订阅、内联节点、provider-only 和危险继承配置，共 12 个场景。测试使用隔离目录和无凭据节点，不会装载到现有 Sparkle。
+
+对生成后的实际配置启动隔离核心，关闭该实例 TUN 并使用独立端口 `17893/19096/11053`，避免修改主机路由：
+
+- UDP/TCP 53 服务均返回 Fake-IP；AAAA 返回空答案。
+- 清单主站通过国内 TLS 校验 DoH 得到真实 A 记录，路由实际命中 `DIRECT`。
+- 国外名称通过 `DNS[HK-test]` 的 SOCKS5/DoH 路径返回有效答案。
+- 节点指向关闭端口时，国外解析返回错误，不回落直连；三个脚本空订阅的实际 `DNS` 组均仅有 `REJECT`，查询失败。
+
+隔离实例和生成的临时文件已关闭/清理。**未执行**：替换线上 Sparkle 配置、启用第二个系统 TUN、整机出站抓包、iOS Egern 运行验证。因此不能写“本机永不泄露”。
+
+上线后应在设备/router 抓包复核公网 UDP/TCP 53、853 和 IPv6，区分允许的 LAN 例外与异常公网解析；公网 DNS 泄露测试出现国内解析器也可能来自本方案有意设置的国内直连路径。
+
+### 回滚
+修改前的五个既有文件另有逐文件备份：`D:/Projects/.clash-dns-backup-20261029-1793251468200/`，其中 `egern/` 和 `v3/` 保留原目录结构；验证临时目录不属于回滚备份。
+
+
+本次修改前的 tracked 文件在提交 `150f3ad`。保存后续编辑后，可从仓库根目录恢复三份脚本与 Egern 文件：
+
+```console
+git restore --source=150f3ad -- v3/chain-proxy-config.js v3/chain-proxy-config.local.js v3/flclash-chain-proxy-override.js egern/Profile.yaml egern/README.md
+```
+
+新增的 `v3/README.md` 和 `v3/config.test.cjs` 不在上述恢复列表中。恢复源码后仍需让客户端重新加载；Git 回滚不会自动更换正在运行的配置。私有订阅、客户端实际配置和网卡状态必须用部署前单独保存的副本还原。
+
+## 官方参考
+
+- [Mihomo DNS](https://wiki.metacubex.one/config/dns/)
+- [Mihomo TUN](https://wiki.metacubex.one/config/inbound/tun/)
+- [Mihomo proxy groups](https://wiki.metacubex.one/config/proxy-groups/)
+- [Egern DNS 及其不同的原生解析边界](https://egernapp.com/docs/configuration/dns/)
+- [本仓库 Egern 使用说明](../egern/README.md)

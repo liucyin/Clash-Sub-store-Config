@@ -10,7 +10,8 @@ hide_vpn_icon: false
 block_quic: true
 close_connections_on_policy_change: false
 compat_route: true
-include_all_networks: false
+# Capture all supported traffic while retaining the explicit LAN/service exclusions.
+include_all_networks: true
 include_apns: false
 include_cellular_services: false
 include_local_networks: false
@@ -21,7 +22,7 @@ proxy_latency_test_url: http://www.gstatic.com/generate_204
 direct_latency_test_url: http://connectivitycheck.platform.hicloud.com/generate_204
 
 hijack_dns:
-  - "*:53"
+  - "*"
 
 bypass_tunnel_proxy:
   - 192.168.0.0/16
@@ -56,17 +57,20 @@ real_ip_domains:
   - localhost.work.weixin.qq.com
   - "*.push.apple.com"
   - "*.stun.*"
+  - manifest.opensteamtool.com
 
-# Domestic domains use domestic encrypted DNS. All other domains use overseas
-# encrypted DNS whose IPs are forced through "漏网之鱼" by the first rules.
+# Domestic queries use direct encrypted DNS. Default overseas queries use the
+# proxy-only DNS policy; native proxy DNS is separately forced direct below.
 dns:
   bootstrap:
+    # Egern only supports direct plaintext UDP bootstrap; IP-literal DoH below
+    # avoids upstream-hostname lookups and the final forward rule covers public DNS.
     - 223.5.5.5
     - 119.29.29.29
   upstreams:
     Domestic:
-      - https://dns.alidns.com/dns-query
-      - https://doh.pub/dns-query
+      - https://223.5.5.5/dns-query
+      - https://223.6.6.6/dns-query
     Overseas:
       - https://1.1.1.1/dns-query
       - https://8.8.8.8/dns-query
@@ -78,8 +82,14 @@ dns:
         match: lan
         value: system
     - domain_suffix:
-        match: arpa
+        match: home.arpa
         value: system
+    - domain_regex:
+        match: '(^|\.)(10|168\.192|(1[6-9]|2[0-9]|3[01])\.172|254\.169|127)\.in-addr\.arpa$'
+        value: system
+    - domain:
+        match: manifest.opensteamtool.com
+        value: Domestic
     - proxy_rule_set:
         match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/cn.list
         value: Domestic
@@ -91,23 +101,19 @@ dns:
         match: "*"
         value: Overseas
   hosts:
-    dns.alidns.com:
-      - 223.5.5.5
-      - 223.6.6.6
-    doh.pub:
-      - 1.12.12.12
-      - 120.53.53.53
     localhost: 127.0.0.1
-  # Proxy server hostnames must resolve directly to avoid DNS/proxy loops.
+  # Native proxy DNS resolves proxy destinations as well as server hostnames;
+  # it bypasses forward and ALWAYS connects directly, even for overseas queries.
   proxy_nameservers:
-    - 223.5.5.5
-    - 119.29.29.29
+    - https://223.5.5.5/dns-query
+    - https://223.6.6.6/dns-query
   block_ips:
     - 0.0.0.0
     - 127.0.0.0/8
     - "::/128"
     - "::1/128"
   skip_tls_verify: false
+  # Deliberately omit public_ip_lookup_url: it enables public-IP ECS on queries.
 
 policy_groups:
   # Public template: never commit a live subscription token to this repository.
@@ -120,6 +126,13 @@ policy_groups:
       block_quic: true
       hidden: true
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png
+
+  # Only subscription nodes and rejection; never inherit a DIRECT-capable group.
+  - select:
+      name: DNS
+      policies: [全部节点, REJECT]
+      flatten: true
+      hidden: true
 
   - auto_test:
       name: 自动选择
@@ -599,34 +612,32 @@ rules:
   - protocol:
       match: stun
       policy: REJECT
-  # Force overseas encrypted DNS through the selected final proxy.
+  # Force default overseas encrypted DNS through a proxy-only policy.
   - ip_cidr:
       match: 1.1.1.1/32
-      policy: 漏网之鱼
-      no_resolve: true
-  - ip_cidr:
-      match: 1.0.0.1/32
-      policy: 漏网之鱼
+      policy: DNS
       no_resolve: true
   - ip_cidr:
       match: 8.8.8.8/32
-      policy: 漏网之鱼
+      policy: DNS
       no_resolve: true
-  - ip_cidr:
-      match: 8.8.4.4/32
-      policy: 漏网之鱼
-      no_resolve: true
-  - domain_suffix:
-      match: dns.alidns.com
-      policy: DIRECT
-  - domain_suffix:
-      match: doh.pub
-      policy: DIRECT
   - rule_set:
       name: Hijacking
       match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Hijacking/Hijacking.list
       policy: REJECT
       update_interval: 86400
+  # Exact manifest exception follows explicit deny safeguards, not a suffix allowlist.
+  - domain:
+      match: manifest.opensteamtool.com
+      policy: DIRECT
+  - ip_cidr:
+      match: 223.5.5.5/32
+      policy: DIRECT
+      no_resolve: true
+  - ip_cidr:
+      match: 223.6.6.6/32
+      policy: DIRECT
+      no_resolve: true
   - rule_set:
       name: Lan
       match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Lan/Lan.list
