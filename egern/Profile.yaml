@@ -773,49 +773,49 @@ rules:
       policy: DIRECT
       update_interval: 86400
 
-  # Cloudbet defaults to Canada. Stake retains the existing Japan default.
+  # Cloudbet defaults to India. Stake retains the existing Japan default.
   - domain_suffix:
       match: cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: cldbt.cloud
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: sports-api.cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: api.cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: cdn.cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: media.cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: docs.cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: affiliates.cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: play-cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: share.cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: a.cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: int.cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: ws.cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: wss.cloudbet.com
-      policy: 加拿大
+      policy: 印度
   - domain_suffix:
       match: stake.com
       policy: 日本
@@ -981,7 +981,7 @@ rules:
   # hijack domestic domains that merely contain "stake" or "cloudbet".
   - domain_keyword:
       match: cloudbet
-      policy: 加拿大
+      policy: 印度
   - domain_keyword:
       match: stake
       policy: 日本
