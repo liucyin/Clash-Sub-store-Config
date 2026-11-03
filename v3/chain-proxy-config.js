@@ -312,6 +312,7 @@ const baseConfig = {
         "泰国",
         "澳洲",
         "巴西",
+        "加拿大",
         "其他",
         "DIRECT",
         "REJECT"
@@ -1753,6 +1754,22 @@ const baseConfig = {
     },
 
     {
+      name: "加拿大",
+      type: "url-test",
+      interval: 300,
+      tolerance: 80,
+      lazy: true,
+      url: "https://www.gstatic.com/generate_204",
+      "disable-udp": false,
+      timeout: 5000,
+      "max-failed-times": 2,
+      hidden: true,
+      "include-all": true,
+      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Canada.png",
+      filter: "🇨🇦|加拿大|Canada|CANADA|canada|Toronto|Vancouver|Montreal"
+    },
+
+    {
       name: "其他",
       type: "url-test",
       interval: 300,
@@ -1766,7 +1783,7 @@ const baseConfig = {
       "include-all": true,
       icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png",
       // 原先用 (?!...) 负向先行断言，Go 的 RE2 不支持该语法；改用 exclude-filter 表达同样的意图
-      "exclude-filter": "(?i)(香港|台湾|日本|韩国|新加坡|美国|英国|德国|法国|印度|泰国|越南|印尼|澳大利亚|巴西|港|台|日|韩|新|美|英|德|法|印|泰|越|尼|澳|巴|hk|tw|jp|kr|sg|us|uk|de|fr|in|th|vn|id|au|br)"
+      "exclude-filter": "(?i)(香港|台湾|日本|韩国|新加坡|美国|英国|德国|法国|印度|泰国|越南|印尼|澳大利亚|巴西|加拿大|港|台|日|韩|新|美|英|德|法|印|泰|越|尼|澳|巴|canada|hk|tw|jp|kr|sg|us|uk|de|fr|in|th|vn|id|au|br)"
     },
 
     // 地区手动选择分组 - 手动选择对应地区节点
@@ -1823,6 +1840,15 @@ const baseConfig = {
       "include-all": true,
       "exclude-filter": "🔗",
       filter: "🇬🇧|英国|英|UK|united kingdom|london"
+    },
+    {
+      name: "加拿大手动选择",
+      type: "select",
+      "disable-udp": false,
+      icon: "https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Canada.png",
+      "include-all": true,
+      "exclude-filter": "🔗",
+      filter: "🇨🇦|加拿大|Canada|CANADA|canada|Toronto|Vancouver|Montreal"
     },
   ],
 
@@ -2186,20 +2212,20 @@ const baseConfig = {
     // iFast 域名规则
     "RULE-SET,ifast,直连",
 
-    // Cloudbet 域名规则 - 默认走台湾
-    "DOMAIN-SUFFIX,cloudbet.com,台湾",
-    "DOMAIN-SUFFIX,cldbt.cloud,台湾",
-    "DOMAIN-SUFFIX,sports-api.cloudbet.com,台湾",
-    "DOMAIN-SUFFIX,api.cloudbet.com,台湾",
-    "DOMAIN-SUFFIX,cdn.cloudbet.com,台湾",
-    "DOMAIN-SUFFIX,media.cloudbet.com,台湾",
-    "DOMAIN-SUFFIX,affiliates.cloudbet.com,台湾",
-    "DOMAIN-SUFFIX,play-cloudbet.com,台湾",
-    "DOMAIN-SUFFIX,share.cloudbet.com,台湾",
-    "DOMAIN-SUFFIX,a.cloudbet.com,台湾",
-    "DOMAIN-SUFFIX,int.cloudbet.com,台湾",
-    "DOMAIN-SUFFIX,ws.cloudbet.com,台湾",
-    "DOMAIN-SUFFIX,wss.cloudbet.com,台湾",
+    // Cloudbet 域名规则 - 默认走加拿大
+    "DOMAIN-SUFFIX,cloudbet.com,加拿大",
+    "DOMAIN-SUFFIX,cldbt.cloud,加拿大",
+    "DOMAIN-SUFFIX,sports-api.cloudbet.com,加拿大",
+    "DOMAIN-SUFFIX,api.cloudbet.com,加拿大",
+    "DOMAIN-SUFFIX,cdn.cloudbet.com,加拿大",
+    "DOMAIN-SUFFIX,media.cloudbet.com,加拿大",
+    "DOMAIN-SUFFIX,affiliates.cloudbet.com,加拿大",
+    "DOMAIN-SUFFIX,play-cloudbet.com,加拿大",
+    "DOMAIN-SUFFIX,share.cloudbet.com,加拿大",
+    "DOMAIN-SUFFIX,a.cloudbet.com,加拿大",
+    "DOMAIN-SUFFIX,int.cloudbet.com,加拿大",
+    "DOMAIN-SUFFIX,ws.cloudbet.com,加拿大",
+    "DOMAIN-SUFFIX,wss.cloudbet.com,加拿大",
 
     // Stake.com 域名规则 - 默认走日本
     "DOMAIN-SUFFIX,stake.com,日本",
@@ -2228,7 +2254,7 @@ const baseConfig = {
     "RULE-SET,China,直连,no-resolve",
 
     // 宽泛的关键词兜底 - 必须排在 China 之后，否则会误伤含 stake/cloudbet 的国内域名
-    "DOMAIN-KEYWORD,cloudbet,台湾",
+    "DOMAIN-KEYWORD,cloudbet,加拿大",
     "DOMAIN-KEYWORD,stake,日本",
 
     "RULE-SET,Telegram,Telegram",

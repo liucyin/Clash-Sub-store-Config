@@ -300,10 +300,20 @@ policy_groups:
       hidden: true
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Brazil.png
   - auto_test:
+      name: 加拿大
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇨🇦|加拿大|多伦多|温哥华|蒙特利尔|\b(?:CA|CAN|Canada)(?:\d+)?\b'
+      interval: 300
+      tolerance: 80
+      timeout: 5
+      hidden: true
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Canada.png
+  - auto_test:
       name: 其他
       policies: [全部节点]
       flatten: true
-      filter: '(?i)^(?!.*(?:香港|澳门|台湾|日本|韩国|美国|英国|德国|法国|印度|新加坡|印尼|印度尼西亚|越南|泰国|澳大利亚|澳洲|巴西|\bHK\b|\bMO\b|\bTW\b|\bJP\b|\bKR\b|\bUS\b|\bUK\b|\bDE\b|\bFR\b|\bIN\b|\bSG\b|\bID\b|\bVN\b|\bTH\b|\bAU\b|\bBR\b)).+$'
+      filter: '(?i)^(?!.*(?:香港|澳门|台湾|日本|韩国|美国|英国|德国|法国|印度|新加坡|印尼|印度尼西亚|越南|泰国|澳大利亚|澳洲|巴西|加拿大|多伦多|温哥华|\bHK\b|\bMO\b|\bTW\b|\bJP\b|\bKR\b|\bUS\b|\bUK\b|\bDE\b|\bFR\b|\bIN\b|\bSG\b|\bID\b|\bVN\b|\bTH\b|\bAU\b|\bBR\b|\bCA\b|\bCAN\b|\bCanada\b)).+$'
       interval: 300
       tolerance: 80
       timeout: 5
@@ -312,7 +322,7 @@ policy_groups:
 
   - select:
       name: 手动选择
-      policies: [自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 韩国手动选择, 新加坡手动选择, 美国手动选择, 英国手动选择, 香港, 澳门, 台湾, 日本, 韩国, 美国, 英国, 德国, 法国, 印度, 新加坡, 印尼, 越南, 泰国, 澳洲, 巴西, 其他, 全部节点, DIRECT, REJECT]
+      policies: [自动选择, 香港手动选择, 台湾手动选择, 日本手动选择, 韩国手动选择, 新加坡手动选择, 美国手动选择, 英国手动选择, 加拿大手动选择, 香港, 澳门, 台湾, 日本, 韩国, 美国, 英国, 德国, 法国, 印度, 新加坡, 印尼, 越南, 泰国, 澳洲, 巴西, 加拿大, 其他, 全部节点, DIRECT, REJECT]
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Rocket.png
   - select:
       name: GLOBAL
@@ -585,6 +595,12 @@ policy_groups:
       filter: '(?i)🇬🇧|英国|伦敦|\b(?:UK|GB|United\s*Kingdom)(?:\d+)?\b'
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png
   - select:
+      name: 加拿大手动选择
+      policies: [全部节点]
+      flatten: true
+      filter: '(?i)🇨🇦|加拿大|多伦多|温哥华|蒙特利尔|\b(?:CA|CAN|Canada)(?:\d+)?\b'
+      icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Canada.png
+  - select:
       name: 全球手动选择
       policies: [手动选择, 全部节点]
       flatten: true
@@ -757,49 +773,49 @@ rules:
       policy: DIRECT
       update_interval: 86400
 
-  # Cloudbet defaults to Taiwan. Stake retains the existing Japan default.
+  # Cloudbet defaults to Canada. Stake retains the existing Japan default.
   - domain_suffix:
       match: cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: cldbt.cloud
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: sports-api.cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: api.cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: cdn.cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: media.cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: docs.cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: affiliates.cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: play-cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: share.cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: a.cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: int.cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: ws.cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: wss.cloudbet.com
-      policy: 台湾
+      policy: 加拿大
   - domain_suffix:
       match: stake.com
       policy: 日本
@@ -965,7 +981,7 @@ rules:
   # hijack domestic domains that merely contain "stake" or "cloudbet".
   - domain_keyword:
       match: cloudbet
-      policy: 台湾
+      policy: 加拿大
   - domain_keyword:
       match: stake
       policy: 日本
