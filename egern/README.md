@@ -1,9 +1,9 @@
 # Egern Profile
 
-`Profile.yaml` uses Egern's native YAML syntax and keeps the v3 routing rules at
-higher priority than the additional Loon rules. This is split DNS, not an
-anonymity profile. Overseas default DNS follows the selected `漏网之鱼` policy;
-the public template deliberately contains no subscription credentials.
+`Profile.yaml` uses Egern's native YAML fields, checked against the current
+official documentation. This is split DNS, not an anonymity profile. Default
+overseas DoH uses the proxy-only `海外DNS` selector; native proxy DNS remains
+direct by Egern design. The public template contains no subscription credentials.
 
 ## Setup
 
@@ -15,15 +15,25 @@ the public template deliberately contains no subscription credentials.
    credentials out of commits, screenshots and public copies.
 3. Keep `target=Egern` in the Sub-Store URL; a Loon subscription is not a valid
    Egern proxy source. Refresh `全部节点` and confirm it contains actual proxies.
-4. Choose the desired egress in `漏网之鱼`: a node proxies default overseas DNS,
-   `DIRECT` sends it directly, and `REJECT` rejects it. There is no separate
-   hidden `DNS` group. Unlike v3, this native Egern profile does not provide
-   per-application DNS egress selection.
+4. Select a working subscription node in `海外DNS`. It contains subscription
+   proxies and `REJECT`, not `DIRECT` or application/final groups. This selection
+   is independent of `漏网之鱼`; use a stable node, normally your overseas egress.
+   Egern does not provide per-application default-DNS egress selection here.
 5. Activate the edited profile and check the routes and DNS behavior on the iOS
    device as described below. Importing the template alone does not supply nodes.
 
-The supplied Loon `.lpx` and `.plugin` resources remain referenced through
-Egern's compatible module importer; unrelated groups and modules are unchanged.
+Remote module URLs are separate dependencies, not native Egern YAML files.
+The official FAQ documents Surge modules. The developer's [2.18.0 release
+notes](https://t.me/egern_news/122) add Loon plugin import; [2.21.0 release
+notes](https://t.me/egern_news/125) add Loon 3.5.1 syntax and fix module DNS
+upstreams. Use a current release and verify conversion/arguments in the app.
+
+`Block_HTTPDNS` and `BlockAdvertisers` are listed first, in that order; this
+does not prove how Egern merges module rules with main rules. The Loon
+`Prevent_DNS_Leaks` module is disabled: its source returned HTTP 403 during
+inspection, and its effective DNS changes could not be verified. Native DNS
+configuration above is authoritative for this audit. Other module functions
+are preserved, not certified. Confirm merged DNS and rule details on the device.
 
 ## REALITY compatibility
 
@@ -59,8 +69,8 @@ protocols. The successful Mihomo checks in v3 do not establish Egern support.
 
 | Resolution path | Upstream | Connection policy |
 | --- | --- | --- |
-| Default DNS: domestic domains and exact `manifest.opensteamtool.com` | `https://223.5.5.5/dns-query`, `https://223.6.6.6/dns-query` | Explicit `DIRECT` rules for these resolver IPs |
-| Default DNS: other public domains | `https://1.1.1.1/dns-query`, `https://8.8.8.8/dns-query` | Current selection in `漏网之鱼` |
+| Default DNS: domestic domains and exact `manifest.opensteamtool.com` | `https://223.5.5.5/dns-query`, `https://223.6.6.6/dns-query` | Explicit `DIRECT` rules for resolver IP + port 443 |
+| Default DNS: other public domains | `https://1.1.1.1/dns-query`, `https://8.8.8.8/dns-query` | Proxy-only `海外DNS` group via resolver IP + port 443 |
 | Native proxy DNS: proxy destination names and proxy server hostnames | Domestic IP-literal DoH above | Always direct, enforced by Egern itself |
 | Local names and private IPv4 reverse lookups | System DNS | Explicit local-only forwarding exceptions |
 
@@ -75,36 +85,53 @@ the exact manifest domain precedes the domestic `cn.list`/`.cn` rules; a final
 `domain_wildcard: "*"` sends all other names to `Overseas`. The former blanket
 `arpa` system-DNS exception was narrowed so public reverse queries no longer
 use system DNS. There is no public `system`/`bootstrap` forwarding fallback.
-The routing-side `China` rule uses the same `cn.list`; `GEOIP CN` remains a
-resolving fallback for domestic domains not covered by that domain set.
+The routing-side `China` rule uses the same `cn.list`. `GEOIP CN` now has
+`no_resolve: true`: it only checks available IPs instead of resolving every
+unmatched hostname. Domestic domains absent from `cn.list`/explicit rules may
+therefore use `漏网之鱼` rather than being resolved solely to attempt `DIRECT`.
 
 Only `manifest.opensteamtool.com` is added to `real_ip_domains`, exact domestic
-DNS forwarding and exact `DIRECT` routing. Its route follows the explicit
-reject safeguards, including `Hijacking`, and precedes generic LAN/application/
-China/final rules. A matching deny still wins. This is not a suffix allowlist
+DNS forwarding and exact `DIRECT` routing. Its route follows `Hijacking`, LAN
+handling and the DNS port guard, and precedes application/China/final rules.
+A matching deny still wins. This is not a suffix allowlist
 for `opensteamtool.com` or `lua.tools`, and does not add exceptions for
 `manifest.steam.run` or `gmrc.wudrm.com` or change antivirus settings.
 
-Overseas resolver IP routes again select `漏网之鱼`, restoring the original
-Egern egress choice without removing the exact manifest exceptions. Selecting
-`DIRECT` in `漏网之鱼` now also makes default overseas DNS direct. Only the two
-configured overseas resolver addresses are routed specially. Egern DNS does not
-dynamically follow each application policy group.
+The four resolver transport rules use Egern's documented `and` syntax with
+`ip_cidr` (`no_resolve: true`) and `dest_port: "443"`. Other ports do not inherit
+these DoH exceptions. After the LAN rule set, `dest_port: "53,853"` rejects
+remaining routed plain DNS and standard DoT/DoQ traffic, before application and
+China rules can send it directly. This guard does not intercept Egern's internal
+Bootstrap or native proxy DNS, excluded routes, or arbitrary application DoH.
+
+`close_connections_on_policy_change: true` closes connections still using an
+old selection so they reconnect through the new policy. Long-lived sessions may
+reconnect when auto-test changes nodes. Nineteen unreachable Cloudbet/Stake
+subdomain rules were removed; their parent suffix rules retain the same policy.
+
+Apple now uses the complete Surge RULE-SET `Apple_All_No_Resolve.list` rather
+than the domain-incomplete `Apple.list`. AppStore precedes Apple; YouTube,
+OneDrive and the other specific application lists precede the broad Google and
+Microsoft lists. Surge rule sets are supported by Egern's official FAQ; source
+entries not documented by Egern (such as `PROCESS-NAME`) and importer handling
+of `no-resolve` still require checking loaded rules. Bili module `logLevel: 'off'`
+is quoted to prevent YAML 1.1 parsers treating it as boolean `false`.
 
 ## Privacy and capture boundaries
 
 - Encryption protects DNS transport, not anonymity: domestic resolvers see your
   direct source address and queried names; overseas default-DNS resolvers see
-  either the proxy egress or the direct address selected by `漏网之鱼`.
+  the proxy egress selected in `海外DNS`. This does not cover native proxy DNS.
   Providers, proxies and destination services retain
   their own visibility. No `public_ip_lookup_url` is set: Egern documents that
   enabling it adds the device's public IP as EDNS Client Subnet (ECS) to upstream
   queries. Keep it unset rather than copying it from the full example.
 - `proxy_nameservers` is not just a bootstrap list. Official Egern DNS behavior
   forces **every native proxy-DNS query**, including proxied destination names,
-  through this list directly and skips Forward rules. Those queries are now
-  encrypted, but remain visible to domestic resolvers; the default-DNS split
-  policy and `漏网之鱼` selection cannot override that native path.
+  through this list directly and skips Forward rules. Those queries are
+  encrypted, but remain visible to domestic resolvers; neither `海外DNS` nor
+  `漏网之鱼` can override that native path. Removing `proxy_nameservers` would
+  share Forward rules but would not make native proxy DNS connections proxied.
 - Egern bootstrap supports **plaintext direct UDP only**. Explicit bootstrap
   IPs remain because an absent or invalid list falls back to system DNS.
   IP-literal DoH and the final public Forward catchall avoid routine upstream-
@@ -123,27 +150,36 @@ dynamically follow each application policy group.
 
 ## Device verification and rollback
 
-Configuration changes were prepared on Windows. iOS Egern import, native policy
-selection, capture behavior, TLS handshakes and packet-level runtime verification
-were **not performed** here. Before relying on the profile, on the device check:
+Windows verification: strict YAML parsing, documented field checks, policy
+references and dependency cycles, live GETs of all 35 rule URLs, real DNS wire
+queries to all four DoH endpoints with certificate verification, and reference
+models for DNS/routing boundaries. These are not an Egern runtime. iOS import,
+native policy selection, capture behavior and packet-level verification were
+**not performed** here. On the device check:
 
 1. The profile imports without unknown-key errors and `全部节点` has real nodes.
-2. Default overseas DNS follows `漏网之鱼`: node selection proxies it, `DIRECT`
-   sends it directly, and `REJECT` rejects it without changing manifest DNS.
+2. Default overseas DoH uses the node selected in `海外DNS`; `REJECT` blocks this
+   default-DNS path. Changing `漏网之鱼` to `DIRECT` must not make that path direct.
+   Native proxy DNS is a separate direct path and is not blocked by this selector.
 3. Domestic/default-manifest queries use the domestic encrypted upstreams, and
    the exact manifest route is `DIRECT` unless an earlier deny applies.
 4. Router-side capture distinguishes expected local/UDP-bootstrap traffic from
-   public DNS, checks UDP and TCP port 53, and confirms the native proxy-DNS
-   direct boundary. Also test LAN access, network changes and VPN reconnects.
+   public DNS. Check UDP/TCP 53 and 853: routed public traffic is rejected after
+   LAN exceptions; native Bootstrap and excluded routes are not covered.
+   Confirm native proxy-DNS direct behavior, LAN access, policy switches, network
+   changes and VPN reconnects.
+5. Check module previews and connection details for merged DNS, effective
+   `Block_HTTPDNS`/ad-block rules and `PROXY` argument bindings. HTTPS rewriting
+   also requires your device's own trusted MITM CA; no private CA is supplied.
 
 Before deployment, preserve/export your current **device** profile separately;
-git cannot restore private device subscription settings. The tracked pre-change
-configuration before this DNS-policy restoration is available at commit `62af4a9`. From the repository root, review
-only these files with `git diff -- egern/Profile.yaml egern/README.md`.
-To roll back the repository changes, after saving any newer local edits, run:
+repository files cannot restore private device subscription settings. The audit
+saved exact pre-edit local backups beside both files. After preserving any newer
+edits, roll back from the repository root in PowerShell:
 
-```console
-git restore --source=62af4a9 -- egern/Profile.yaml egern/README.md
+```powershell
+Copy-Item .\egern\Profile.yaml.bak-20261107-dns-audit .\egern\Profile.yaml -Force
+Copy-Item .\egern\README.md.bak-20261107-dns-audit .\egern\README.md -Force
 ```
 
 Then reimport the restored local `egern/Profile.yaml` or restore the exported

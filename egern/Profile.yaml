@@ -8,7 +8,7 @@ allow_external_connections: false
 vif_only: false
 hide_vpn_icon: false
 block_quic: true
-close_connections_on_policy_change: false
+close_connections_on_policy_change: true
 compat_route: true
 # Capture all supported traffic while retaining the explicit LAN/service exclusions.
 include_all_networks: true
@@ -59,8 +59,8 @@ real_ip_domains:
   - "*.stun.*"
   - manifest.opensteamtool.com
 
-# Domestic queries use direct encrypted DNS. Default overseas queries use the
-# selected 漏网之鱼 policy; native proxy DNS is separately forced direct below.
+# Split DNS: domestic queries use direct DoH; default overseas DoH uses 海外DNS.
+# Egern's native proxy DNS remains direct and cannot inherit a proxy policy.
 dns:
   bootstrap:
     # Egern only supports direct plaintext UDP bootstrap; IP-literal DoH below
@@ -541,6 +541,13 @@ policy_groups:
       flatten: true
       icon: https://testingcf.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/YouTube.png
 
+  # Only subscription proxies and REJECT: never inherit DIRECT from app/final groups.
+  - select:
+      name: 海外DNS
+      policies: [全部节点, REJECT]
+      flatten: true
+      icon: network
+
   - select:
       name: 漏网之鱼
       policies: [手动选择, 自动选择, 全球手动选择, 美国链式代理, 英国链式代理, 美国手动选择, 美国, 日本手动选择, 日本, 香港手动选择, 香港, DIRECT, REJECT]
@@ -621,37 +628,46 @@ rules:
   - protocol:
       match: stun
       policy: REJECT
-  # Default overseas encrypted DNS follows the selected 漏网之鱼 policy.
-  - ip_cidr:
-      match: 1.1.1.1/32
-      policy: 漏网之鱼
-      no_resolve: true
-  - ip_cidr:
-      match: 8.8.8.8/32
-      policy: 漏网之鱼
-      no_resolve: true
+  # Default overseas DoH is independent of 漏网之鱼, with no DIRECT candidate.
+  - and:
+      match:
+        - ip_cidr: { match: 1.1.1.1/32, no_resolve: true }
+        - dest_port: { match: "443" }
+      policy: 海外DNS
+  - and:
+      match:
+        - ip_cidr: { match: 8.8.8.8/32, no_resolve: true }
+        - dest_port: { match: "443" }
+      policy: 海外DNS
   - rule_set:
       name: Hijacking
       match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Hijacking/Hijacking.list
       policy: REJECT
       update_interval: 86400
-  # Exact manifest exception follows explicit deny safeguards, not a suffix allowlist.
-  - domain:
-      match: manifest.opensteamtool.com
+  - and:
+      match:
+        - ip_cidr: { match: 223.5.5.5/32, no_resolve: true }
+        - dest_port: { match: "443" }
       policy: DIRECT
-  - ip_cidr:
-      match: 223.5.5.5/32
+  - and:
+      match:
+        - ip_cidr: { match: 223.6.6.6/32, no_resolve: true }
+        - dest_port: { match: "443" }
       policy: DIRECT
-      no_resolve: true
-  - ip_cidr:
-      match: 223.6.6.6/32
-      policy: DIRECT
-      no_resolve: true
   - rule_set:
       name: Lan
       match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Lan/Lan.list
       policy: DIRECT
       update_interval: 86400
+  # After LAN exceptions: reject uncaptured plain DNS and standard DoT/DoQ.
+  # Internal bootstrap/proxy DNS and excluded routes are outside this rule's guarantee.
+  - dest_port:
+      match: "53,853"
+      policy: REJECT
+  # Exact manifest exception follows explicit deny safeguards, not a suffix allowlist.
+  - domain:
+      match: manifest.opensteamtool.com
+      policy: DIRECT
 
   # Existing v3 custom rules.
   - domain_suffix:
@@ -781,40 +797,7 @@ rules:
       match: cldbt.cloud
       policy: 台湾
   - domain_suffix:
-      match: sports-api.cloudbet.com
-      policy: 台湾
-  - domain_suffix:
-      match: api.cloudbet.com
-      policy: 台湾
-  - domain_suffix:
-      match: cdn.cloudbet.com
-      policy: 台湾
-  - domain_suffix:
-      match: media.cloudbet.com
-      policy: 台湾
-  - domain_suffix:
-      match: docs.cloudbet.com
-      policy: 台湾
-  - domain_suffix:
-      match: affiliates.cloudbet.com
-      policy: 台湾
-  - domain_suffix:
       match: play-cloudbet.com
-      policy: 台湾
-  - domain_suffix:
-      match: share.cloudbet.com
-      policy: 台湾
-  - domain_suffix:
-      match: a.cloudbet.com
-      policy: 台湾
-  - domain_suffix:
-      match: int.cloudbet.com
-      policy: 台湾
-  - domain_suffix:
-      match: ws.cloudbet.com
-      policy: 台湾
-  - domain_suffix:
-      match: wss.cloudbet.com
       policy: 台湾
   - domain_suffix:
       match: stake.com
@@ -830,30 +813,6 @@ rules:
       policy: 日本
   - domain_suffix:
       match: stake.pet
-      policy: 日本
-  - domain_suffix:
-      match: api.stake.com
-      policy: 日本
-  - domain_suffix:
-      match: sports.stake.com
-      policy: 日本
-  - domain_suffix:
-      match: cdn.stake.com
-      policy: 日本
-  - domain_suffix:
-      match: assets.stake.com
-      policy: 日本
-  - domain_suffix:
-      match: img.stake.com
-      policy: 日本
-  - domain_suffix:
-      match: ws.stake.com
-      policy: 日本
-  - domain_suffix:
-      match: wss.stake.com
-      policy: 日本
-  - domain_suffix:
-      match: payment.stake.com
       policy: 日本
   - domain_suffix:
       match: stake.bet.br
@@ -947,8 +906,8 @@ rules:
       match: ifastps.com.cn
       policy: DIRECT
   # Standard application rules from the existing v3 profile.
-  - rule_set: { name: Apple, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Apple/Apple.list, policy: Apple, update_interval: 86400 }
   - rule_set: { name: AppStore, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/AppStore/AppStore.list, policy: AppStore, update_interval: 86400 }
+  - rule_set: { name: Apple, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Apple/Apple_All_No_Resolve.list, policy: Apple, update_interval: 86400 }
   - rule_set: { name: BiliBili, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/BiliBili/BiliBili.list, policy: BiliBili, update_interval: 86400 }
   - rule_set: { name: Bybit, match: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/classical/bybit.list, policy: Bybit, update_interval: 86400 }
   - rule_set: { name: Claude, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Claude/Claude.list, policy: Claude, update_interval: 86400 }
@@ -957,8 +916,6 @@ rules:
   - rule_set: { name: Facebook, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Facebook/Facebook.list, policy: Facebook, update_interval: 86400 }
   - rule_set: { name: Gemini, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Gemini/Gemini.list, policy: Gemini, update_interval: 86400 }
   - rule_set: { name: Github, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/GitHub/GitHub.list, policy: Github, update_interval: 86400 }
-  - rule_set: { name: Google, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Google/Google.list, policy: Google, update_interval: 86400 }
-  - rule_set: { name: Microsoft, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Microsoft/Microsoft.list, policy: Microsoft, update_interval: 86400 }
   - rule_set: { name: Netflix, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Netflix/Netflix.list, policy: Netflix, update_interval: 86400 }
   - rule_set: { name: OpenAI, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/OpenAI/OpenAI.list, policy: OpenAI, update_interval: 86400 }
   - rule_set: { name: OneDrive, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/OneDrive/OneDrive.list, policy: OneDrive, update_interval: 86400 }
@@ -968,6 +925,8 @@ rules:
   - rule_set: { name: TikTok, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/TikTok/TikTok.list, policy: TikTok, update_interval: 86400 }
   - rule_set: { name: Twitter, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Twitter/Twitter.list, policy: Twitter, update_interval: 86400 }
   - rule_set: { name: YouTube, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/YouTube/YouTube.list, policy: YouTube, update_interval: 86400 }
+  - rule_set: { name: Google, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Google/Google.list, policy: Google, update_interval: 86400 }
+  - rule_set: { name: Microsoft, match: https://testingcf.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/Microsoft/Microsoft.list, policy: Microsoft, update_interval: 86400 }
 
   # Mirror the DNS CN domain set here so domestic resolution and routing agree.
   # Keep these rules after application rules and before GeoIP/final.
@@ -988,6 +947,7 @@ rules:
   - geoip:
       match: CN
       policy: DIRECT
+      no_resolve: true
   - default:
       policy: 漏网之鱼
 
@@ -995,6 +955,10 @@ default_subscription_group: 全部节点
 default_proxy_group: 手动选择
 
 modules:
+  - url: https://kelee.one/Tool/Loon/Lpx/Block_HTTPDNS.lpx
+    enabled: true
+  - url: https://kelee.one/Tool/Loon/Lpx/BlockAdvertisers.lpx
+    enabled: true
   - url: https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.lpx
     compat_arguments:
       logLevel: info
@@ -1006,8 +970,6 @@ modules:
       configHost: https://iosloc.1812446.xyz
       configToken: <CONFIG_TOKEN>
     enabled: false
-  - url: https://kelee.one/Tool/Loon/Lpx/BlockAdvertisers.lpx
-    enabled: true
   - url: https://kelee.one/Tool/Loon/Lpx/Zhibo8_remove_ads.lpx
     enabled: true
   - url: https://kelee.one/Tool/Loon/Lpx/WexinMiniPrograms_Remove_ads.lpx
@@ -1045,21 +1007,20 @@ modules:
       purifyComment: 'true'
       optimizeRequest: 'true'
       sponsorBlock: 'true'
-      logLevel: off
+      logLevel: 'off'
     enabled: true
   - name: 禁用ios更新
     url: https://yfamilys.com/plugin/DisableUpdate.plugin
     enabled: false
   - url: https://kelee.one/Tool/Loon/Lpx/QQ_Redirect.lpx
     enabled: true
-  - url: https://kelee.one/Tool/Loon/Lpx/Block_HTTPDNS.lpx
-    enabled: true
   - url: https://kelee.one/Tool/Loon/Lpx/QuickSearch.lpx
     enabled: false
+  # Native DNS is configured above; this Loon DNS module is not verified for Egern.
   - url: https://kelee.one/Tool/Loon/Lpx/Prevent_DNS_Leaks.lpx
     compat_arguments:
       PROXY: 美国手动选择
-    enabled: true
+    enabled: false
   - url: https://kelee.one/Tool/Loon/Lpx/Node_detection_tool.lpx
     enabled: true
   - url: https://kelee.one/Tool/Loon/Lpx/TestFlightRegionUnlock.lpx
