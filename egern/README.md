@@ -25,6 +25,36 @@ the public template deliberately contains no subscription credentials.
 The supplied Loon `.lpx` and `.plugin` resources remain referenced through
 Egern's compatible module importer; unrelated groups and modules are unchanged.
 
+## REALITY compatibility
+
+`Profile.yaml` has no inline proxies: `全部节点` loads an external subscription
+using `target=Egern`. The v3 JavaScript generators do not run in this native
+profile, so fixing a Mihomo override does not modify Egern's downloaded nodes.
+
+For 台湾-shlii, check the private subscription's generated Egern node against
+the server settings: TCP port `64325`, `user_id` matching the node UUID,
+`flow: xtls-rprx-vision`, `transport.tls.sni: www.apple.com`, and
+`transport.tls.reality.public_key` / `short_id` matching the node credentials.
+Do not publish those credentials or hardcode the private node into this public
+template. A remote provider's node conversion must be fixed at its source, not
+by adding proxy fields to an `external` policy group.
+
+Mihomo needs `reality-opts.support-x25519mlkem768: true` for this server, but that
+is **not an Egern configuration field**. The current [official Egern proxy
+schema](https://egernapp.com/docs/configuration/proxies#reality-configuration)
+documents `public_key` and `short_id` under the native TLS `reality` block; it
+does not document a corresponding MLKEM switch. Schema omission does not prove
+that an Egern version supports or lacks the required handshake. Do not copy
+Mihomo's `reality-opts`, `client-fingerprint`, or MLKEM switch into this profile,
+and do not disable certificate verification to work around authentication.
+
+Windows checks only confirm that this template parses as YAML and has no inline
+nodes. Egern app-version compatibility, private subscription conversion and an
+actual REALITY handshake remain **unverified**: update Egern, refresh its native
+subscription and test 台湾-shlii on the iOS device. If it fails, inspect the
+device's Egern version and handshake log before changing server versions or
+protocols. The successful Mihomo checks in v3 do not establish Egern support.
+
 ## DNS and exact manifest routing
 
 | Resolution path | Upstream | Connection policy |

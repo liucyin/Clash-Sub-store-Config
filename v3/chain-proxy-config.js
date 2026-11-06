@@ -2318,6 +2318,12 @@ function main(config, profileName) {
   config.proxies = (subscription.proxies || []).filter(proxy =>
     !(proxy.name?.startsWith('🔗 ') && proxy['dialer-proxy'] === dialerProxyGroupName)
   );
+  // 新版 Xray REALITY 要求该节点发送 X25519-MLKEM768 key share。
+  for (const proxy of config.proxies) {
+    if (proxy.type === 'vless' && proxy.server === '23.150.4.58' && proxy['reality-opts']) {
+      proxy['reality-opts']['support-x25519mlkem768'] = true;
+    }
+  }
   config['proxy-providers'] = subscription['proxy-providers'] || {};
   const groupsByName = new Map(config['proxy-groups'].map(group => [group.name, group]));
   (subscription['proxy-groups'] || []).forEach(group => groupsByName.set(group.name, group));

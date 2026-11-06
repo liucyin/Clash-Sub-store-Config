@@ -27,6 +27,14 @@ DNS 出口随相关策略组切换：选 `DIRECT` 就直连，选 `REJECT` 就�
 4. 检查实际生成配置：默认 DoH 带 `#漏网之鱼`、业务 DoH 带对应业务组名，不再有本脚本生成的独立 `DNS` 组；清单域名仍保留 Real-IP、国内 DoH 和精确 `DIRECT` 规则。TUN 开启且捕获 UDP/TCP 53。客户端若覆盖 TUN/DNS 设置，最终配置和实际状态优先于脚本。
 5. 本机验证内核是 Mihomo Meta v1.19.31。使用支持 `dns-mode: hijack` 和 `empty-fallback` 的 Mihomo 内核，不要假定旧版 Clash 内核支持这些字段。
 
+### 台湾-shlii 的 REALITY 兼容
+
+三个 v3 入口（`chain-proxy-config.js`、`chain-proxy-config.local.js`、`flclash-chain-proxy-override.js`）均为 `config.proxies` 中 `server: 23.150.4.58` 且带 `reality-opts` 的 VLESS 节点补充 `support-x25519mlkem768: true`。这用于兼容新版 Xray REALITY 的密钥交换要求；不改节点名称、端口、公钥、Short ID 或其他服务器的配置。当前台湾-shlii 使用 TCP `64325`、`client-fingerprint: chrome`。仅保留 URL 的远程 `proxy-providers` 载荷不在此处理范围内，应在其订阅源转换环节配置。
+
+缺少该项时，Mihomo 可能报 `REALITY authentication failed`，Sparkle 测速显示超时。参见 [Xray 上游兼容说明](https://github.com/XTLS/Xray-core/issues/7259#issuecomment-6626094020)。订阅更新会重新应用本地覆写；若 Sparkle 远程更新覆写脚本，必须先将这份源码推送到其实际引用的仓库，否则会下载旧版覆盖修复。
+
+2026-11-06 验证：现有 13 项 Node 回归全部通过；三个入口均验证了目标节点补齐选项，其他服务器、无 REALITY 的 VLESS 和非 VLESS 节点不受影响。三个入口生成的目标节点分别在隔离 Mihomo v1.19.33 中绑定物理网卡直连，Google `generate_204` 测速通过，延迟分别为 2319、2331、3629 ms。本机运行中的 Sparkle 同项修复已热加载，原生测速通过；未执行 FlClash 界面验证。`egern/Profile.yaml` 使用独立原生格式和外部订阅，不执行这些 JS，也不接受直接照搬 Mihomo 的字段；参见 [Egern REALITY 兼容边界](../egern/README.md#reality-compatibility)。仓库修改未自动提交或推送。
+
 ## DNS 的具体出口
 
 | 查询类别 | 上游 | 传输与出口 |

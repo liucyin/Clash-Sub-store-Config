@@ -268,6 +268,13 @@ function main(config) {
   console.log("🚀 FlClash 链式代理覆写开始...");
   config = config || {};
 
+  // 在复制链式节点前补齐新版 Xray REALITY 的密钥交换要求。
+  (config.proxies || []).forEach(function(proxy) {
+    if (proxy.type === 'vless' && proxy.server === '23.150.4.58' && proxy['reality-opts']) {
+      proxy['reality-opts']['support-x25519mlkem768'] = true;
+    }
+  });
+
   config['allow-lan'] = false;
   config['bind-address'] = '127.0.0.1';
 
