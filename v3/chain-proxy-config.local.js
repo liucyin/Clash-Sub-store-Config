@@ -2204,6 +2204,7 @@ const baseConfig = {
     "DOMAIN-SUFFIX,portal101.cn,直连",
     "DOMAIN-SUFFIX,javasec.org,直连",
     "DOMAIN-SUFFIX,deepseek.com,直连",
+    "DOMAIN-SUFFIX,pokebonk.com,直连",
 
     // 测速服务规则
     "GEOSITE,ookla-speedtest,Speedtest",

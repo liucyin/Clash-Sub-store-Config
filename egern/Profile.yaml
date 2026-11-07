@@ -680,6 +680,9 @@ rules:
       match: deepseek.com
       policy: DIRECT
   - domain_suffix:
+      match: pokebonk.com
+      policy: DIRECT
+  - domain_suffix:
       match: grok.com
       policy: Grok
   - domain_suffix:
